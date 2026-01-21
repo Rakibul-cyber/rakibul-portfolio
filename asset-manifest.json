@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/rakibul-portfolio/static/css/main.5b5765d0.css",
-    "main.js": "/rakibul-portfolio/static/js/main.f9e24d50.js",
+    "main.css": "/rakibul-portfolio/static/css/main.72586b8e.css",
+    "main.js": "/rakibul-portfolio/static/js/main.8bb3c469.js",
     "static/js/453.66e6b017.chunk.js": "/rakibul-portfolio/static/js/453.66e6b017.chunk.js",
     "index.html": "/rakibul-portfolio/index.html",
-    "main.5b5765d0.css.map": "/rakibul-portfolio/static/css/main.5b5765d0.css.map",
-    "main.f9e24d50.js.map": "/rakibul-portfolio/static/js/main.f9e24d50.js.map",
+    "main.72586b8e.css.map": "/rakibul-portfolio/static/css/main.72586b8e.css.map",
+    "main.8bb3c469.js.map": "/rakibul-portfolio/static/js/main.8bb3c469.js.map",
     "453.66e6b017.chunk.js.map": "/rakibul-portfolio/static/js/453.66e6b017.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.5b5765d0.css",
-    "static/js/main.f9e24d50.js"
+    "static/css/main.72586b8e.css",
+    "static/js/main.8bb3c469.js"
   ]
 }
