@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="/rakibul-portfolio/">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <meta name="description" content="Md. Rakibul Hassan — Flutter Developer & DevOps Engineer based in Frankfurt am Main. Available for freelance, part-time contracts, and consulting.">
+  <meta name="keywords" content="Flutter Developer, DevOps, AWS, Mobile App Developer, Frankfurt, Flutter Web, Dart, Cloud Engineer">
+  <meta name="author" content="Md. Rakibul Hassan">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Rakibul Hassan — Flutter & DevOps Developer">
+  <meta property="og:description" content="Building production Flutter apps and AWS cloud infrastructure. Available for hire.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rakibulhassan.dev">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Rakibul Hassan — Flutter & DevOps Developer">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <title>Rakibul Hassan — Flutter & DevOps Developer</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #0A0F1E;
+      overflow-x: hidden;
+    }
+    /* Loading screen */
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: #0A0F1E;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s;
+    }
+    #loading .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #00D4FF;
+      margin-bottom: 24px;
+    }
+    #loading .logo span { color: #8B9DC3; font-weight: 400; }
+    #loading .bar-wrap {
+      width: 200px;
+      height: 2px;
+      background: #1E2D45;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    #loading .bar {
+      height: 100%;
+      background: linear-gradient(90deg, #00D4FF, #FFB347);
+      border-radius: 2px;
+      animation: load 1.5s ease-in-out forwards;
+    }
+    @keyframes load {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <div class="logo">RH<span>.dev</span></div>
+    <div class="bar-wrap"><div class="bar"></div></div>
+  </div>
+
+  <script>
+    window.addEventListener('flutter-first-frame', () => {
+      const el = document.getElementById('loading');
+      if (el) { el.style.opacity = '0'; setTimeout(() => el.remove(), 500); }
+    });
+  </script>
+
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
