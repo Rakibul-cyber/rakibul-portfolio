@@ -7,6 +7,8 @@ class Project {
   final String? githubUrl;
   final String? liveUrl;
   final String icon;
+  final String? coverImagePath;
+  final List<String> galleryImagePaths;
 
   const Project({
     required this.title,
@@ -17,6 +19,8 @@ class Project {
     this.githubUrl,
     this.liveUrl,
     required this.icon,
+    this.coverImagePath,
+    this.galleryImagePaths = const [],
   });
 }
 
@@ -89,20 +93,28 @@ class PortfolioData {
       icon: '🌲',
     ),
     Project(
-      title: 'Louco Event Media App',
-      subtitle: 'Freelance · Flutter Mobile',
+      title: 'Louco Mobile App',
+      subtitle: 'Production · Flutter Mobile',
       description:
-          'Cross-platform event media app built with Flutter. Implemented OAuth social auth flows (Google & Apple), SCRUM-based workflow, CI/CD integration, and production deployment for a Germany-based media company.',
+          'Production-level event discovery mobile app for Germany. I contributed to Flutter features including authentication, guest mode, event discovery, favorites, notifications, responsive UI improvements, and Android/iOS release builds.',
       tags: [
         'Flutter',
-        'OAuth',
-        'Google Sign-In',
-        'Apple Sign-In',
-        'REST APIs',
-        'SCRUM'
+        'GetX',
+        'Firebase',
+        'REST API',
+        'Push Notifications',
+        'Google/Apple Auth'
       ],
       status: 'Production',
       icon: '🎪',
+      coverImagePath: 'assets/projects/louco/louco-cover.png',
+      galleryImagePaths: [
+        'assets/projects/louco/louco-auth.png',
+        'assets/projects/louco/louco-event-details.png',
+        'assets/projects/louco/louco-favorites.png',
+        'assets/projects/louco/louco-notifications.png',
+        'assets/projects/louco/louco-responsive.png',
+      ],
     ),
     Project(
       title: 'XR-Hub Condominium Management System',
