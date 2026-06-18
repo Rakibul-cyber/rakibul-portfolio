@@ -96,14 +96,20 @@ class PortfolioData {
       title: 'Louco Mobile App',
       subtitle: 'Production · Flutter Mobile',
       description:
-          'Production-level event discovery mobile app for Germany. I contributed to Flutter features including authentication, guest mode, event discovery, favorites, notifications, responsive UI improvements, and Android/iOS release builds.',
+          'Production-level event discovery mobile application for Germany, built with Flutter. I implemented features across authentication, onboarding, discovery, favorites, notifications, and profile flows; integrated REST APIs with GetX; improved guest mode, city-based discovery, event details, responsive mobile/tablet layouts, and Android/iOS release readiness.',
       tags: [
         'Flutter',
+        'Dart',
         'GetX',
         'Firebase',
         'REST API',
         'Push Notifications',
-        'Google/Apple Auth'
+        'Google Auth',
+        'Apple Auth',
+        'Android',
+        'iOS',
+        'TestFlight',
+        'Play Console'
       ],
       status: 'Production',
       icon: '🎪',
@@ -114,6 +120,7 @@ class PortfolioData {
         'assets/projects/louco/louco-favorites.png',
         'assets/projects/louco/louco-notifications.png',
         'assets/projects/louco/louco-responsive.png',
+        'assets/projects/louco/louco-cityvibe.png',
       ],
     ),
     Project(
