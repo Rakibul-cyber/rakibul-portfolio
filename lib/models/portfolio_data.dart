@@ -91,6 +91,15 @@ class PortfolioData {
       ],
       status: 'Live',
       icon: '🌲',
+      coverImagePath: 'assets/projects/forest_ai/forest-map.png',
+      galleryImagePaths: [
+        'assets/projects/forest_ai/environment-cover.png',
+        'assets/projects/forest_ai/risk-analysis.png',
+        'assets/projects/forest_ai/weather.png',
+        'assets/projects/forest_ai/observation.png',
+        'assets/projects/forest_ai/team-chat.png',
+        'assets/projects/forest_ai/profile.png',
+      ],
     ),
     Project(
       title: 'Louco Mobile App',

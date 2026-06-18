@@ -88,6 +88,8 @@ class _FeaturedProjectCardState extends State<_FeaturedProjectCard> {
 
   @override
   Widget build(BuildContext context) {
+    final hasImages = widget.project.coverImagePath != null ||
+        widget.project.galleryImagePaths.isNotEmpty;
     final hoverEnabled = kIsWeb && ResponsiveLayout.isDesktop(context);
 
     return MouseRegion(
@@ -112,77 +114,103 @@ class _FeaturedProjectCardState extends State<_FeaturedProjectCard> {
                 ]
               : [],
         ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Icon
-            Container(
-              width: 72,
-              height: 72,
-              decoration: BoxDecoration(
-                color: AppTheme.cyan.withValues(alpha: 0.08),
-                border: Border.all(color: AppTheme.cyan.withValues(alpha: 0.2)),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Center(
-                child: Text(widget.project.icon,
-                    style: const TextStyle(fontSize: 32)),
-              ),
-            ),
-            const SizedBox(width: 32),
-            Expanded(
-              child: Column(
+        child: hasImages
+            ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppTheme.amber.withValues(alpha: 0.1),
-                          border: Border.all(
-                              color: AppTheme.amber.withValues(alpha: 0.3)),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Text(
-                          'FEATURED',
-                          style: GoogleFonts.spaceGrotesk(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            color: AppTheme.amber,
-                            letterSpacing: 1.5,
-                          ),
-                        ),
+                  if (widget.project.coverImagePath != null) ...[
+                    _ProjectCoverImage(
+                      imagePath: widget.project.coverImagePath!,
+                    ),
+                    const SizedBox(height: 28),
+                  ],
+                  _FeaturedProjectDetails(project: widget.project),
+                  if (widget.project.galleryImagePaths.isNotEmpty) ...[
+                    const SizedBox(height: 28),
+                    _ProjectImageGallery(
+                      imagePaths: widget.project.galleryImagePaths,
+                    ),
+                  ],
+                ],
+              )
+            : _FeaturedProjectDetails(project: widget.project),
+      ),
+    );
+  }
+}
+
+class _FeaturedProjectDetails extends StatelessWidget {
+  final Project project;
+
+  const _FeaturedProjectDetails({required this.project});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Icon
+        Container(
+          width: 72,
+          height: 72,
+          decoration: BoxDecoration(
+            color: AppTheme.cyan.withValues(alpha: 0.08),
+            border: Border.all(color: AppTheme.cyan.withValues(alpha: 0.2)),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Center(
+            child: Text(project.icon, style: const TextStyle(fontSize: 32)),
+          ),
+        ),
+        const SizedBox(width: 32),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppTheme.amber.withValues(alpha: 0.1),
+                      border: Border.all(
+                          color: AppTheme.amber.withValues(alpha: 0.3)),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      'FEATURED',
+                      style: GoogleFonts.spaceGrotesk(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w700,
+                        color: AppTheme.amber,
+                        letterSpacing: 1.5,
                       ),
-                      const SizedBox(width: 12),
-                      StatusBadge(status: widget.project.status),
-                    ],
+                    ),
                   ),
-                  const SizedBox(height: 14),
-                  Text(widget.project.title,
-                      style: Theme.of(context).textTheme.headlineMedium),
-                  const SizedBox(height: 6),
-                  Text(widget.project.subtitle,
-                      style:
-                          const TextStyle(color: AppTheme.cyan, fontSize: 14)),
-                  const SizedBox(height: 16),
-                  Text(widget.project.description,
-                      style: Theme.of(context).textTheme.bodyLarge),
-                  const SizedBox(height: 20),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: widget.project.tags
-                        .map((t) => TagChip(label: t))
-                        .toList(),
-                  ),
+                  const SizedBox(width: 12),
+                  StatusBadge(status: project.status),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 14),
+              Text(project.title,
+                  style: Theme.of(context).textTheme.headlineMedium),
+              const SizedBox(height: 6),
+              Text(project.subtitle,
+                  style: const TextStyle(color: AppTheme.cyan, fontSize: 14)),
+              const SizedBox(height: 16),
+              Text(project.description,
+                  style: Theme.of(context).textTheme.bodyLarge),
+              const SizedBox(height: 20),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: project.tags.map((t) => TagChip(label: t)).toList(),
+              ),
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
