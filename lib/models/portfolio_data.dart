@@ -148,6 +148,38 @@ class PortfolioData {
       icon: '🏢',
     ),
     Project(
+      title:
+          'Analyzing Historical Stock & Revenue Data and Building a Dashboard',
+      subtitle: 'Stock Revenue Dashboard',
+      description:
+          'A data analysis and dashboard project focused on retrieving, cleaning, processing, and visualizing historical stock price and revenue data. The project presents market trends and revenue insights through an interactive dashboard for investors, analysts, and data enthusiasts.',
+      tags: [
+        'Python',
+        'Pandas',
+        'NumPy',
+        'Matplotlib',
+        'Plotly',
+        'Dash',
+        'Streamlit',
+        'Jupyter Notebook',
+        'Data Analysis',
+        'Data Visualization'
+      ],
+      status: 'Project',
+      githubUrl:
+          'https://github.com/Rakibul-cyber/Analyzing-Historical-Stock-Revenue-Data-and-Building-a-Dashboard',
+      icon: '📈',
+      coverImagePath:
+          'assets/projects/stock-dashboard/stock-dashboard-cover.png',
+      galleryImagePaths: [
+        'assets/projects/stock-dashboard/stock-dashboard-data.png',
+        'assets/projects/stock-dashboard/stock-dashboard-visualization.png',
+        'assets/projects/stock-dashboard/stock-dashboard-revenue.png',
+        'assets/projects/stock-dashboard/stock-dashboard-analysis.png',
+        'assets/projects/stock-dashboard/stock-dashboard-dashboard.png',
+      ],
+    ),
+    Project(
       title: 'STEKO Health Checker',
       subtitle: 'Final Year Project · mHealth',
       description:
