@@ -144,7 +144,10 @@ test('the CV is a real PDF', () => {
 
 test('static output only: no server bundle, no adapter', () => {
   assert.ok(!existsSync(path.join(dist, 'server')));
-  assert.ok(!files.some((f) => /_worker|entry\.mjs$/.test(f)), 'server entry found in dist');
+  assert.ok(
+    !files.some((f) => /(^|[\\/])_worker\.js$|[\\/]entry\.mjs$/.test(f)),
+    'server entry found in dist',
+  );
   const config = read(path.join(root, 'astro.config.mjs'));
   assert.match(config, /output:\s*'static'/);
   assert.ok(!/adapter\s*:/.test(config), 'an adapter is configured');
@@ -237,9 +240,20 @@ test('robots.txt allows crawling and points to the sitemap under the base path',
   assert.ok(robots.includes(`Sitemap: ${SITE}${BASE}sitemap-index.xml`));
 });
 
+test('the legacy Flutter service worker is replaced by a self-unregistering kill switch', () => {
+  const sw = read(path.join(dist, 'flutter_service_worker.js'));
+  assert.match(sw, /registration\.unregister\(\)/);
+  assert.match(sw, /flutter-app-cache/);
+  assert.ok(!/addEventListener\(['"]fetch/.test(sw), 'kill switch must not intercept requests');
+});
+
 test(`shipped JavaScript stays under ${JS_BUDGET_BYTES / 1024} KB`, (t) => {
   let total = 0;
-  for (const f of files.filter((x) => x.endsWith('.js'))) total += statSync(f).size;
+  // The service-worker kill switch is fetched only by browsers that had the old site.
+  const pageJs = files.filter(
+    (x) => x.endsWith('.js') && path.basename(x) !== 'flutter_service_worker.js',
+  );
+  for (const f of pageJs) total += statSync(f).size;
   const html = read(path.join(dist, 'index.html'));
   for (const m of html.matchAll(
     /<script(?![^>]*application\/ld\+json)[^>]*>([\s\S]*?)<\/script>/g,
