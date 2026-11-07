@@ -9,8 +9,8 @@
 | 0 Audit | ✅ | `docs/EXISTING_PORTFOLIO_AUDIT.md` |
 | 1 Reference analysis | ✅ | `docs/REFERENCE_DESIGN_AUDIT.md`, `docs/screenshots/reference-*` |
 | 2 Branch, tags, plan | ✅ | tags `legacy-flutter-source` (2eadadd), `legacy-flutter-deploy` (ae42c32), local only |
-| 3 Scaffold | ⏳ | |
-| 4 Content model | ⏳ | |
+| 3 Scaffold | ✅ | build, check, lint, format pass |
+| 4 Content model | ✅ | inventory: 6 projects, 16 skills, 4 posts, 4 timeline, 3/3/3 certs/learning/languages; `portfolio.ts` type-checks |
 | 5 Header/hero/stats | ⏳ | |
 | 6 Expertise/work | ⏳ | |
 | 7 Remaining sections + legal | ⏳ | |
