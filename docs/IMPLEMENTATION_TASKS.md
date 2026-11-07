@@ -52,11 +52,62 @@ Status legend: ✅ done · 🔄 in progress · ⏳ pending · ⚠️ done with c
 | Typed `portfolio.ts` (verbatim legacy fields; sourced stats) | type-checks | `src/data/portfolio.ts` | L | ✅ |
 | Migration map | every legacy item mapped | `docs/CONTENT_MIGRATION_MAP.md` | M | ✅ |
 
-## Phase 5: Header, hero, stats ⏳
-## Phase 6: Expertise, work ⏳
-## Phase 7: Workflow, experience, about, contact, footer, legal, 404 ⏳
-## Phase 8: Preservation test → remove Flutter ⏳
-## Phase 9: Quality (build-output, e2e, axe, links, Lighthouse, visual QA) ⏳
-## Phase 10: Deploy workflow, docs, final report ⏳
+## Phase 5: Header, hero, stats ✅
 
-(Tasks for phases 5–10 are expanded as each phase starts.)
+| Task | Acceptance | Files | Risk | Cx | Status |
+|---|---|---|---|---|---|
+| Header: wordmark, anchors, ink CTA, blur on scroll | blur after 8px scroll | `components/sections/Header.astro`, `scripts/header.ts` | — | S | ✅ |
+| Full-screen mobile menu | `aria-expanded`, Escape, focus in + trapped, scroll lock (e2e) | `Header.astro`, `scripts/menu.ts` | focus traps | M | ✅ |
+| Hero: pill, gradient headline, CTAs, CV, monogram, chips, role line | above the fold at 1440×900; chips never cover the centre; 0 overlap 640–1920px (e2e) | `Hero.astro` | chip geometry | M | ✅ |
+| Stats card + marquee | sourced stats; pause on hover/focus; static under reduced motion | `Stats.astro` | — | S | ✅ |
+
+## Phase 6: Expertise, work ✅
+
+| Task | Acceptance | Files | Risk | Cx | Status |
+|---|---|---|---|---|---|
+| 4 expertise cards + "Shown in" + full toolkit | links resolve (e2e) | `Expertise.astro` | overclaiming | M | ✅ |
+| Flagship case study | LOSO next to held-out, architecture, limitations | `work/FlagshipCase.astro` | mobile overflow (fixed) | L | ✅ |
+| Highlight cards with `<details>` | opens (e2e) | `work/HighlightCard.astro` | — | S | ✅ |
+| Filterable index + live region | 2/1/5/3/7 (e2e); no images rendered (test) | `work/ProjectIndex.astro`, `scripts/filters.ts` | — | M | ✅ |
+
+## Phase 7: Process, experience, about, writing, contact, footer, legal, 404 ✅
+
+| Task | Acceptance | Files | Risk | Cx | Status |
+|---|---|---|---|---|---|
+| Six-stage ring as ARIA tabs; auto-advance stops on interaction, pauses off-screen | arrows/Home/End/roving tabindex (e2e) | `Process.astro`, `scripts/workflow.ts` | class clash with Tailwind `ring` (fixed) | L | ✅ |
+| Terminal replay of real CI steps + training log | full output under reduced motion / no JS (e2e) | `process/Terminal.astro`, `scripts/terminal.ts` | — | M | ✅ |
+| Quality gates, quote band | — | `Process.astro` | — | S | ✅ |
+| Experience with transition note; education | real titles, CV bullets | `Experience.astro` | — | S | ✅ |
+| About + certifications, learning, publications, languages | — | `About.astro` | — | S | ✅ |
+| Writing (renders only published articles) | not rendered today (test) | `Writing.astro` | — | S | ✅ |
+| Contact: validation + `mailto:` composer | errors on empty; encoded subject/body (e2e) | `Contact.astro`, `scripts/contact.ts` | — | M | ✅ |
+| Footer; Impressum (`data-todo`), privacy, 404, robots | pages render; gate fails on todo | `Footer.astro`, `pages/*`, `layouts/Legal.astro` | legal accuracy (owner review) | M | ✅ |
+
+## Phase 8: Preservation test → remove Flutter ✅
+
+| Task | Acceptance | Files | Risk | Cx | Status |
+|---|---|---|---|---|---|
+| Content preservation test (mutation-checked) | 15/15 | `tests/content-preservation.test.mjs` | false passes | M | ✅ |
+| Before/after inventory | table | `docs/TEST_PLAN.md` | — | S | ✅ |
+| Remove Flutter source (after the test passed) | dedicated commit `697b211` | `lib/`, `web/`, `pubspec.*` | data loss (mitigated by tag) | S | ✅ |
+
+## Phase 9: Quality ✅
+
+| Task | Result |
+|---|---|
+| Build-output test | 17/17 |
+| Deploy gate | fails on the Impressum placeholder (intended) |
+| Playwright e2e at 1440/820/390 | 43/43 |
+| axe | 0 violations of any impact |
+| External links | 8 ok, 1 LinkedIn warning |
+| Lighthouse mobile | 96 / 100 / 100 / 100 (3 runs) |
+| Visual QA vs reference | documented in `REFERENCE_DESIGN_AUDIT.md` §9; 8 issues fixed |
+| Dependency age | 486/486 packages ≥ 14 days (lockfile regenerated with `--before`) |
+
+## Phase 10: Deployment preparation ✅
+
+| Task | Result |
+|---|---|
+| `.github/workflows/deploy.yml` | PR: verify only; main: verify → gate → publish tested `dist/` to `gh-pages` (no force); actionlint 1.7.12 clean |
+| Legacy service-worker kill switch | verified by upgrade simulation |
+| `docs/DEPLOYMENT_PLAN.md`, README, PROJECT_STATUS | written |
