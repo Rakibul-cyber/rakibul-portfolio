@@ -1,0 +1,101 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { profile } from '../data/portfolio';
+import { withBase } from '../lib/url';
+---
+
+<Legal
+  title="Privacy policy — Md Rakibul Hassan"
+  description="How this website handles personal data: static hosting on GitHub Pages, no cookies, no analytics."
+  path="privacy/"
+  heading="Privacy policy"
+  updated="Last updated: November 2026"
+>
+  <p>
+    This is a static personal website. It sets no cookies, runs no analytics or tracking, embeds no
+    third-party content and loads its fonts from this site, not from external servers. This policy
+    explains the little data processing that does happen.
+  </p>
+
+  <h2>1. Controller</h2>
+  <p>
+    {profile.name}, contact details and postal address as stated in the
+    <a href={withBase('impressum/')} lang="de">
+      Impressum
+    </a>
+    . Email:
+    <a href={`mailto:${profile.email}`}>{profile.email}</a>, phone:{' '}
+    <a href={`tel:${profile.phoneHref}`}>{profile.phone}</a>.
+  </p>
+
+  <h2>2. Hosting on GitHub Pages</h2>
+  <p>
+    The site is hosted on GitHub Pages, a service of GitHub, Inc. (USA). When you open a page, your
+    browser sends technical data that GitHub processes to deliver the site and keep it secure,
+    typically your IP address, the date and time of the request, the requested URL, the referring
+    page and your browser’s user agent. These server logs are under GitHub’s control; I have no
+    access to them.
+  </p>
+  <p>
+    Legal basis: Art. 6(1)(f) GDPR. My legitimate interest is presenting this website reliably and
+    securely. Processing by GitHub may involve a transfer of data to the USA. Details on GitHub’s
+    processing and safeguards are in the
+    <a
+      href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
+      rel="noopener noreferrer"
+    >
+      GitHub General Privacy Statement
+    </a>
+    .
+  </p>
+
+  <h2>3. No cookies, no analytics, self-hosted fonts</h2>
+  <p>
+    This site does not set cookies and does not use analytics, advertising or tracking tools. Fonts
+    are delivered from this website itself, so no request is made to font providers such as Google
+    Fonts.
+  </p>
+
+  <h2>4. Contacting me</h2>
+  <p>
+    If you contact me by email or phone, I process the data you provide (for example your name,
+    email address and message) to answer your request. Legal basis: Art. 6(1)(b) GDPR where your
+    message concerns a possible employment or contractual relationship, otherwise Art. 6(1)(f) GDPR
+    (my legitimate interest in answering enquiries). I delete the data once it is no longer needed,
+    unless statutory retention obligations apply.
+  </p>
+  <p>
+    <strong>The contact form sends and stores nothing.</strong> When you press its button, your own
+    email app opens with a pre-filled message. Nothing is transmitted to this website or to any
+    third party; whether and how the message is sent is entirely up to you and your email provider.
+  </p>
+
+  <h2>5. External links and downloads</h2>
+  <p>
+    This site links to external websites such as GitHub and LinkedIn. They are only contacted if you
+    follow a link; from then on, the provider’s own privacy policy applies. Downloading the CV (PDF)
+    is a plain file request to GitHub Pages, processed as described in section 2.
+  </p>
+
+  <h2>6. Your rights</h2>
+  <p>Under the GDPR you have the right to:</p>
+  <ul>
+    <li>access the personal data I hold about you (Art. 15);</li>
+    <li>have it corrected (Art. 16) or erased (Art. 17);</li>
+    <li>restrict its processing (Art. 18);</li>
+    <li>receive it in a portable format (Art. 20);</li>
+    <li>object to processing based on Art. 6(1)(f) GDPR (Art. 21).</li>
+  </ul>
+  <p>To exercise these rights, contact me using the details in section 1.</p>
+
+  <h2>7. Right to lodge a complaint</h2>
+  <p>
+    You can complain to a data protection supervisory authority (Art. 77 GDPR). The authority
+    responsible for me is the Hessian Commissioner for Data Protection and Freedom of Information
+    (HBDI):
+    <a href="https://datenschutz.hessen.de" rel="noopener noreferrer">
+      datenschutz.hessen.de
+    </a>
+    .
+  </p>
+</Legal>

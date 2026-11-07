@@ -1,0 +1,98 @@
+---
+import { footer, nav, profile } from '../../data/portfolio';
+import { withBase } from '../../lib/url';
+
+export interface Props {
+  home?: boolean;
+}
+const { home = true } = Astro.props;
+const year = new Date().getFullYear();
+const href = (anchor: string) => (home ? anchor : withBase(`/${anchor}`));
+const linkClass =
+  'inline-flex min-h-8 items-center text-sm text-muted transition-colors hover:text-ink';
+---
+
+<footer class="border-t border-slate-200/70 bg-surface">
+  <div class="mx-auto max-w-6xl px-6 pt-16 pb-10 sm:px-8">
+    <div class="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div>
+        <a
+          href={home ? '#top' : withBase('/')}
+          class="font-display text-lg font-bold tracking-tight text-ink"
+        >
+          Rakibul Hassan<span class="text-accent">.</span>
+        </a>
+        <p class="mt-3 max-w-xs text-sm leading-relaxed text-muted">{footer.tagline}</p>
+      </div>
+      <nav aria-label="Footer">
+        <h2 class="footer-label">Navigation</h2>
+        <ul class="mt-3 space-y-1">
+          {nav.map((item) => (
+            <li>
+              <a href={href(item.href)} class={linkClass}>
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <div>
+        <h2 class="footer-label">Legal</h2>
+        <ul class="mt-3 space-y-1">
+          <li>
+            <a href={withBase('impressum/')} class={linkClass} lang="de">
+              Impressum
+            </a>
+          </li>
+          <li>
+            <a href={withBase('privacy/')} class={linkClass}>
+              Privacy
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="footer-label">Connect</h2>
+        <ul class="mt-3 space-y-1">
+          <li>
+            <a href={`mailto:${profile.email}`} class={`${linkClass} break-all`}>
+              {profile.email}
+            </a>
+          </li>
+          <li>
+            <a href={profile.linkedin} class={linkClass} target="_blank" rel="noopener noreferrer">
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a href={profile.github} class={linkClass} target="_blank" rel="noopener noreferrer">
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a href={withBase(profile.cv)} class={linkClass}>
+              CV (PDF)
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 flex flex-col gap-2 border-t border-slate-200/70 pt-6 text-xs text-slate-600 sm:flex-row sm:justify-between">
+      <p>
+        © {year} {profile.name} · {profile.location}
+      </p>
+      <p>No cookies, no tracking. Built with Astro.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer-label {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-slate-600);
+  }
+</style>

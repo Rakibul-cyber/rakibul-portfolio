@@ -1,0 +1,50 @@
+---
+import Legal from '../layouts/Legal.astro';
+import TodoPlaceholder from '../components/ui/TodoPlaceholder.astro';
+import { profile } from '../data/portfolio';
+---
+
+<Legal
+  title="Impressum — Md Rakibul Hassan"
+  description="Impressum (Anbieterkennzeichnung) der Website von Md Rakibul Hassan."
+  path="impressum/"
+  lang="de"
+  heading="Impressum"
+  updated="Stand: November 2026"
+>
+  <h2>Angaben gemäß § 5 DDG</h2>
+  <address>
+    {profile.name}
+    <br />
+    <TodoPlaceholder id="impressum-address">
+      Postanschrift fehlt noch – wird vor der Veröffentlichung vom Inhaber ergänzt.
+    </TodoPlaceholder>
+    <br />
+    Deutschland
+  </address>
+
+  <h2>Kontakt</h2>
+  <p>
+    Telefon: <a href={`tel:${profile.phoneHref}`}>{profile.phone}</a>
+    <br />
+    E-Mail: <a href={`mailto:${profile.email}`}>{profile.email}</a>
+  </p>
+
+  <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+  <p>{profile.name}, Anschrift wie oben.</p>
+
+  <h2>Haftung für Links</h2>
+  <p>
+    Diese Website enthält Links zu externen Websites Dritter (zum Beispiel GitHub und LinkedIn), auf
+    deren Inhalte ich keinen Einfluss habe. Für diese fremden Inhalte kann ich daher keine Gewähr
+    übernehmen. Verantwortlich für die Inhalte der verlinkten Seiten ist stets der jeweilige
+    Anbieter oder Betreiber. Zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar.
+    Werden mir Rechtsverletzungen bekannt, entferne ich die betreffenden Links umgehend.
+  </p>
+
+  <h2>Haftung für Inhalte</h2>
+  <p>
+    Die Inhalte dieser Website wurden mit Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit
+    und Aktualität der Inhalte kann ich jedoch keine Gewähr übernehmen.
+  </p>
+</Legal>
