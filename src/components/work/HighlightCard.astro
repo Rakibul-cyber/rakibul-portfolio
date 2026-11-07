@@ -1,0 +1,82 @@
+---
+import Icon from '../ui/Icon.astro';
+import Tag from '../ui/Tag.astro';
+import type { Project } from '../../data/portfolio';
+import { smartQuotes } from '../../lib/typography';
+
+export interface Props {
+  project: Project;
+  delay?: number;
+}
+const { project, delay = 0 } = Astro.props;
+const hl = project.highlight;
+---
+
+{hl && (
+  <article
+    id={`project-${project.id}`}
+    aria-labelledby={`title-${project.id}`}
+    class="group lift flex flex-col rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-shadow hover:shadow-xl hover:shadow-slate-200/60 sm:p-7"
+    data-reveal
+    style={`--reveal-delay: ${delay}ms`}
+  >
+    <div class="flex items-start justify-between gap-3">
+      <Tag tone="accent">{hl.domain}</Tag>
+      {project.githubUrl && (
+        <a
+          href={project.githubUrl}
+          class="-m-2 inline-flex size-11 items-center justify-center rounded-full text-slate-400 transition-colors hover:text-accent"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon name="arrow-up-right" class="nudge-diag size-5" />
+          <span class="sr-only">{project.shortTitle} repository on GitHub</span>
+        </a>
+      )}
+    </div>
+    <h3
+      id={`title-${project.id}`}
+      class="mt-5 font-display text-lg leading-snug font-semibold text-ink"
+    >
+      {project.title}
+    </h3>
+    <p class="mt-1 text-xs font-medium tracking-wide text-slate-500 uppercase">
+      {project.subtitle}
+    </p>
+    <p class="mt-3 text-sm leading-relaxed text-muted">{smartQuotes(hl.summary)}</p>
+
+    <details class="case-details mt-auto border-t border-slate-100 pt-4">
+      <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 text-sm font-semibold text-accent-600 [&::-webkit-details-marker]:hidden">
+        How it was built
+        <Icon name="arrow-right" class="chevron size-4 transition-transform" />
+      </summary>
+      <dl class="mt-2 space-y-4 pb-1">
+        {hl.details.map((d) => (
+          <div>
+            <dt class="text-xs font-semibold tracking-wide text-slate-500 uppercase">{d.label}</dt>
+            <dd class="mt-1 text-sm leading-relaxed text-slate-700">
+              {Array.isArray(d.body) ? (
+                <ul class="list-disc space-y-1 pl-4 marker:text-accent">
+                  {d.body.map((line) => (
+                    <li>{line}</li>
+                  ))}
+                </ul>
+              ) : (
+                d.body
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </details>
+  </article>
+)}
+
+<style>
+  .case-details[open] .chevron {
+    transform: rotate(90deg);
+  }
+  .case-details {
+    margin-top: 1.25rem;
+  }
+</style>

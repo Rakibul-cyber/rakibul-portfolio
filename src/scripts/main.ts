@@ -1,3 +1,4 @@
+import { initFilters } from './filters';
 import { initHeader } from './header';
 import { initMenu } from './menu';
 import { initReveal } from './reveal';
@@ -6,4 +7,5 @@ import { initReveal } from './reveal';
 // is null-safe and does nothing when its markup is absent.
 initHeader();
 initMenu();
+initFilters();
 initReveal();
