@@ -46,7 +46,10 @@ const count = (id: string) =>
 
   <p class="sr-only" role="status" aria-live="polite" data-filter-status></p>
 
-  <ul class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3" aria-labelledby="index-title">
+  <ul
+    class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
+    aria-labelledby="index-title"
+  >
     {projects.map((p) => (
       <li
         id={featured.has(p.id) ? undefined : `project-${p.id}`}

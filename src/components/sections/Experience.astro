@@ -4,7 +4,7 @@ import { education, experience, transitionNote } from '../../data/portfolio';
 ---
 
 <section id="experience" aria-labelledby="experience-title" class="bg-surface py-24 sm:py-32">
-  <div class="mx-auto grid max-w-6xl gap-14 px-6 sm:px-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+  <div class="mx-auto grid grid-cols-1 max-w-6xl gap-14 px-6 sm:px-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
     <div class="lg:sticky lg:top-28 lg:self-start" data-reveal>
       <p class="font-display text-sm font-semibold tracking-eyebrow text-accent uppercase">
         Experience
@@ -54,7 +54,7 @@ import { education, experience, transitionNote } from '../../data/portfolio';
         <Icon name="cap" class="size-4" />
         Education
       </h3>
-      <ul class="mt-4 grid gap-4 sm:grid-cols-2">
+      <ul class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {education.map((edu) => (
           <li class="rounded-2xl border border-slate-200/80 bg-white p-5" data-reveal>
             <p class="font-mono text-xs font-medium text-accent-600">{edu.period}</p>

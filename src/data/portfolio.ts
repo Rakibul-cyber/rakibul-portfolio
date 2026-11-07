@@ -1035,7 +1035,7 @@ export const footer = {
 export const seo = {
   title: 'Md Rakibul Hassan — AI/ML Engineer & AI-Powered Software Developer',
   description:
-    'AI/ML engineer and AI-powered software developer in Frankfurt: machine learning models, Python inference APIs and MLOps, backed by production mobile application architecture.',
+    'AI/ML engineer in Frankfurt building machine learning models, Python inference APIs and MLOps pipelines, backed by production mobile application architecture.',
   keywords: [
     'AI/ML Engineer',
     'Machine Learning Engineer',

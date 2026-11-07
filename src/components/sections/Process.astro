@@ -29,7 +29,10 @@ const withCode = (text: string) =>
   class="border-b border-slate-200/70 py-24 sm:py-32"
 >
   <div class="mx-auto max-w-6xl px-6 sm:px-8">
-    <div class="grid items-center gap-14 lg:grid-cols-[1fr_1fr] lg:gap-12" data-workflow>
+    <div
+      class="grid grid-cols-1 items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12"
+      data-workflow
+    >
       <div>
         <SectionHeading
           id="process-title"

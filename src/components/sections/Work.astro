@@ -26,7 +26,7 @@ import { flagship, highlightProjects } from '../../data/portfolio';
     <p class="mt-16 font-display text-xs font-semibold tracking-label text-slate-600 uppercase">
       Case highlights
     </p>
-    <div class="mt-5 grid items-start gap-5 lg:grid-cols-3">
+    <div class="mt-5 grid grid-cols-1 items-start gap-5 lg:grid-cols-3">
       {highlightProjects.map((p, i) => (
         <HighlightCard project={p} delay={i * 70} />
       ))}

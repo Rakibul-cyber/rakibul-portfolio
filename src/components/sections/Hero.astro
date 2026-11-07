@@ -13,7 +13,7 @@ import { withBase } from '../../lib/url';
     <div class="hero-glow-2 absolute inset-0"></div>
   </div>
 
-  <div class="relative mx-auto grid max-w-6xl items-center gap-14 px-6 pt-28 pb-16 sm:px-8 sm:pt-32 lg:grid-cols-[1.12fr_0.88fr] lg:gap-10 lg:pt-36 lg:pb-20">
+  <div class="relative mx-auto grid grid-cols-1 max-w-6xl items-center gap-14 px-6 pt-28 pb-16 sm:px-8 sm:pt-32 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] lg:gap-10 lg:pt-36 lg:pb-20">
     <div>
       <p
         class="inline-flex items-center gap-2.5 rounded-full border border-slate-200/80 bg-white/80 px-3.5 py-1.5 text-xs font-medium sm:text-sm text-muted shadow-sm backdrop-blur"
@@ -81,7 +81,7 @@ import { withBase } from '../../lib/url';
           />
         ) : (
           <div
-            class="monogram relative flex size-full items-center justify-center overflow-hidden rounded-full bg-white shadow-2xl ring-4 shadow-slate-300/50 ring-white"
+            class="monogram relative flex size-full items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-white shadow-2xl ring-4 shadow-slate-400/40 ring-white"
             role="img"
             aria-label={`${profile.name} monogram`}
           >
@@ -218,7 +218,27 @@ import { withBase } from '../../lib/url';
   }
   @media (min-width: 64rem) {
     .portrait {
+      --c: 18rem;
+    }
+    /* The desktop column is narrower than the tablet one: hug the circle more tightly. */
+    .chip:nth-child(n) {
+      --k: 0.15;
+    }
+    .chip:nth-child(3),
+    .chip:nth-child(4) {
+      --k: 0.24;
+    }
+  }
+  @media (min-width: 80rem) {
+    .portrait {
       --c: 23rem;
+    }
+    .chip:nth-child(n) {
+      --k: 0.22;
+    }
+    .chip:nth-child(3),
+    .chip:nth-child(4) {
+      --k: 0.3;
     }
   }
   @media (prefers-reduced-motion: reduce) {

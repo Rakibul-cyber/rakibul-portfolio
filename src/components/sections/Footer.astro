@@ -14,7 +14,7 @@ const linkClass =
 
 <footer class="border-t border-slate-200/70 bg-surface">
   <div class="mx-auto max-w-6xl px-6 pt-16 pb-10 sm:px-8">
-    <div class="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)]">
       <div>
         <a
           href={home ? '#top' : withBase('/')}

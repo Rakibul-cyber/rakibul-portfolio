@@ -16,7 +16,7 @@ export default defineConfig({
   build: {
     format: 'directory',
     // Small pages: inlining the stylesheet removes a render-blocking request.
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'always',
   },
   integrations: [
     sitemap({
