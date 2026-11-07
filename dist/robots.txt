@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rakibul-cyber.github.io/rakibul-portfolio/sitemap-index.xml
