@@ -1,0 +1,103 @@
+---
+import Icon from '../ui/Icon.astro';
+import { stack, stats } from '../../data/portfolio';
+---
+
+<section aria-label="Key facts" class="relative mx-auto max-w-6xl px-6 sm:px-8">
+  <div
+    class="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm"
+    data-reveal
+  >
+    <dl class="grid grid-cols-2 gap-px bg-slate-100 sm:grid-cols-3">
+      {stats.map((stat, i) => (
+        <div
+          class:list={[
+            'flex flex-col gap-1 bg-white px-6 py-6 sm:px-8 sm:py-9',
+            i === 0 && 'col-span-2 sm:col-span-1',
+          ]}
+        >
+          <dt class="order-2 text-sm leading-snug text-muted">{stat.label}</dt>
+          <dd class="order-1 font-display text-4xl leading-10 font-bold tracking-tight text-ink">
+            {stat.value}
+          </dd>
+        </div>
+      ))}
+    </dl>
+
+    <details class="group border-t border-slate-100 px-8 py-3 text-xs text-muted">
+      <summary class="inline-flex min-h-8 cursor-pointer list-none items-center gap-1.5 font-medium transition-colors hover:text-ink [&::-webkit-details-marker]:hidden">
+        <Icon name="info" class="size-3.5" />
+        How these numbers are sourced
+      </summary>
+      <ul class="mt-2 mb-1 space-y-1">
+        {stats.map((stat) => (
+          <li>
+            <span class="font-semibold text-ink">{stat.value}</span> — {stat.source}
+          </li>
+        ))}
+      </ul>
+    </details>
+
+    <div class="border-t border-slate-100 py-7">
+      <p class="text-center font-display text-xs font-semibold tracking-label text-slate-500 uppercase">
+        Built with
+      </p>
+      <div class="marquee mt-5" role="region" aria-label="Technologies I use" tabindex="0">
+        <div class="marquee-track">
+          {[0, 1].map((copy) => (
+            <ul class="marquee-list" aria-hidden={copy === 1 ? 'true' : undefined}>
+              {stack.map((tech) => (
+                <li class="rounded-full border border-slate-200/80 bg-surface px-3.5 py-1.5 font-display text-sm font-medium whitespace-nowrap text-slate-600">
+                  {tech}
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 8% 92%, transparent);
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: var(--animate-marquee);
+    will-change: transform;
+  }
+  .marquee-list {
+    display: flex;
+    gap: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track,
+  .marquee:focus .marquee-track {
+    animation-play-state: paused;
+  }
+  /* Reduced motion: a static, wrapped list; the duplicate copy is dropped. */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      mask-image: none;
+      padding-inline: 1.5rem;
+    }
+    .marquee-track {
+      width: auto;
+      animation: none !important;
+      transform: none;
+    }
+    .marquee-list {
+      flex-wrap: wrap;
+      justify-content: center;
+      padding-right: 0;
+    }
+    .marquee-list[aria-hidden='true'] {
+      display: none;
+    }
+  }
+</style>

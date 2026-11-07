@@ -105,6 +105,8 @@ export interface Project {
   id: string;
   /** Legacy, verbatim (except the new Driver Stress project). */
   title: string;
+  /** Short name for "Shown in" links and compact lists. */
+  shortTitle: string;
   subtitle: string;
   description: string;
   tags: string[];
@@ -259,6 +261,7 @@ const DRIVER_REPO = 'https://github.com/Rakibul-cyber/driver-stress-monitoring';
 export const projects: Project[] = [
   {
     id: 'driver-stress',
+    shortTitle: 'Driver Stress',
     title: 'Real-Time Driver Stress & Cognitive Load Monitoring',
     subtitle: 'Machine learning · Inference API · MLOps',
     description:
@@ -380,6 +383,7 @@ export const projects: Project[] = [
   },
   {
     id: 'forest-ai',
+    shortTitle: 'Forest AI',
     title: 'Forest Tracking & Environmental Safety System',
     subtitle: 'Production · Full-Stack + Cloud',
     description:
@@ -424,6 +428,7 @@ export const projects: Project[] = [
   },
   {
     id: 'stock-dashboard',
+    shortTitle: 'Stock Dashboard',
     title: 'Analyzing Historical Stock & Revenue Data and Building a Dashboard',
     subtitle: 'Stock Revenue Dashboard',
     description:
@@ -476,6 +481,7 @@ export const projects: Project[] = [
   },
   {
     id: 'louco',
+    shortTitle: 'Louco',
     title: 'Louco Mobile App',
     subtitle: 'Production · Flutter Mobile',
     description:
@@ -538,6 +544,7 @@ export const projects: Project[] = [
   },
   {
     id: 'steko',
+    shortTitle: 'STEKO',
     title: 'STEKO Health Checker',
     subtitle: 'Final Year Project · mHealth',
     description:
@@ -553,6 +560,7 @@ export const projects: Project[] = [
   },
   {
     id: 'xr-hub',
+    shortTitle: 'XR-Hub',
     title: 'XR-Hub Condominium Management System',
     subtitle: 'Flutter Web & Mobile',
     description:
@@ -566,6 +574,7 @@ export const projects: Project[] = [
   },
   {
     id: 'automotive-hmi',
+    shortTitle: 'Automotive HMI',
     title: 'Automotive HMI Dashboard',
     subtitle: 'Android Automotive · Jetpack Compose',
     description:

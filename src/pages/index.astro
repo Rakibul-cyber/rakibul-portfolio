@@ -1,15 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
-import Button from '../components/ui/Button.astro';
-import SectionHeading from '../components/ui/SectionHeading.astro';
+import Header from '../components/sections/Header.astro';
+import Hero from '../components/sections/Hero.astro';
+import Stats from '../components/sections/Stats.astro';
+import { personJsonLd, seo } from '../data/portfolio';
 ---
 
-<Base title="Md Rakibul Hassan" description="Scaffold" path="/">
-  <main id="main" class="mx-auto max-w-6xl px-6 py-24 sm:px-8">
-    <h1 class="font-display text-5xl font-bold">Scaffold</h1>
-    <SectionHeading eyebrow="Eyebrow" title="Section title" id="t" lead="Lead text." />
-    <Button href="/#main" icon="arrow-right">
-      Primary
-    </Button>
+<Base title={seo.title} description={seo.description} path="/" jsonLd={[personJsonLd]}>
+  <Header />
+  <main id="main">
+    <Hero />
+    <Stats />
   </main>
 </Base>

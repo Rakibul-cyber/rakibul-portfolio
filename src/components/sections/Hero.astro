@@ -1,0 +1,229 @@
+---
+import { Image } from 'astro:assets';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import { heroChips, profile } from '../../data/portfolio';
+import { withBase } from '../../lib/url';
+---
+
+<section id="top" class="relative overflow-hidden" aria-labelledby="hero-title">
+  <div class="hero-bg pointer-events-none absolute inset-0" aria-hidden="true">
+    <div class="hero-grid hero-grid-mask absolute inset-0"></div>
+    <div class="hero-glow absolute inset-0"></div>
+    <div class="hero-glow-2 absolute inset-0"></div>
+  </div>
+
+  <div class="relative mx-auto grid max-w-6xl items-center gap-14 px-6 pt-28 pb-16 sm:px-8 sm:pt-32 lg:grid-cols-[1.12fr_0.88fr] lg:gap-10 lg:pt-36 lg:pb-20">
+    <div>
+      <p
+        class="inline-flex items-center gap-2.5 rounded-full border border-slate-200/80 bg-white/80 px-3.5 py-1.5 text-xs font-medium sm:text-sm text-muted shadow-sm backdrop-blur"
+        data-reveal
+      >
+        <span class="relative flex size-2" aria-hidden="true">
+          <span class="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-60"></span>
+          <span class="relative inline-flex size-2 rounded-full bg-emerald-500"></span>
+        </span>
+        {profile.status}
+      </p>
+
+      <h1
+        id="hero-title"
+        class="mt-6 font-display text-[2rem] leading-[1.1] font-bold tracking-tight text-balance text-ink sm:text-5xl sm:leading-[1.06] lg:text-[3.1rem]"
+        data-reveal
+        style="--reveal-delay: 60ms"
+      >
+        {profile.headline.lead}
+        <span class="text-gradient">{profile.headline.highlight}</span>
+      </h1>
+
+      <p
+        class="mt-6 max-w-xl text-lg leading-relaxed text-pretty text-muted"
+        data-reveal
+        style="--reveal-delay: 120ms"
+      >
+        {profile.intro}
+      </p>
+
+      <div class="mt-9 flex flex-col gap-3 sm:flex-row" data-reveal style="--reveal-delay: 180ms">
+        <Button href="#work" icon="arrow-right">
+          See my work
+        </Button>
+        <Button href="#contact" variant="secondary">
+          Get in touch
+        </Button>
+      </div>
+
+      <a
+        href={withBase(profile.cv)}
+        class="group mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-muted transition-colors hover:text-ink"
+        data-reveal
+        style="--reveal-delay: 220ms"
+      >
+        <Icon name="download" class="size-4" />
+        Download CV <span class="sr-only">(PDF)</span>
+      </a>
+    </div>
+
+    <div
+      class="portrait relative flex flex-col items-center"
+      data-reveal
+      style="--reveal-delay: 160ms"
+    >
+      <div class="portrait-circle relative">
+        {profile.photo ? (
+          <Image
+            src={profile.photo.src}
+            alt={profile.photo.alt}
+            widths={[240, 368, 736]}
+            sizes="(min-width: 64rem) 368px, (min-width: 40rem) 320px, 240px"
+            loading="eager"
+            class="size-full rounded-full object-cover shadow-2xl ring-4 shadow-slate-300/50 ring-white"
+          />
+        ) : (
+          <div
+            class="monogram relative flex size-full items-center justify-center overflow-hidden rounded-full bg-white shadow-2xl ring-4 shadow-slate-300/50 ring-white"
+            role="img"
+            aria-label={`${profile.name} monogram`}
+          >
+            <div class="hero-grid absolute inset-0 opacity-70" aria-hidden="true" />
+            <div class="monogram-glow absolute inset-0" aria-hidden="true" />
+            <span class="relative font-display text-7xl font-bold tracking-tight text-gradient sm:text-8xl">
+              {profile.monogram}
+            </span>
+            <span class="absolute bottom-[22%] font-mono text-[0.7rem] tracking-label text-muted uppercase">
+              Frankfurt · DE
+            </span>
+          </div>
+        )}
+      </div>
+
+      <p class="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center font-display text-lg font-semibold text-ink sm:text-xl lg:text-lg">
+        <span>{profile.roles[0]}</span>
+        <span class="size-1.5 rotate-45 bg-accent" aria-hidden="true"></span>
+        <span>{profile.roles[1]}</span>
+      </p>
+
+      <ul class="chips mt-6 flex max-w-md flex-wrap justify-center gap-2" aria-label="Core skills">
+        {heroChips.map((chip) => (
+          <li class="chip inline-flex items-center gap-2 rounded-full whitespace-nowrap border border-slate-200/80 bg-white/85 px-3 py-1.5 text-xs font-medium text-ink shadow-sm backdrop-blur">
+            <Icon name={chip.icon} class="size-4 text-accent" />
+            {chip.label}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-grid-mask {
+    mask-image: radial-gradient(78% 65% at 50% 0, #000 22%, transparent 72%);
+  }
+  .hero-glow {
+    background: radial-gradient(
+      52% 52% at 50% -8%,
+      color-mix(in srgb, var(--color-accent) 16%, transparent),
+      transparent 70%
+    );
+  }
+  .hero-glow-2 {
+    background: radial-gradient(
+      42% 55% at 88% 18%,
+      color-mix(in srgb, var(--color-violet) 12%, transparent),
+      transparent 70%
+    );
+  }
+  .monogram-glow {
+    background:
+      radial-gradient(
+        60% 60% at 30% 25%,
+        color-mix(in srgb, var(--color-accent) 14%, transparent),
+        transparent 70%
+      ),
+      radial-gradient(
+        55% 55% at 75% 80%,
+        color-mix(in srgb, var(--color-violet) 12%, transparent),
+        transparent 70%
+      );
+  }
+
+  /* Circle size drives the chip geometry below. */
+  .portrait {
+    --c: 15rem;
+  }
+  .portrait-circle {
+    width: var(--c);
+    height: var(--c);
+  }
+
+  /*
+   * From 40rem up, chips float around the circle: three per side, anchored to the
+   * circle's edge so they never cover its centre. Below 40rem they stay a wrapped
+   * list under the role line (as in the reference).
+   */
+  @media (min-width: 40rem) {
+    .portrait {
+      --c: 20rem;
+    }
+    .chips {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: var(--c);
+      max-width: none;
+      margin: 0;
+      pointer-events: none;
+    }
+    .chip {
+      position: absolute;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      box-shadow:
+        0 10px 15px -3px color-mix(in oklab, var(--color-slate-300) 30%, transparent),
+        0 4px 6px -4px color-mix(in oklab, var(--color-slate-300) 30%, transparent);
+      animation: var(--animate-float);
+      pointer-events: auto;
+    }
+    .chip:nth-child(odd) {
+      right: calc(50% + var(--c) * var(--k, 0.3));
+    }
+    .chip:nth-child(even) {
+      left: calc(50% + var(--c) * var(--k, 0.3));
+    }
+    .chip:nth-child(1) {
+      top: 6%;
+    }
+    .chip:nth-child(2) {
+      top: 4%;
+      animation-delay: -1.5s;
+    }
+    .chip:nth-child(3) {
+      top: 44%;
+      --k: 0.36;
+      animation-delay: -3s;
+    }
+    .chip:nth-child(4) {
+      top: 42%;
+      --k: 0.36;
+      animation-delay: -4.5s;
+    }
+    .chip:nth-child(5) {
+      bottom: 6%;
+      animation-delay: -2s;
+    }
+    .chip:nth-child(6) {
+      bottom: 8%;
+      animation-delay: -5s;
+    }
+  }
+  @media (min-width: 64rem) {
+    .portrait {
+      --c: 23rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chip {
+      animation: none !important;
+    }
+  }
+</style>

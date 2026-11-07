@@ -20,6 +20,10 @@
   --color-term-ok: #34d399;
   --color-term-warn: #fbbf24;
   --color-term-info: #a5b4fc;
+  /* Window controls (decorative). */
+  --color-term-red: #ff5f57;
+  --color-term-amber: #febc2e;
+  --color-term-green: #28c840;
 
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-display: 'Space Grotesk Variable', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
