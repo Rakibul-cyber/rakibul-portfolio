@@ -69,6 +69,20 @@ Each entry: decision, alternatives considered, trade-offs. Decisions marked *(ap
 - ESLint 10 (flat config) + `typescript-eslint` + `eslint-plugin-astro`; Prettier 3 + `prettier-plugin-astro` + `prettier-plugin-tailwindcss`.
 - Tests: Node's built-in `node:test` for content preservation and build output (no extra dependency); `@playwright/test` + `@axe-core/playwright` for e2e and accessibility.
 
+## TD-13 Performance choices found during Phase 9
+
+- **Inline CSS** (`build.inlineStylesheets: 'always'`): the page is a single long document, so inlining its ~50 KB of CSS removes two render-blocking requests. Lighthouse mobile Performance went from 96 to 97 on the same dependency tree.
+- **No images above the fold.** The hero uses a CSS/SVG monogram; LCP is the headline text.
+- **Fonts:** two Latin variable WOFF2 files (48 KB + 22 KB), preloaded, `font-display: swap`. CLS measured at 0.
+
+## TD-14 Dependency age is enforced for the whole tree
+
+Direct dependencies are pinned exactly, but their own caret ranges pulled in 69 packages published in the last 14 days (including Vite 8.3.6 and a newer `playwright-core` that also caused duplicate-type errors). The lockfile was therefore regenerated with `npm install --before=2026-10-25`, and `playwright-core` is pinned via `overrides` to the version `@playwright/test` uses. Result: 486 / 486 packages are at least 14 days old. CI installs with `npm ci`, so the lockfile is authoritative. To update later: bump the pins, then run `npm install --before=<today − 14 days>`.
+
+## TD-15 robots.txt on a project site
+
+A GitHub Pages *project* site lives under `/rakibul-portfolio/`, but crawlers only read `robots.txt` at the domain root (`rakibul-cyber.github.io/robots.txt`, owned by the user site). The generated `/rakibul-portfolio/robots.txt` (requested by the brief) is harmless but advisory. The sitemap is also linked from every page (`<link rel="sitemap">`) and can be submitted in Google Search Console.
+
 ## TD-11 Legal pages
 
 - Impressum (German, § 5 DDG, § 18 Abs. 2 MStV) and privacy policy, as templates the owner must review.

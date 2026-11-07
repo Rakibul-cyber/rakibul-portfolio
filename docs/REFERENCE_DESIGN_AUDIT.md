@@ -149,4 +149,30 @@ Kept current through Phase 9 (§9 below is filled after the visual comparison).
 
 ## 9. Fidelity check (redesign vs. reference)
 
-_Filled in Phase 9._
+Captured 2026-11-08 with `scripts/capture-screenshots.mjs` at the same viewports: `docs/screenshots/redesign-{desktop,tablet,mobile}.png` and `-full.png`. Compared side by side with the reference captures.
+
+**Matches the reference:** header (wordmark with accent dot, centred anchors, ink pill CTA, blur on scroll); hero composition (status pill with ping, two-tone headline with accent→violet gradient, muted lead, primary + secondary pill buttons, "Download CV" link under them, circle on the right with three chips per side, role line with diamond separator underneath, faint masked grid + glows); stats card (rounded-3xl, hairline-separated cells, uppercase label, edge-faded marquee); section rhythm (`py-24 sm:py-32`, alternating canvas/surface with hairlines, eyebrow + H2 + lead intro); service-style cards (icon tile, accent kicker, title, summary, hairline, check list); case cards (domain pill, corner arrow); ring with numbered nodes, dotted circle, travelling dot and centre circle; dark terminal with traffic lights and status; quality pill card; dark quote band with glow; contact two-column with form card; surface footer with uppercase column labels. Type scale and tokens are identical (§3–4).
+
+**Fixed during visual QA:**
+
+| Issue | Fix |
+|---|---|
+| Hero chips wrapped their labels | `white-space: nowrap` |
+| Monogram circle disappeared against the near-white background (the reference's photo provides that contrast) | 1px slate border + stronger shadow |
+| Desktop chips overhung the container edge by ~45 px; at 1024 px one chip was clipped and one touched the intro text | circle 18rem between `lg` and `xl`, 23rem from `xl`; per-breakpoint chip offsets. Now 0 overlaps and 0 clipped chips at 640–1920 px (e2e test) |
+| At 390 px the flagship's Model/Evaluation block was clipped on the right (grid track stretched to the table's min-content width inside an `overflow-hidden` card) | every grid gets explicit `grid-cols-1` / `minmax(0,…)` tracks; new e2e test fails if any element in `<main>` extends past the viewport |
+| `.ring` class collided with Tailwind's `ring` utility (drew a box) | renamed `wf-ring` |
+| Terminal `<pre>` picked up formatter whitespace | markup generated as one string |
+| Mobile headline was 7 lines | 2rem on mobile |
+| Mobile stats stacked as three tall rows | first stat full width, then two side by side (as the reference's 2×2) |
+
+**Remaining intentional differences:**
+
+1. Monogram instead of a portrait (no photo exists; set `profile.photo` to switch automatically).
+2. Longer headline and intro (the brief's copy) → four headline lines on desktop instead of three; the CV link still sits above the fold at 1440×900 (y ≈ 690 px).
+3. Three stats instead of four (only three are verifiable).
+4. Technology marquee instead of client logos; no client grid.
+5. Four expertise cards in a 2×2 grid (reference: three in a row).
+6. Six ring stages (the reference has five) and a tab panel beside the ring; the reference's separate four-step "How I work" row is merged into this section.
+7. Flagship case study, project index, experience timeline and About details are additional content blocks; the home page is therefore longer (13,744 px vs 8,833 px at 1440).
+8. Full-screen mobile menu instead of a drop-down panel; no language switch; no cookie banner; no chat mock.

@@ -34,6 +34,59 @@ The content preservation test was mutation-checked on 2026-11-08. Renaming one l
 
 Titles, subtitles, descriptions, statuses and tags of all six legacy projects are byte-identical in `src/data/portfolio.ts` and visible on the page (quotes are typographic at render time).
 
-## Latest results
+## Latest results (2026-11-08, local: macOS arm64, Node 24.22.0, Chrome via `PW_CHANNEL=chrome`)
 
-_Filled in Phase 9 with real numbers._
+`npm run verify` → **exit 0**.
+
+| Suite | Result |
+|---|---|
+| `astro check` + `tsc --noEmit` | 46 files: 0 errors, 0 warnings, 0 hints |
+| ESLint | 0 problems |
+| Prettier | all files formatted |
+| Build | 4 pages (home, Impressum, privacy, 404) + robots.txt + sitemap |
+| Legacy extraction `--check` | up to date |
+| Content preservation | 15 / 15 passed; 6 warnings (Stock Dashboard images that never existed) |
+| Build output | 16 / 16 passed; home page ships **5,924 bytes** of JS (budget 10 KB) |
+| E2E (Playwright, desktop 1440 / tablet 820 / mobile 390) | **43 / 43 passed** |
+| Accessibility (axe, part of e2e) | 0 serious/critical on home, Impressum, privacy, 404, open mobile menu, process + contact error state. A full run at every impact level found **0 violations of any severity**; axe left colour contrast "needs review" items on gradient/translucent text, checked by hand below |
+| External links | 9 URLs: 8 OK, 1 warning (LinkedIn HTTP 999 to bots; verify manually), 0 failures |
+| Deploy gate `npm run check:deploy` | **fails as intended**: `impressum/index.html: impressum-address` (owner must supply the address) |
+| Dependency age | all 486 packages in `package-lock.json` published before 2026-10-25 (≥ 14 days) |
+
+### Manual contrast check (WCAG 2.2 AA)
+
+| Pair | Ratio |
+|---|---|
+| muted `#5a6072` on canvas / surface / white | 6.11 / 5.85 / 6.27 |
+| slate-500 on white (small labels; never used on surface) | 4.76 |
+| slate-600 on surface | 7.08 |
+| accent on canvas (eyebrows) | 5.90 |
+| accent-600 on accent-50 (pills) | 6.59 |
+| white on accent (primary button) | 6.04 |
+| violet on canvas (end of the headline gradient, large text ≥ 3:1) | 4.27 |
+| terminal dim / info / ok / warn on ink | 6.16 / 9.50 / 9.85 / 11.34 |
+
+### Lighthouse 13.5.0 (mobile emulation, simulated throttling, local server)
+
+| Page | Performance | Accessibility | Best Practices | SEO |
+|---|---|---|---|---|
+| Home, run 1 | 96 | 100 | 100 | 100 |
+| Home, run 2 | 96 | 100 | 100 | 100 |
+| Home, run 3 | 96 | 100 | 100 | 100 |
+| Impressum | 100 | 100 | 100 | 63 |
+| Privacy | 100 | 100 | 100 | 63 |
+
+Home metrics: FCP 1.8 s, LCP 2.6 s, TBT 20–50 ms, CLS 0, Speed Index 1.8 s. The legal pages score 63 on SEO **by design**: they are `noindex` (brief §6.4), which Lighthouse reports as "page is blocked from indexing". Remaining Performance hints are hosting-side: cache lifetimes and document latency are set by GitHub Pages; the local test server sends no compression, GitHub Pages gzips. An earlier build with external stylesheets scored 96; inlining CSS (`build.inlineStylesheets: 'always'`) removed the render-blocking requests (97 on that dependency tree).
+
+### Reproduce
+
+```bash
+export PATH="$HOME/.local/opt/node/bin:$PATH"   # this machine only
+npm ci
+npx playwright install --with-deps chromium     # or set PW_CHANNEL=chrome to use installed Chrome
+npm run verify
+npm run test:links
+npm run check:deploy                            # expected to fail until the Impressum address is added
+node scripts/serve-dist.mjs --port 4323 &
+npx lighthouse@13.5.0 http://localhost:4323/rakibul-portfolio/ --view
+```
