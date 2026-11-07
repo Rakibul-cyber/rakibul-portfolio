@@ -9,11 +9,16 @@
  */
 import { chromium } from '@playwright/test';
 
-const [url = 'http://localhost:4321/rakibul-portfolio/', out = 'docs/screenshots', prefix = 'redesign'] =
-  process.argv.slice(2);
+const [
+  url = 'http://localhost:4321/rakibul-portfolio/',
+  out = 'docs/screenshots',
+  prefix = 'redesign',
+] = process.argv.slice(2);
 const viewports = { desktop: [1440, 900], tablet: [820, 1180], mobile: [390, 844] };
 
-const browser = await chromium.launch(process.env.PW_CHANNEL ? { channel: process.env.PW_CHANNEL } : {});
+const browser = await chromium.launch(
+  process.env.PW_CHANNEL ? { channel: process.env.PW_CHANNEL } : {},
+);
 for (const [name, [width, height]] of Object.entries(viewports)) {
   const page = await browser.newPage({ viewport: { width, height } });
   await page.goto(url, { waitUntil: 'networkidle' });

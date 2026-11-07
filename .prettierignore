@@ -13,3 +13,4 @@ build/
 pubspec.lock
 *.pdf
 *.md
+tests/legacy-inventory.json

@@ -14,7 +14,9 @@ import { fileURLToPath } from 'node:url';
 const BASE = '/rakibul-portfolio';
 const root = resolve(fileURLToPath(new URL('../dist', import.meta.url)));
 const args = process.argv.slice(2);
-const port = Number(args.includes('--port') ? args[args.indexOf('--port') + 1] : process.env.PORT ?? 4321);
+const port = Number(
+  args.includes('--port') ? args[args.indexOf('--port') + 1] : (process.env.PORT ?? 4321),
+);
 
 const types = {
   '.html': 'text/html; charset=utf-8',
