@@ -1,0 +1,39 @@
+# Test plan
+
+All suites run locally with `npm run verify` (type check → lint → format → build → preservation + build-output → e2e incl. axe) and in CI (`.github/workflows/deploy.yml`). Latest real results are recorded at the bottom; nothing here is claimed without a run.
+
+## Suites
+
+| Suite | Command | What it proves |
+|---|---|---|
+| Type check | `npm run check` | `astro check` + `tsc --noEmit` on strict TypeScript, 0 errors / warnings / hints |
+| Lint | `npm run lint` | ESLint (typescript-eslint strict, eslint-plugin-astro) |
+| Format | `npm run format:check` | Prettier with Astro + Tailwind class ordering |
+| Legacy extraction | `node tests/extract-legacy-inventory.mjs --check` | `tests/legacy-inventory.json` matches a fresh extraction from tag `legacy-flutter-source` |
+| Content preservation | `npm test` (part 1) | Every legacy project/field/tag/link, CV, 16 skills, contact, timeline, certifications, languages present; changed links documented; drafts not rendered; pricing, hire, fake success, fake terminal, unverified stats absent; images shipped but not rendered |
+| Build output | `npm test` (part 2) | `.nojekyll`; every internal `href`/`src` under `/rakibul-portfolio/` and resolving in `dist/`; every `#anchor` has a target; no localhost; no Google Fonts; no third-party scripts; CV is a PDF; static output; one `<h1>` per page; canonical, JSON-LD, sitemap, robots; allowed runtime deps only; JS budget |
+| Deploy gate | `npm run check:deploy` | Build-output checks **plus** fails on any `data-todo` marker (Impressum address) |
+| E2E | `npm run test:e2e` | Playwright at 1440 / 820 / 390, served under the real sub-path: status 200, no overflow, no broken images, no console errors, reduced motion, nav, filters, workflow keyboard, `<details>`, contact form + mailto, mobile menu, CV, legal + 404 pages |
+| Accessibility | `npm run test:a11y` (also in e2e) | axe-core on every page and the open mobile menu: 0 serious / critical |
+| External links | `npm run test:links` | Every external URL answers < 400 (LinkedIn's 999 is a warning) |
+| Lighthouse | see "Lighthouse" below | Mobile scores for the built home page |
+
+The content preservation test was mutation-checked on 2026-11-08. Renaming one legacy tag and injecting "€45/hr" into the built HTML made it fail with exactly those two assertions; restoring the build made it pass again.
+
+## Before / after project inventory
+
+| # | Legacy project (Flutter site order) | Legacy status | Legacy GitHub | New order | Rendered as | New GitHub | Images |
+|---|---|---|---|---|---|---|---|
+| 1 | Forest Tracking & Environmental Safety System | Live | — | 2 | case highlight + index | — (repo contents don't match; owner decision) | 7 in `public/projects/forest_ai/`, not rendered |
+| 2 | Louco Mobile App | Production | — | 4 | case highlight + index | — | 7 in `public/projects/louco/`, not rendered |
+| 3 | XR-Hub Condominium Management System | Delivered | — | 6 | index | — (three candidate repos; owner decision) | none |
+| 4 | Analyzing Historical Stock & Revenue Data and Building a Dashboard | Project | `…/Analyzing-Historical-Stock-Revenue-Data-and-Building-a-Dashboard` | 3 | case highlight + index | unchanged | 6 referenced, **never existed** (warning) |
+| 5 | STEKO Health Checker | Published | `https://github.com/Rakibul-cyber` | 5 | index | `…/FYP-2-Steko-Health-Checker-Application` (**awaiting approval**) | none |
+| 6 | Automotive HMI Dashboard | Demo | `…/automotive-hmi-dashboard` | 7 | index | unchanged | none |
+| — | Real-Time Driver Stress & Cognitive Load Monitoring (new) | — | — | 1 | flagship case study + index | `…/driver-stress-monitoring` | none |
+
+Titles, subtitles, descriptions, statuses and tags of all six legacy projects are byte-identical in `src/data/portfolio.ts` and visible on the page (quotes are typographic at render time).
+
+## Latest results
+
+_Filled in Phase 9 with real numbers._
