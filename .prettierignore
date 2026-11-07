@@ -1,0 +1,15 @@
+dist/
+.astro/
+node_modules/
+package-lock.json
+test-results/
+playwright-report/
+docs/screenshots/
+public/
+lib/
+web/
+build/
+.dart_tool/
+pubspec.lock
+*.pdf
+*.md
