@@ -18,19 +18,14 @@
 | 9 Quality | ✅ | `npm run verify` exit 0: check 0/0/0, lint, format, 32/32 node tests, 43/43 e2e incl. axe; Lighthouse mobile 96/100/100/100 |
 | 10 Deploy prep | ✅ | `.github/workflows/deploy.yml` (actionlint clean), `docs/DEPLOYMENT_PLAN.md`, README |
 
-## Urgent: found on `gh-pages` (2026-11-08)
+## Security incident (2026-11-08): see `docs/SECURITY_INCIDENT_2026-11-08.md`
 
-Commit `869072a` "Add new images and sitemap files for project updates" (made outside this branch and already pushed to the **public** `gh-pages`) contains 328 build and cache files. Among them:
+GitHub secret scanning flagged a Google API key in `gh-pages` commit `869072a`. It is **Chrome's built-in key** (the same string is embedded in the installed Google Chrome binary), cached in a `flutter run -d chrome` profile that was committed along with 324 generated files. It is not the owner's key and cannot be revoked by the owner.
 
-- **`.dart_tool/chrome-device/`**: a complete Chrome profile from `flutter run -d chrome`, including `Cookies`, `Login Data`, `History`, `Web Data` and session files. They are downloadable from `raw.githubusercontent.com` (HTTP 200). GitHub Pages itself returns 404 because Jekyll skips dot-folders. A local inspection that printed counts and hostnames only found 2 cookies, both for github.com and **encrypted** with the macOS Keychain key, 0 saved logins, no autofill/addresses/cards, and 10 history entries (9 localhost, 1 github.com). The risk is low, but this does not belong in a public repo.
-- `dist/` (the redesign build) served at `/rakibul-portfolio/dist/`, where its asset paths don't resolve, plus `build/`, `.astro/`, `test-results/` and `.DS_Store` files.
-- `dist/CV_MD_Rakibul_Hassan.pdf`, **the CV with your street address**, now live at `https://rakibul-cyber.github.io/rakibul-portfolio/dist/CV_MD_Rakibul_Hassan.pdf` (HTTP 200).
-
-Recommended (owner action, not done):
-
-1. Optional extra safety: sign out of GitHub sessions you don't recognise (GitHub → Settings → Sessions).
-2. Remove these files from `gh-pages` with a normal commit. This stops serving them, but they stay in history. Merging the redesign and letting the deploy workflow publish will also replace the whole `gh-pages` tree.
-3. To erase them from history as well, `gh-pages` must be rewritten and **force-pushed**, e.g. reset it to `ae42c32` (the legacy build): `git push --force-with-lease origin ae42c32:gh-pages`. Cached copies on GitHub may persist until GitHub support purges them. This needs your explicit go-ahead.
+- Contained locally: `gh-pages` commit `d7b23a7` untracks the generated files (not pushed). The redesign branch has a hardened `.gitignore`.
+- Owner actions: push `gh-pages`; decide on a history rewrite (force-push, optional); close the GitHub alert as a false positive once satisfied; enable push protection.
+- **Redesign work is paused** until the owner confirms the remediation plan.
+- The old CV with the street address is still published at `/rakibul-portfolio/dist/CV_MD_Rakibul_Hassan.pdf` via `gh-pages`.
 
 ## Blocking items
 
@@ -54,7 +49,7 @@ Recommended (owner action, not done):
 1. **Impressum address** (blocks deployment).
 2. **STEKO project status field.** The legacy status badge still says "Published" (verbatim legacy field), which reads oddly next to "paper under review". Options: keep it (it can be read as the app being delivered), or change it to e.g. "Delivered" as another recorded correction.
 3. **Root `CV_MD_Rakibul_Hassan.pdf`** (old version with the street address) is still tracked at the repository root as a duplicate; only `public/` is deployed. Remove it from the branch once the new CV is in `public/`?
-4. **gh-pages cleanup** (see Urgent above).
+4. **gh-pages cleanup and history** (see `docs/SECURITY_INCIDENT_2026-11-08.md`).
 5. **Forest AI repository:** not linked (the repo is a Figma Make UI bundle). Link as a UI prototype, or leave it out?
 6. **Legal texts** (Impressum, privacy policy) are templates; please review.
 7. **AI candidate repositories:** assessment below; none added.
