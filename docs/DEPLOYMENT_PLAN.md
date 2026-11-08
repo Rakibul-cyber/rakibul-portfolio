@@ -15,13 +15,13 @@ GitHub Pages (unchanged settings: branch gh-pages, folder /) ──► https://r
 
 - Pull requests run **verify only**. They never deploy.
 - The deploy job is the only job with `contents: write`. `concurrency: deploy-gh-pages` prevents overlapping deploys.
-- `check:deploy` fails while any `data-todo` marker exists. Today that is the Impressum postal address, so **the first deploy will be blocked until the address is added**. That's intentional.
+- `check:deploy` runs the hygiene, build-output and preservation tests, and blocks files that must never be published (the old CV with the street address, by hash). As of 2026-11-08 it **passes** on the current branch: the new CV is in place and there is no Impressum (owner decision). **A merge to `main` would therefore deploy.**
 - The first deploy commit replaces the Flutter files on `gh-pages`, including the stray `build/` and `.dart_tool/` folders, in a normal commit. History is kept, and the old build stays reachable at tag `legacy-flutter-deploy`.
 - Returning visitors who have the old Flutter service worker get `flutter_service_worker.js`, a kill switch that deletes the Flutter caches, unregisters itself and reloads the tab. Verified locally with an upgrade simulation: 1 registration and 2 caches before, 0 and 0 after, new site rendered.
 
 ## Before merging
 
-1. **Add the Impressum address** (owner decision 1). In `src/pages/impressum.astro`, replace the `<TodoPlaceholder id="impressum-address">…</TodoPlaceholder>` element with the street, postcode and city. Then `npm run build && npm run check:deploy` must pass.
+1. ~~Impressum address~~: no longer applicable (no Impressum, owner decision 2026-11-08).
 2. Decide the other open items in `PROJECT_STATUS.md` (none of them blocks the deploy).
 3. Optional: run `npm run verify` locally.
 
@@ -55,7 +55,7 @@ Merging the PR into `main` triggers the workflow. Watch *Actions → Build, test
 1. https://rakibul-cyber.github.io/rakibul-portfolio/ returns the new site. View source should show HTML text, not `flutter_bootstrap.js`.
 2. https://rakibul-cyber.github.io/rakibul-portfolio/CV_MD_Rakibul_Hassan.pdf downloads the PDF (it was 404 before).
 3. On a phone that visited the old site: open the URL and hard-refresh once if the old app shows. The kill switch should then take over.
-4. Impressum and privacy pages load. A random path shows the 404 page with a working home link.
+4. The privacy page loads. A random path shows the 404 page with a working home link.
 5. Click the LinkedIn link by hand (automated checks get HTTP 999).
 6. Optional: submit `https://rakibul-cyber.github.io/rakibul-portfolio/sitemap-index.xml` in Google Search Console.
 

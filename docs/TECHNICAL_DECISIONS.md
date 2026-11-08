@@ -85,9 +85,8 @@ A GitHub Pages *project* site lives under `/rakibul-portfolio/`, but crawlers on
 
 ## TD-11 Legal pages
 
-- Impressum (German, § 5 DDG, § 18 Abs. 2 MStV) and privacy policy, as templates the owner must review.
-- The postal address is **not** published without approval: a visible placeholder with `data-todo="impressum-address"` stands in, and `npm run check:deploy` fails while any `data-todo` marker exists, so the site can't go live with an incomplete Impressum.
-- Both pages are `noindex` and excluded from the sitemap.
+- **Privacy policy** (English, `noindex`, excluded from the sitemap), a template for the owner to review.
+- **No Impressum** (owner decision, 2026-11-08). The page, its footer link and the `data-todo` deploy-gate check were removed. Earlier, a placeholder blocked deployment until a postal address was supplied. Whether a German personal site needs an Impressum under § 5 DDG is the owner's legal assessment; re-adding one is a single page plus a footer link.
 
 ## TD-12 What we deliberately did not build
 

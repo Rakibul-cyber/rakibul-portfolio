@@ -13,10 +13,10 @@ All suites run locally with `npm run verify` (type check → lint → format →
 | Repository hygiene | `npm test` (part 1) | No generated, browser-profile, dependency, test-output, env, key or credential file is tracked (catches `git add -f`); `.gitignore` still ignores them and allows `.env.example` |
 | Content preservation | `npm test` (part 2) | Every legacy project/field/tag/link, CV, 16 skills, contact, timeline, certifications, languages present; changed links documented; drafts not rendered; pricing, hire, fake success, fake terminal, unverified stats absent; images shipped but not rendered |
 | Build output | `npm test` (part 3) | `dist/` file allowlist; `.nojekyll`; every internal `href`/`src` under `/rakibul-portfolio/` and resolving in `dist/`; every `#anchor` has a target; no localhost; no Google Fonts; no third-party scripts; CV is a PDF; static output; one `<h1>` per page; canonical, JSON-LD, sitemap, robots; allowed runtime deps only; JS budget |
-| Deploy gate | `npm run check:deploy` | Hygiene, build-output and preservation tests, **plus** fails on any `data-todo` marker (Impressum address) or a blocked file hash (CV with street address) |
-| E2E | `npm run test:e2e` | Playwright at 1440 / 820 / 390, served under the real sub-path: status 200, no overflow, no broken images, no console errors, reduced motion, nav, filters, workflow keyboard, `<details>`, contact form + mailto, mobile menu, CV, legal + 404 pages |
+| Deploy gate | `npm run check:deploy` | Hygiene, build-output and preservation tests, **plus** blocks files that must never be published (CV with street address, by hash). The `data-todo` check was removed with the Impressum (2026-11-08) |
+| E2E | `npm run test:e2e` | Playwright at 1440 / 820 / 390, served under the real sub-path: status 200, no overflow, no broken images, no console errors, reduced motion, nav, filters, workflow keyboard, `<details>`, contact form + mailto, mobile menu, CV, privacy + 404 pages |
 | Accessibility | `npm run test:a11y` (also in e2e) | axe-core on every page and the open mobile menu: 0 serious / critical |
-| External links | `npm run test:links` | Every external URL answers < 400 (LinkedIn's 999 is a warning) |
+| External links | `npm run test:links` | Every external URL answers < 400 (LinkedIn's 999 is a warning; if github.com answers 5xx for a profile or repo URL, the target is confirmed through the GitHub API and reported as `ok*`) |
 | Lighthouse | see "Lighthouse" below | Mobile scores for the built home page |
 
 The content preservation test was mutation-checked on 2026-11-08. Renaming one legacy tag and injecting "€45/hr" into the built HTML made it fail with exactly those two assertions; restoring the build made it pass again.
@@ -32,28 +32,26 @@ The content preservation test was mutation-checked on 2026-11-08. Renaming one l
 | 5 | STEKO Health Checker | Published → **Under review** (approved correction) | `https://github.com/Rakibul-cyber` | 6 | index | `…/FYP-2-Steko-Health-Checker-Application` (approved 2026-11-08) | none |
 | 6 | Automotive HMI Dashboard | Demo | `…/automotive-hmi-dashboard` | 8 | index | unchanged | none |
 | — | Real-Time Driver Stress & Cognitive Load Monitoring (new) | — | — | 1 | flagship case study + index | `…/driver-stress-monitoring` | none |
-| — | Smart Infrastructure Lead Intelligence (new, rule-based, not ML) | — | — | 4 | index (Backend & cloud) | `…/smart-infrastructure-lead-intelligence` | none |
+| — | Smart Infrastructure Lead Intelligence (new, rule-based, not ML) | — | — | 4 | **hidden** (data flag) until confirmed with Enviotech | `…/smart-infrastructure-lead-intelligence` | none |
 
 Titles, subtitles, descriptions, statuses and tags of all six legacy projects are byte-identical in `src/data/portfolio.ts` and visible on the page (quotes are typographic at render time). The exceptions are the STEKO description and status badge, where "Published research" became "Research paper (under review)". Both corrections were owner-approved on 2026-11-08 and are recorded in `contentCorrections`; the test asserts the corrected values are shown and the old description is gone.
 
-## Latest results (2026-11-08, local: macOS arm64, Node 24.22.0, Chrome via `PW_CHANNEL=chrome`)
+## Latest results (2026-11-08, after the resume update; local: macOS arm64, Node 24.22.0, Chrome via `PW_CHANNEL=chrome`)
 
-`npm run verify` → **exit 0**.
+`npm run verify` → **exit 0**. `npm run check:deploy` → **exit 0 (passes)**.
 
 | Suite | Result |
 |---|---|
-| `astro check` + `tsc --noEmit` | 46 files: 0 errors, 0 warnings, 0 hints |
-| ESLint | 0 problems |
-| Prettier | all files formatted |
-| Build | 4 pages (home, Impressum, privacy, 404) + robots.txt + sitemap |
-| Legacy extraction `--check` | up to date |
-| Content preservation | 15 / 15 passed; 6 warnings (Stock Dashboard images that never existed) |
-| Build output | 16 / 16 passed; home page ships **5,924 bytes** of JS (budget 10 KB) |
-| E2E (Playwright, desktop 1440 / tablet 820 / mobile 390) | **43 / 43 passed** |
-| Accessibility (axe, part of e2e) | 0 serious/critical on home, Impressum, privacy, 404, open mobile menu, process + contact error state. A full run at every impact level found **0 violations of any severity**; axe left colour contrast "needs review" items on gradient/translucent text, checked by hand below |
-| External links | 9 URLs: 8 OK, 1 warning (LinkedIn HTTP 999 to bots; verify manually), 0 failures |
-| Deploy gate `npm run check:deploy` | **fails as intended**: `impressum/index.html: impressum-address` (owner must supply the address) |
-| Dependency age | all 486 packages in `package-lock.json` published before 2026-10-25 (≥ 14 days) |
+| `astro check` + `tsc --noEmit` | 0 errors, 0 warnings, 0 hints |
+| ESLint, Prettier | clean |
+| Build | 3 pages (home, privacy, 404) + robots.txt + sitemap |
+| Node tests (hygiene + preservation + build output) | **37 / 37** passed (6 warnings: Stock Dashboard images that never existed) |
+| E2E incl. axe (desktop 1440 / tablet 820 / mobile 390) | **42 / 42** passed |
+| External links | 10 URLs: 9 ok (5 of them `ok*`: github.com answered 504 to page requests from this machine, targets confirmed via the GitHub API), 1 warning (LinkedIn 999), 0 failures |
+| Deploy gate | **passes**: new address-free CV (sha256 `3e323201…`), no Impressum |
+| Dependency age | all packages in `package-lock.json` published before 2026-10-25 (unchanged) |
+
+Earlier result sets (43 e2e tests with the Impressum page, Lighthouse runs) are in the git history of this file. Lighthouse wasn't re-run for this content-only change.
 
 ### Manual contrast check (WCAG 2.2 AA)
 
@@ -75,10 +73,9 @@ Titles, subtitles, descriptions, statuses and tags of all six legacy projects ar
 | Home, run 1 | 96 | 100 | 100 | 100 |
 | Home, run 2 | 96 | 100 | 100 | 100 |
 | Home, run 3 | 96 | 100 | 100 | 100 |
-| Impressum | 100 | 100 | 100 | 63 |
 | Privacy | 100 | 100 | 100 | 63 |
 
-Home metrics: FCP 1.8 s, LCP 2.6 s, TBT 20–50 ms, CLS 0, Speed Index 1.8 s. The legal pages score 63 on SEO **by design**: they are `noindex` (brief §6.4), which Lighthouse reports as "page is blocked from indexing". Remaining Performance hints are hosting-side: cache lifetimes and document latency are set by GitHub Pages; the local test server sends no compression, GitHub Pages gzips. An earlier build with external stylesheets scored 96; inlining CSS (`build.inlineStylesheets: 'always'`) removed the render-blocking requests (97 on that dependency tree).
+Home metrics: FCP 1.8 s, LCP 2.6 s, TBT 20–50 ms, CLS 0, Speed Index 1.8 s. The privacy page scores 63 on SEO **by design**: it is `noindex` (brief §6.4), which Lighthouse reports as "page is blocked from indexing". Remaining Performance hints are hosting-side: cache lifetimes and document latency are set by GitHub Pages; the local test server sends no compression, GitHub Pages gzips. An earlier build with external stylesheets scored 96; inlining CSS (`build.inlineStylesheets: 'always'`) removed the render-blocking requests (97 on that dependency tree).
 
 ### Reproduce
 
@@ -88,7 +85,7 @@ npm ci
 npx playwright install --with-deps chromium     # or set PW_CHANNEL=chrome to use installed Chrome
 npm run verify
 npm run test:links
-npm run check:deploy                            # expected to fail until the Impressum address is added
+npm run check:deploy
 node scripts/serve-dist.mjs --port 4323 &
 npx lighthouse@13.5.0 http://localhost:4323/rakibul-portfolio/ --view
 ```

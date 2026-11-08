@@ -1,6 +1,6 @@
 # History purge plan (not executed)
 
-**Status:** plan only. Nothing here has been run. Every force-push and the tag push need the owner's explicit approval. The legacy tags stay local until the owner decides.
+**Status: decided against (owner decision, 2026-11-08). Git history is kept; nothing here was run.** The procedure stays for reference in case the decision is revisited, which would need fresh explicit approval. The legacy tags remain local.
 
 ## Goal
 

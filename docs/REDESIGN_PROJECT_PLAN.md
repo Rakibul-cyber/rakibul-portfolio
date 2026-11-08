@@ -27,7 +27,7 @@ Engineering recruiters and hiring managers for AI/ML and software engineering ro
 9. About: bio, certifications, learning, publications, languages.
 10. (Writing: hidden until complete articles exist.)
 11. Contact: `mailto:` composer, phone, LinkedIn, GitHub, CV.
-12. Footer: navigation, Impressum, Privacy, connect.
+12. Footer: navigation, Privacy, connect (Impressum removed by owner decision, 2026-11-08).
 
 ## SEO strategy
 
@@ -60,7 +60,7 @@ Engineering recruiters and hiring managers for AI/ML and software engineering ro
 | Losing legacy content in migration | M | H | Programmatic extraction from the tagged source; preservation test must pass before Flutter is deleted; tags keep everything reachable |
 | Overclaiming AI/ML experience | M | H | Content rules (§7 of the brief) encoded in data review; no LLM/RAG/agents/DL/K8s claims; every stat sourced; limitations rendered |
 | Breaking paths under `/rakibul-portfolio/` | M | H | `withBase()` everywhere; build-output test checks every internal URL resolves in `dist/`; e2e served under the real sub-path |
-| Publishing the owner's home address | L | H | Impressum placeholder + deploy gate; flagged that the CV PDF itself contains the address |
+| Publishing the owner's home address | L | H | No Impressum; deploy gate blocks the old address-containing CV by hash; new CV verified address-free; flagged that the CV PDF itself contains the address |
 | Accidental push/deploy | L | H | No upstream on the working branch; no push commands run; deploy only on push to `main` after the gate |
 | Reference fidelity vs. owner's content (no photo, no clients) | H | M | Monogram and technology marquee designed to fill the same visual slots; differences documented |
 | Accessibility regressions from motion | M | M | Reduced-motion layer in CSS and JS; content visible without JS; axe in e2e |

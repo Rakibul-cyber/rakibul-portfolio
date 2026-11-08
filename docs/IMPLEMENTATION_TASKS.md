@@ -96,7 +96,7 @@ Status legend: ✅ done · 🔄 in progress · ⏳ pending · ⚠️ done with c
 | Task | Result |
 |---|---|
 | Build-output test | 17/17 |
-| Deploy gate | fails on the Impressum placeholder (intended) |
+| Deploy gate | passes as of 2026-11-08 (new CV; no Impressum by owner decision) |
 | Playwright e2e at 1440/820/390 | 43/43 |
 | axe | 0 violations of any impact |
 | External links | 8 ok, 1 LinkedIn warning |

@@ -31,7 +31,7 @@ npm run preview    # serves dist/ under /rakibul-portfolio/ like GitHub Pages: h
 npx playwright install --with-deps chromium   # once (or set PW_CHANNEL=chrome to use an installed Chrome)
 npm run verify       # type check → lint → format check → build → unit/build-output tests → e2e + axe
 npm run test:links   # checks every external link
-npm run check:deploy # deploy gate: build-output + preservation tests, fails on any data-todo marker
+npm run check:deploy # deploy gate: hygiene, build-output and preservation tests; blocks files that must never be published
 ```
 
 What each suite covers, plus the latest real results and Lighthouse scores, is in [`docs/TEST_PLAN.md`](docs/TEST_PLAN.md).
@@ -43,7 +43,7 @@ Everything visible comes from [`src/data/portfolio.ts`](src/data/portfolio.ts):
 | To… | Edit |
 | --- | --- |
 | Change hero text, contact details, LinkedIn URL | `profile` |
-| Add or reorder a project | `projects` (array order = display order). Give it `categories` for the filters; add `highlight` for a case card or `caseStudy` for a full case study |
+| Add, reorder or hide a project | `projects` (array order = display order; `hidden: true` keeps it in data but off the site). Give it `categories` for the filters; add `highlight` for a case card or `caseStudy` for a full case study |
 | Change a statistic | `stats`. Every stat needs a `source` |
 | Change the expertise cards | `expertise` (`shownIn` must list existing project ids) |
 | Publish an article | set `status: 'published'` and a `url` in `articles`. The Writing section appears automatically |
@@ -77,10 +77,10 @@ Pushing to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy
 src/data/portfolio.ts      all content (typed)
 src/components/sections/   one component per page section
 src/components/work/       flagship case study, highlight cards, project index
-src/components/ui/         Button, Card, Tag, Icon, SectionHeading, TodoPlaceholder
+src/components/ui/         Button, Card, Tag, Icon, SectionHeading
 src/scripts/               small vanilla TS modules (header, menu, filters, workflow tabs, terminal, contact form, reveal)
 src/styles/global.css      Tailwind import, @theme tokens, reduced-motion rules
-src/pages/                 index, impressum, privacy, 404, robots.txt
+src/pages/                 index, privacy, 404, robots.txt (no Impressum: owner decision 2026-11-08)
 public/                    CV, favicon, .nojekyll, legacy project images (deployed, not displayed), service-worker kill switch
 tests/                     legacy extractor + inventory, preservation, build-output, link check, e2e/
 scripts/                   sub-path preview server, screenshot capture, deploy gate

@@ -15,7 +15,7 @@ Every legacy content item → where it lives now → what changed. Source of the
 | STEKO Health Checker | `steko` | Project index | title, subtitle, tags, status "Published" | Order 5 → 5. **GitHub URL changed** `https://github.com/Rakibul-cyber` → `…/FYP-2-Steko-Health-Checker-Application` (approved by the owner on 2026-11-08; recorded in `linkChanges`).. **Description corrected** (owner-approved 2026-11-08): "Published research:" → "Research paper (under review):"; the paper is under review, not published. Recorded in `contentCorrections`; the preservation test checks the old text is gone and the new text is rendered. |
 | Automotive HMI Dashboard | `automotive-hmi` | Project index | all, incl. GitHub URL | Order 6 → 7. |
 | — (new) | `driver-stress` | Flagship case study + project index | — | New project from `github.com/Rakibul-cyber/driver-stress-monitoring`; all facts from its README, `model_metadata.json`, `train_log.txt`, `ci.yml`, `src/`, `tests/`. |
-| — (new, owner decision 2026-11-08) | `lead-intelligence` | Project index (Backend & cloud) + "Shown in" on the MLOps/backend card | — | New project from `github.com/Rakibul-cyber/smart-infrastructure-lead-intelligence`, described as **rule-based lead scoring, not ML**. Facts only from its README (pipeline, stack, limitations), `src/lead_intelligence/scorer.py` (0–100 weighted score; Low/Medium/High at 50/80), `tests/` and `.github/workflows/ci.yml` (CI on fixtures and fictional data). Placed after Stock Dashboard. The README's self-reported test count is not quoted because it wasn't re-run here. |
+| — (new, owner decision 2026-11-08) | `lead-intelligence` | **Hidden** (`hidden: true`) until the owner confirms with Enviotech GmbH; kept in data, not rendered, no links | — | New project from `github.com/Rakibul-cyber/smart-infrastructure-lead-intelligence`, described as **rule-based lead scoring, not ML**. Facts only from its README (pipeline, stack, limitations), `src/lead_intelligence/scorer.py` (0–100 weighted score; Low/Medium/High at 50/80), `tests/` and `.github/workflows/ci.yml` (CI on fixtures and fictional data). Placed after Stock Dashboard. The README's self-reported test count is not quoted because it wasn't re-run here. |
 
 Legacy emoji icons are kept in data as `legacyIcon` (not rendered). Legacy `liveUrl` was `null` for every project, so none is set.
 
@@ -65,7 +65,7 @@ Legacy emoji icons are kept in data as `legacyIcon` (not rendered). Legacy `live
 
 | Legacy | New | Change |
 |---|---|---|
-| Email, phone, location | Contact section + footer + Impressum | unchanged; email and phone are now `mailto:` / `tel:` links |
+| Email, phone, location | Contact section + footer + privacy policy (no Impressum, owner decision 2026-11-08) | unchanged; email and phone are now `mailto:` / `tel:` links |
 | GitHub `https://github.com/Rakibul-cyber` | Contact, footer, JSON-LD `sameAs` | Now an actual link (legacy button had no handler) |
 | LinkedIn `https://www.linkedin.com/in/rakibulhassan-dev/` | same places | Kept; the CV lists a different URL (owner decision 3) |
 | Contact form (no handler, fake "Message sent!") | Form that validates and opens a composed `mailto:` | Fake success removed; note says nothing is sent or stored |
@@ -77,6 +77,26 @@ Legacy emoji icons are kept in data as `legacyIcon` (not rendered). Legacy `live
 | Legacy | New | Change |
 |---|---|---|
 | `https://rakibul-cyber.github.io/rakibul-portfolio/CV_MD_Rakibul_Hassan.pdf` (404 in production) | `public/CV_MD_Rakibul_Hassan.pdf` → same URL | Fixed: the file now ships with the build |
+
+## Resume as the source for experience (owner decision 2026-11-08)
+
+`Rakibul_Hassan_Resume.pdf` (created 2026-11-06) is now authoritative for experience, languages and publications. It is also the published CV (`public/CV_MD_Rakibul_Hassan.pdf`).
+
+| Legacy / earlier | Now | Note |
+|---|---|---|
+| — | **Software Developer (Working Student), Enviotech GmbH, Frankfurt am Main, July 2026 – present** | new; 4 resume bullets |
+| Freelance · Louco GmbH, Frankfurt, 2025 – Present (Flutter Developer) | **Software Developer, Louco Event Media GmbH, Offenbach, March 2026 – June 2026** | resume title, company name, location and dates; 4 resume bullets; "present" removed. Louco highlight card updated to match (no "freelance") |
+| HiWi · JGU Mainz, 2025 – Present | **HiWi – Mobile Application Developer, JGU Mainz, September 2025 – February 2026** | 3 resume bullets replace the 5 earlier CV bullets; "present" removed |
+| Flutter Dev · Teczo Sdn. Bhd., Kuala Lumpur, 2023 | **Software Developer, Teczo Sdn. Bhd., February 2022 – August 2022** | resume title and dates (the legacy site said 2023); 3 resume bullets |
+| About paragraph 2 (Louco GmbH, JGU) | names all four employers with resume dates | |
+| Languages: English — Professional, German — Learning | English — Fluent, German — Basic | resume |
+| BEST4U.COM (2022) | linked to `journals.iium.edu.my/kict/index.php/jisdt/article/view/255` | owner-supplied URL (checked: HTTP 200) |
+| STEKO-SD | stays "under review" | the resume says "Ongoing"; owner decision keeps "under review" |
+| Full toolkit (16 legacy skills) | plus resume-only skills in separate groups: JavaScript, SQL, C++, scikit-learn, NLP, XGBoost, model evaluation, pandas, NumPy, BeautifulSoup, Playwright, web scraping, data visualization, FastAPI, Azure, GitLab, Postman, SSH, Jira, Trello | **toolkit only**; never on the expertise cards (no project evidence for NLP, XGBoost, Azure or C++) |
+
+The legacy timeline remains in `tests/legacy-inventory.json`. The preservation test now checks that every legacy organisation still appears and that experience matches the resume exactly; only the Enviotech role may say "present".
+
+Project status badges such as Louco "Production" and Forest "Live" describe the apps, not roles, so they are unchanged. The "2 apps in production use" statistic still relies on these legacy statuses and should be re-confirmed by the owner, since the roles have ended.
 
 ## Owner-approved corrections (2026-11-08)
 
