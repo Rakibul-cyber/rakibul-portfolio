@@ -20,16 +20,15 @@
 
 ## Security incident (2026-11-08): see `docs/SECURITY_INCIDENT_2026-11-08.md`
 
-GitHub secret scanning flagged a Google API key in `gh-pages` commit `869072a`. It is **Chrome's built-in key** (the same string is embedded in the installed Google Chrome binary), cached in a `flutter run -d chrome` profile that was committed along with 324 generated files. It is not the owner's key and cannot be revoked by the owner.
-
-- Contained locally: `gh-pages` commit `d7b23a7` untracks the generated files (not pushed). The redesign branch has a hardened `.gitignore`.
-- Owner actions: push `gh-pages`; decide on a history rewrite (force-push, optional); close the GitHub alert as a false positive once satisfied; enable push protection.
-- **Redesign work is paused** until the owner confirms the remediation plan.
-- The old CV with the street address is still published at `/rakibul-portfolio/dist/CV_MD_Rakibul_Hassan.pdf` via `gh-pages`.
+- The flagged key is Chrome's built-in key, cached in a `flutter run -d chrome` profile that `gh-pages` commit `869072a` committed by accident.
+- **Cleanup pushed** (owner-approved, normal push): `869072a..d7b23a7`.
+- **History not rewritten** (owner decision); the remaining exposure is documented. The GitHub alert is left for the owner to close.
+- Hardening: repo-hygiene test, `dist/` allowlist, CV hash block in the deploy gate, `persist-credentials: false`.
+- **Old CV with the street address**: 4 public copies (live `/dist/` path, `main`, the pushed redesign branch, Google Drive) plus history. Plan in `docs/CV_PRIVACY_PLAN.md`.
 
 ## Blocking items
 
-- **Deployment only:** the Impressum postal address. In the 2026-11-08 round you chose "I'll type my address", but no address came through, so the placeholder remains and `npm run check:deploy` still fails. Send the address, or decide to drop the Impressum.
+- **Deployment only:** (1) a CV without the street address in `public/`; the deploy gate blocks the current file by hash. (2) The Impressum postal address. In the 2026-11-08 round you chose "I'll type my address", but no address came through, so the placeholder remains and `npm run check:deploy` still fails. Send the address, or decide to drop the Impressum.
 
 ## Resolved owner decisions (2026-11-08)
 
@@ -49,7 +48,7 @@ GitHub secret scanning flagged a Google API key in `gh-pages` commit `869072a`. 
 1. **Impressum address** (blocks deployment).
 2. **STEKO project status field.** The legacy status badge still says "Published" (verbatim legacy field), which reads oddly next to "paper under review". Options: keep it (it can be read as the app being delivered), or change it to e.g. "Delivered" as another recorded correction.
 3. **Root `CV_MD_Rakibul_Hassan.pdf`** (old version with the street address) is still tracked at the repository root as a duplicate; only `public/` is deployed. Remove it from the branch once the new CV is in `public/`?
-4. **gh-pages cleanup and history** (see `docs/SECURITY_INCIDENT_2026-11-08.md`).
+4. **Approve removing `dist/` from `gh-pages`** (normal commit and push) to take down the live old-CV copy; see `docs/CV_PRIVACY_PLAN.md` step C. Also set the Google Drive CV to restricted (step D).
 5. **Forest AI repository:** not linked (the repo is a Figma Make UI bundle). Link as a UI prototype, or leave it out?
 6. **Legal texts** (Impressum, privacy policy) are templates; please review.
 7. **AI candidate repositories:** assessment below; none added.

@@ -1,6 +1,6 @@
 # Security incident 2026-11-08: Google API key in `gh-pages`
 
-**Status:** contained locally, awaiting owner actions (push the fix; decide on history rewrite; handle the GitHub alert). Nothing has been pushed, force-pushed, merged or deployed.
+**Status:** cleanup pushed to `gh-pages` (`d7b23a7`, owner-approved normal push). History is intentionally **not** rewritten. The GitHub alert is left open for the owner to review and close manually.
 
 ## Summary
 
@@ -63,10 +63,28 @@ Patterns: Google API key, AWS access key, GitHub/GitLab/Slack/npm tokens, Stripe
 
 Limitations: regex scan, not a dedicated scanner such as gitleaks or trufflehog. Compiled and binary files can't be fully ruled out by pattern matching.
 
+## Cleanup push (2026-11-08)
+
+Checks before the push, all passed: `origin/gh-pages` was still `869072a` (both after `git fetch` and via `ls-remote`), and `d7b23a7` is its direct child, a fast-forward of one commit that overwrites nothing. That commit contains only 365 deletions of generated files plus `.DS_Store`, and one modified file, `.gitignore`. `index.html`, `main.dart.js`, `flutter*.js`, `version.json`, `canvaskit/` and `dist/` have identical tree hashes; `assets/` differs only by a deleted `.DS_Store`.
+
+Push: `869072a..d7b23a7 gh-pages -> gh-pages` (normal, non-force). Afterwards the remote equals local, `raw.githubusercontent.com/…/gh-pages/.dart_tool/chrome-device/…/000005.ldb` returns 404, and the live site returns 200.
+
+## Remaining historical exposure (owner decision: no rewrite)
+
+`869072a` stays in the history of `gh-pages`, so the three files holding the key, the rest of the Chrome profile and the other generated files can still be fetched by commit SHA or browsed in GitHub's history view. Anyone who cloned the repository between the first and second push has a copy.
+
+Why this is acceptable for now, recorded as the owner's decision of 2026-11-08:
+
+- The key is Google Chrome's built-in key, shipped in every Chrome installation. It grants no access to the owner's resources, and revoking or rotating it isn't possible for the owner.
+- The other profile data is encrypted with this Mac's Keychain or is device-local (no saved logins, no autofill data).
+- Rewriting would require a force-push of the deploy branch, which carries its own risk and doesn't remove copies from existing clones or GitHub's caches.
+
+Revisit if anything changes. A rewrite stays possible later with the commands below, and needs explicit approval.
+
 ## Remaining actions for the owner
 
-1. **Push the cleanup** (normal push, no force): `git push origin gh-pages`. This removes the files from the published branch tip. They remain in history.
-2. **Decide on history.** The key is Google's public Chrome key, so a rewrite is optional hygiene. If you want `869072a` gone from the branch (requires a force-push), and you still have `dist/`:
+1. ~~Push the cleanup~~: **done** (see above).
+2. **History**: owner decided **not** to rewrite (2026-11-08). For reference only: The key is Google's public Chrome key, so a rewrite is optional hygiene. If you want `869072a` gone from the branch (requires a force-push), and you still have `dist/`:
 
    ```bash
    git switch gh-pages
@@ -76,10 +94,17 @@ Limitations: regex scan, not a dedicated scanner such as gitleaks or trufflehog.
    ```
 
    GitHub may keep the old commit reachable by SHA for some time; ask GitHub Support to purge cached views if needed. Anyone who already cloned or forked keeps a copy.
-3. **GitHub alert.** Revocation is not possible: the key belongs to Google Chrome, not to your Google Cloud account. If you want to double-check, look for a matching key at Google Cloud Console → APIs & Services → Credentials in each of your projects. The expected result is none. Then close the alert as **False positive** (or *Won't fix*), with a note linking this document. I have not closed it.
+3. **GitHub alert**: the owner reviews and closes it manually. Revocation is not possible: the key belongs to Google Chrome, not to your Google Cloud account. If you want to double-check, look for a matching key at Google Cloud Console → APIs & Services → Credentials in each of your projects. The expected result is none. Then close the alert as **False positive** (or *Won't fix*), with a note linking this document. I have not closed it.
 4. **Optional:** delete the local throwaway profile (`rm -rf .dart_tool/chrome-device`); Flutter recreates it.
 5. **Prevention:**
    - Don't commit to `gh-pages` by hand. Let `.github/workflows/deploy.yml` publish `dist/`.
    - Avoid `git add .` / `git add -A` in a directory holding build output.
    - Enable GitHub secret-scanning **push protection** (Settings → Code security).
-6. Related, not a credential: `dist/CV_MD_Rakibul_Hassan.pdf` in `gh-pages` (the CV with your street address) is still served at `/rakibul-portfolio/dist/CV_MD_Rakibul_Hassan.pdf`. Replacing the CV in `public/` doesn't change that copy. See `PROJECT_STATUS.md`.
+6. Related, not a credential: the CV with the street address is still public in several places. See `docs/CV_PRIVACY_PLAN.md`.
+
+## Hardening added after the incident
+
+- `tests/repo-hygiene.test.mjs` (part of `npm test` and the deploy gate) fails if any generated, browser-profile, dependency, test-output, `.env` (except `.env.example`), key or credential file is tracked, including via `git add -f`. It also checks that `.gitignore` keeps ignoring them. Mutation-checked: a force-added `.dart_tool/chrome-device/…` file makes it fail.
+- `tests/build-output.test.mjs` allowlists what `dist/` may contain, so a stray `.DS_Store`, source map or env file can't be published. Mutation-checked.
+- The deploy workflow publishes only the tested `dist/` artifact (`publish_dir: ./dist`, `keep_files: false`), so the published branch tip is exactly the build output. Checkouts now use `persist-credentials: false`.
+- `npm run check:deploy` blocks the address-containing CV by hash.
