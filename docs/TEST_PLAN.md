@@ -26,14 +26,15 @@ The content preservation test was mutation-checked on 2026-11-08. Renaming one l
 | # | Legacy project (Flutter site order) | Legacy status | Legacy GitHub | New order | Rendered as | New GitHub | Images |
 |---|---|---|---|---|---|---|---|
 | 1 | Forest Tracking & Environmental Safety System | Live | — | 2 | case highlight + index | — (repo contents don't match; owner decision) | 7 in `public/projects/forest_ai/`, not rendered |
-| 2 | Louco Mobile App | Production | — | 4 | case highlight + index | — | 7 in `public/projects/louco/`, not rendered |
-| 3 | XR-Hub Condominium Management System | Delivered | — | 6 | index | — (three candidate repos; owner decision) | none |
+| 2 | Louco Mobile App | Production | — | 5 | case highlight + index | — | 7 in `public/projects/louco/`, not rendered |
+| 3 | XR-Hub Condominium Management System | Delivered | — | 7 | index | — (three candidate repos; owner decision) | none |
 | 4 | Analyzing Historical Stock & Revenue Data and Building a Dashboard | Project | `…/Analyzing-Historical-Stock-Revenue-Data-and-Building-a-Dashboard` | 3 | case highlight + index | unchanged | 6 referenced, **never existed** (warning) |
-| 5 | STEKO Health Checker | Published | `https://github.com/Rakibul-cyber` | 5 | index | `…/FYP-2-Steko-Health-Checker-Application` (approved 2026-11-08) | none |
-| 6 | Automotive HMI Dashboard | Demo | `…/automotive-hmi-dashboard` | 7 | index | unchanged | none |
+| 5 | STEKO Health Checker | Published → **Under review** (approved correction) | `https://github.com/Rakibul-cyber` | 6 | index | `…/FYP-2-Steko-Health-Checker-Application` (approved 2026-11-08) | none |
+| 6 | Automotive HMI Dashboard | Demo | `…/automotive-hmi-dashboard` | 8 | index | unchanged | none |
 | — | Real-Time Driver Stress & Cognitive Load Monitoring (new) | — | — | 1 | flagship case study + index | `…/driver-stress-monitoring` | none |
+| — | Smart Infrastructure Lead Intelligence (new, rule-based, not ML) | — | — | 4 | index (Backend & cloud) | `…/smart-infrastructure-lead-intelligence` | none |
 
-Titles, subtitles, descriptions, statuses and tags of all six legacy projects are byte-identical in `src/data/portfolio.ts` and visible on the page (quotes are typographic at render time). The one exception is the STEKO description, where "Published research" became "Research paper (under review)". That correction was owner-approved on 2026-11-08 and is recorded in `contentCorrections`; the test asserts the new text is shown and the old one is gone.
+Titles, subtitles, descriptions, statuses and tags of all six legacy projects are byte-identical in `src/data/portfolio.ts` and visible on the page (quotes are typographic at render time). The exceptions are the STEKO description and status badge, where "Published research" became "Research paper (under review)". Both corrections were owner-approved on 2026-11-08 and are recorded in `contentCorrections`; the test asserts the corrected values are shown and the old description is gone.
 
 ## Latest results (2026-11-08, local: macOS arm64, Node 24.22.0, Chrome via `PW_CHANNEL=chrome`)
 

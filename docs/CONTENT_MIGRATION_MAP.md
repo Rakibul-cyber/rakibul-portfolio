@@ -15,6 +15,7 @@ Every legacy content item → where it lives now → what changed. Source of the
 | STEKO Health Checker | `steko` | Project index | title, subtitle, tags, status "Published" | Order 5 → 5. **GitHub URL changed** `https://github.com/Rakibul-cyber` → `…/FYP-2-Steko-Health-Checker-Application` (approved by the owner on 2026-11-08; recorded in `linkChanges`).. **Description corrected** (owner-approved 2026-11-08): "Published research:" → "Research paper (under review):"; the paper is under review, not published. Recorded in `contentCorrections`; the preservation test checks the old text is gone and the new text is rendered. |
 | Automotive HMI Dashboard | `automotive-hmi` | Project index | all, incl. GitHub URL | Order 6 → 7. |
 | — (new) | `driver-stress` | Flagship case study + project index | — | New project from `github.com/Rakibul-cyber/driver-stress-monitoring`; all facts from its README, `model_metadata.json`, `train_log.txt`, `ci.yml`, `src/`, `tests/`. |
+| — (new, owner decision 2026-11-08) | `lead-intelligence` | Project index (Backend & cloud) + "Shown in" on the MLOps/backend card | — | New project from `github.com/Rakibul-cyber/smart-infrastructure-lead-intelligence`, described as **rule-based lead scoring, not ML**. Facts only from its README (pipeline, stack, limitations), `src/lead_intelligence/scorer.py` (0–100 weighted score; Low/Medium/High at 50/80), `tests/` and `.github/workflows/ci.yml` (CI on fixtures and fictional data). Placed after Stock Dashboard. The README's self-reported test count is not quoted because it wasn't re-run here. |
 
 Legacy emoji icons are kept in data as `legacyIcon` (not rendered). Legacy `liveUrl` was `null` for every project, so none is set.
 
@@ -83,9 +84,10 @@ Legacy emoji icons are kept in data as `legacyIcon` (not rendered). Legacy `live
 |---|---|---|---|
 | STEKO Health Checker description | `… Published research: "STEKO-SD: …".` | `… Research paper (under review): "STEKO-SD: …".` | `contentCorrections` in `src/data/portfolio.ts`; preservation test |
 | STEKO-SD publication | no status shown | "(under review)" | `publications` |
+| STEKO status badge | `Published` | `Under review` | `contentCorrections` (field `status`); preservation test |
 | STEKO GitHub link | `https://github.com/Rakibul-cyber` | `…/FYP-2-Steko-Health-Checker-Application` | `linkChanges` (status `approved`) |
 
-The STEKO project's legacy **status** field ("Published") is still verbatim. See the open question in `PROJECT_STATUS.md`.
+The STEKO status badge was corrected too (owner decision, 2026-11-08), so no STEKO field contradicts the publication status any more.
 
 ## Removed (approved, brief §4.5)
 

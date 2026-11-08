@@ -12,7 +12,7 @@
 | 3 Scaffold + design system | ✅ | Astro 7.4.2, TS strict, Tailwind 4.3.3 `@theme` tokens |
 | 4 Content model + extraction | ✅ | `tests/legacy-inventory.json` (6 projects, 16 skills, 4 posts, 4 timeline, 3/3/3), `src/data/portfolio.ts` |
 | 5 Header, hero, stats | ✅ | |
-| 6 Expertise, work | ✅ | 7 projects; filters 2/1/5/3/7 |
+| 6 Expertise, work | ✅ | 8 projects (7 + lead-intelligence added 2026-11-08); filters 2/1/5/4/8 |
 | 7 Process, experience, about, contact, footer, legal, 404 | ✅ | |
 | 8 Preservation → remove Flutter | ✅ | preservation 15/15 passed **before** `697b211` removed `lib/`, `web/`, `pubspec.*` |
 | 9 Quality | ✅ | `npm run verify` exit 0: check 0/0/0, lint, format, 32/32 node tests, 43/43 e2e incl. axe; Lighthouse mobile 96/100/100/100 |
@@ -28,31 +28,41 @@
 
 ## Blocking items
 
-- **Deployment only:** (1) a CV without the street address in `public/`; the deploy gate blocks the current file by hash. (2) The Impressum postal address. In the 2026-11-08 round you chose "I'll type my address", but no address came through, so the placeholder remains and `npm run check:deploy` still fails. Send the address, or decide to drop the Impressum.
+- **Deployment only:**
+  1. A CV without the street address at `public/CV_MD_Rakibul_Hassan.pdf`. The deploy gate blocks the current file by hash. **The 2026-11-08 instruction still had the placeholder `[path]`, so no file has been supplied yet.**
+  2. The Impressum postal address. **That instruction also still had the placeholder `[type it here]`.**
+
+## Waiting for owner approval
+
+- **Push `gh-pages` commit `f336f14`** (prepared locally, not pushed): deletes the 28 files under `dist/` and nothing else. This takes down the live old-CV copy. (`.dart_tool/` and `build/` were already removed by the pushed `d7b23a7`.)
+- **History purge:** a full written procedure is in `docs/HISTORY_PURGE_PLAN.md`; nothing has been executed. The legacy tags stay local until this is decided.
+- **PR #1** (`redesign/ai-ml-astro` → `main`, opened 2026-11-07) is open. Merging it would trigger the deploy workflow, which would then stop at the deploy gate while the CV and Impressum items are open.
 
 ## Resolved owner decisions (2026-11-08)
 
-| # | Decision | Applied |
-|---|---|---|
-| LinkedIn | `https://www.linkedin.com/in/rakibulhassan-dev/` | already in `profile.linkedin`; no change |
-| STEKO-SD | under review | publication shows "(under review)"; STEKO description corrected (see `docs/CONTENT_MIGRATION_MAP.md` → Owner-approved corrections) |
-| STEKO repo link | approved | `linkChanges` status `approved` |
-| XR-Hub | leave unlinked | no change |
-| Blog | keep hidden | all 4 articles stay `draft` |
-| Profile photo | no photo supplied | the "RH" monogram stays |
-| Reference screenshots | remove from branch | untracked and git-ignored; files kept locally. **They remain in the history of the already-pushed `origin/redesign/ai-ml-astro`** (commit `c2ca139`) |
-| CV | owner will supply a PDF without the street address at `public/CV_MD_Rakibul_Hassan.pdf` (same filename) | **pending:** the file is still the old 205,078-byte CV. Older versions remain in Git history (and on `main`, the pushed redesign branch and `gh-pages`), so they stay downloadable from the repository even after replacement |
+| Decision | Applied |
+|---|---|
+| LinkedIn `https://www.linkedin.com/in/rakibulhassan-dev/` | already in use |
+| STEKO-SD under review | publication "(under review)"; description corrected; **status badge "Under review"** (both in `contentCorrections`, enforced by the preservation test) |
+| STEKO repo link | approved |
+| XR-Hub | left unlinked |
+| Blog | hidden |
+| Profile photo | monogram kept |
+| Reference screenshots | untracked and git-ignored, kept locally |
+| **smart-infrastructure-lead-intelligence** | added as project 4 of 8 under Backend & cloud, described as rule-based lead scoring (not ML), facts from its README, scorer code, tests and CI; also listed under "Shown in" on the MLOps/backend card |
+| Root CV duplicate | untracked (local file kept, git-ignored; the hygiene test blocks re-adding it) |
+| Git history | not rewritten; no force-push (plan prepared) |
+| Security alert | owner closes it manually |
 
 ## Decisions still open
 
-1. **Impressum address** (blocks deployment).
-2. **STEKO project status field.** The legacy status badge still says "Published" (verbatim legacy field), which reads oddly next to "paper under review". Options: keep it (it can be read as the app being delivered), or change it to e.g. "Delivered" as another recorded correction.
-3. **Root `CV_MD_Rakibul_Hassan.pdf`** (old version with the street address) is still tracked at the repository root as a duplicate; only `public/` is deployed. Remove it from the branch once the new CV is in `public/`?
-4. **Approve removing `dist/` from `gh-pages`** (normal commit and push) to take down the live old-CV copy; see `docs/CV_PRIVACY_PLAN.md` step C. Also set the Google Drive CV to restricted (step D).
-5. **Forest AI repository:** not linked (the repo is a Figma Make UI bundle). Link as a UI prototype, or leave it out?
-6. **Legal texts** (Impressum, privacy policy) are templates; please review.
-7. **AI candidate repositories:** assessment below; none added.
-8. Optional cleanup: `assets/projects/**` duplicates `public/projects/**`.
+1. Impressum address (blocks deployment).
+2. New CV file (blocks deployment).
+3. Approve the `f336f14` push; restrict or replace the Google Drive CV.
+4. History purge: yes/no (see plan).
+5. Forest AI repository: not linked (a Figma Make UI bundle). Link it as a UI prototype, or leave it out?
+6. Legal texts (Impressum, privacy policy) are templates; please review.
+7. Optional cleanup: `assets/projects/**` duplicates `public/projects/**`.
 
 ## AI candidate repositories: assessment (2026-11-08)
 
@@ -60,7 +70,7 @@ Bar: the Driver Stress project. That means real code, a README that explains the
 
 | Repository | What is actually there | Verdict |
 |---|---|---|
-| `smart-infrastructure-lead-intelligence` | ~5,900 lines of Python, 378 test functions, Docker + Compose, GitHub Actions CI green on `main` (26 Oct 2026), a long README with architecture, limitations and a GDPR/robots note. Scoring is **rule-based** (keyword signals → 0–100 score), not ML | **Recommend (1).** Strongest engineering evidence after Driver Stress. Present it under backend/automation as "rule-based lead scoring pipeline", **not** as AI/ML. It scrapes public business contact data, so keep the legal note visible |
+| `smart-infrastructure-lead-intelligence` | ~5,900 lines of Python, 378 test functions, Docker + Compose, GitHub Actions CI green on `main` (26 Oct 2026), a long README with architecture, limitations and a GDPR/robots note. Scoring is **rule-based** (keyword signals → 0–100 score), not ML | **Added 2026-11-08** (owner decision). Strongest engineering evidence after Driver Stress. Present it under backend/automation as "rule-based lead scoring pipeline", **not** as AI/ML. It scrapes public business contact data, so keep the legal note visible |
 | `USING-ANIMAL-CLASSFY-MACHINE-LEARNING` | 2022 coursework: pandas + scikit-learn Random Forest with GridSearchCV on the Austin shelter-outcomes dataset; predicts **adoption vs. not**. The README claims it classifies animals into mammals/birds/reptiles, which the code does not do. Random split without a seed; accuracy only printed, no recorded results, no tests | **Recommend (2), only after fixes.** It is real supervised ML, but first rewrite the README to match the code, fix the seed, use a stratified split, add a baseline and record the metrics. As it stands it fails the honesty bar |
 | `Text-Summarizer-Using-NLP` | Two notebooks: spaCy word-frequency extractive summariser with a tkinter UI, and TextBlob sentiment on tweets (tweepy), plus a PDF report. No evaluation (no ROUGE). The README claims optional transformer summarisation that isn't in the code | Not now. Classic NLP coursework with no measured results and an overclaiming README |
 | `aws-satellite-data-pipeline` | 60-line boto3 script. The "AI processing" is `time.sleep(2)`, random coordinates and a hard-coded `"ai_confidence_score": "98.5%"` | **Do not add.** Showing a fabricated confidence score would undermine the honest framing of the site. It could be reframed as a plain EC2/S3/IAM exercise, but adds little |

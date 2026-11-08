@@ -28,10 +28,10 @@ Other things noticed in the PDF: author metadata "hloom.com" (the Word template,
 | Step | Action | Effect | Approval needed |
 |---|---|---|---|
 | A | Owner exports a new CV **without the street address** (keep "Frankfurt am Main, Germany"), ideally with the PDF author/title metadata cleared, and saves it as `public/CV_MD_Rakibul_Hassan.pdf` | the legitimate download keeps the same URL and filename | owner provides the file |
-| B | Commit the new `public/` CV on the redesign branch; untrack the root duplicate `CV_MD_Rakibul_Hassan.pdf` with `git rm --cached` (the local file stays) and git-ignore it | the branch carries one address-free CV | none (local commit); pushing the branch is the owner's call |
-| C | Remove `dist/` (or at least `dist/CV_MD_Rakibul_Hassan.pdf`) from `gh-pages` with a **normal commit and normal push**. `dist/` there is an accidental preview whose asset paths don't resolve | removes the live copy (#1) | **explicit approval to push to `gh-pages`** |
+| B | Commit the new `public/` CV on the redesign branch (**waiting for the file**). The root duplicate `CV_MD_Rakibul_Hassan.pdf` is **already untracked** (`git rm --cached`, local file kept, git-ignored, and the hygiene test fails if it is tracked again) | the branch carries one address-free CV | none (local commit); pushing the branch is the owner's call |
+| C | Remove `dist/` from `gh-pages` with a **normal commit and normal push**. `dist/` there is an accidental preview whose asset paths don't resolve. **Prepared locally as `f336f14`** (28 deletions, all under `dist/`) | removes the live copy (#1) | **explicit approval to push to `gh-pages`** |
 | D | Google Drive: set the file's sharing to *Restricted*, or upload the new CV as a new version of the same file (Manage versions) so the old link serves the clean CV | removes or replaces copy #4 | owner, in Google Drive |
 | E | `main` stops carrying the root CV when the redesign PR is merged (step B removes it) | removes #2 from the default view | the owner's merge |
-| F | Optional: rewrite history to purge old CV blobs | removes #5; requires force-push, and clones or caches may keep copies | **explicit approval** (currently declined) |
+| F | Optional: rewrite history to purge old CV blobs; full procedure in `docs/HISTORY_PURGE_PLAN.md` | removes #5; requires force-push, and clones or caches may keep copies | **explicit approval** (not given) |
 
 After A–E, the only published CV is the address-free `public/` copy, served at the URL the site links to. The old version would still exist in Git history (F not done) and in any third-party caches.
