@@ -1,0 +1,248 @@
+---
+import Icon from '../ui/Icon.astro';
+import SectionHeading from '../ui/SectionHeading.astro';
+import Terminal from '../process/Terminal.astro';
+import { qualityGates, quote, workflow } from '../../data/portfolio';
+
+// Six nodes evenly spaced on the ring, starting at 12 o'clock, clockwise.
+const nodes = workflow.stages.map((stage, i) => {
+  const angle = (-90 + i * (360 / workflow.stages.length)) * (Math.PI / 180);
+  return {
+    ...stage,
+    x: (50 + 50 * Math.cos(angle)).toFixed(3),
+    y: (50 + 50 * Math.sin(angle)).toFixed(3),
+  };
+});
+const withCode = (text: string) =>
+  text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(
+      /`([^`]+)`/g,
+      '<code class="rounded bg-surface px-1 py-0.5 font-mono text-[0.85em] text-ink">$1</code>',
+    );
+---
+
+<section
+  id="process"
+  aria-labelledby="process-title"
+  class="border-b border-slate-200/70 py-24 sm:py-32"
+>
+  <div class="mx-auto max-w-6xl px-6 sm:px-8">
+    <div
+      class="grid grid-cols-1 items-center gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12"
+      data-workflow
+    >
+      <div>
+        <SectionHeading
+          id="process-title"
+          eyebrow="How I work"
+          title="From a question to a model that ships."
+          lead="Six stages, with evaluation in the middle because it’s the step that can send work back. Each stage below shows what it looked like in the driver-stress project."
+        />
+        <p
+          class="mt-7 inline-flex items-center gap-2 rounded-full border border-dashed border-accent/40 bg-accent-50/60 px-3.5 py-1.5 text-sm font-medium text-accent-600"
+          data-reveal
+        >
+          <Icon name="refresh" class="size-4" />
+          Iterates until it holds up on unseen data
+        </p>
+
+        <div class="panels mt-8" data-reveal>
+          {nodes.map((stage, i) => (
+            <div
+              id={`stage-panel-${stage.id}`}
+              role="tabpanel"
+              aria-labelledby={`stage-tab-${stage.id}`}
+              tabindex="0"
+              data-stage-panel={stage.id}
+              class="panel rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm"
+            >
+              <p class="flex items-center gap-3">
+                <span class="flex size-7 items-center justify-center rounded-full bg-ink font-mono text-xs text-white">
+                  {i + 1}
+                </span>
+                <span class="font-display text-lg font-semibold text-ink">{stage.title}</span>
+              </p>
+              <p class="mt-3 leading-relaxed text-slate-700">{stage.summary}</p>
+              <p class="mt-4 border-t border-slate-100 pt-4 text-sm leading-relaxed text-muted">
+                <span class="font-semibold text-accent-600">In the driver-stress project: </span>
+                <Fragment set:html={withCode(stage.example)} />
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="ring-wrap mx-auto w-full" data-reveal>
+        <div class="wf-ring relative mx-auto aspect-square">
+          <svg
+            class="absolute inset-0 size-full overflow-visible"
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+          >
+            <circle
+              cx="50"
+              cy="50"
+              r="50"
+              fill="none"
+              stroke="currentColor"
+              class="text-accent/45"
+              stroke-width="0.55"
+              stroke-dasharray="0.01 2.1"
+              stroke-linecap="round"
+            />
+          </svg>
+          <div class="orbit absolute inset-0" aria-hidden="true">
+            <span class="orbit-dot absolute top-0 left-1/2 size-2.5 rounded-full bg-violet shadow-[0_0_0_4px] shadow-violet/20" />
+          </div>
+
+          <div class="centre absolute top-1/2 left-1/2 flex flex-col items-center justify-center rounded-full border border-slate-200/80 bg-white text-center shadow-xl shadow-slate-200/60">
+            <span class="flex size-10 items-center justify-center rounded-xl bg-accent-50 text-accent sm:size-12">
+              <Icon name="gauge" class="size-5 sm:size-6" />
+            </span>
+            <p class="mt-2 font-display text-sm font-semibold text-ink sm:text-base">
+              {workflow.gate.title}
+            </p>
+            <p class="mt-1 max-w-[11rem] text-[0.7rem] leading-snug text-muted sm:text-xs">
+              {workflow.gate.body}
+            </p>
+          </div>
+
+          <div
+            role="tablist"
+            aria-label="Workflow stages"
+            aria-orientation="horizontal"
+            class="absolute inset-0"
+          >
+            {nodes.map((stage, i) => (
+              <button
+                type="button"
+                role="tab"
+                id={`stage-tab-${stage.id}`}
+                aria-controls={`stage-panel-${stage.id}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? '0' : '-1'}
+                data-stage-tab={stage.id}
+                class="node group absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
+                style={`left: ${stage.x}%; top: ${stage.y}%`}
+              >
+                <span class="node-tile relative flex size-12 items-center justify-center rounded-xl border border-slate-200/80 bg-white text-accent shadow-sm transition-all sm:size-14">
+                  <Icon name={stage.icon} class="size-5 sm:size-6" />
+                  <span class="absolute -top-2 -right-2 flex size-5 items-center justify-center rounded-full bg-ink font-mono text-[0.65rem] text-white">
+                    {i + 1}
+                  </span>
+                </span>
+                <span class="mt-1.5 rounded-full bg-canvas/90 px-1.5 font-display text-xs font-semibold text-ink sm:text-sm">
+                  {stage.title}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="mt-10 flex max-w-3xl items-start gap-3 rounded-xl border border-dashed border-accent/40 bg-accent-50/50 px-5 py-4 text-sm leading-relaxed text-accent-600"
+      data-reveal
+    >
+      <Icon name="info" class="mt-0.5 size-4" />
+      <p>
+        The evaluation gate is where the driver-stress model’s per-subject spread (F1 from 0.94 down
+        to 0.00) became visible. The case study reports that spread instead of only the best number.
+      </p>
+    </div>
+
+    <div class="mt-16">
+      <Terminal />
+    </div>
+
+    <div
+      class="mt-8 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm sm:p-7"
+      data-reveal
+    >
+      <h3 class="font-display text-xs font-semibold tracking-label text-slate-600 uppercase">
+        Quality, built into every step
+      </h3>
+      <ul class="mt-4 flex flex-wrap gap-2.5">
+        {qualityGates.map((gate) => (
+          <li class="inline-flex items-center gap-2 rounded-full bg-accent-50 px-3.5 py-1.5 text-sm font-medium text-accent-600">
+            <Icon name="check" class="size-4" strokeWidth={2.25} />
+            {gate}
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <figure class="quote relative mt-10 overflow-hidden rounded-2xl bg-ink p-8 sm:p-12" data-reveal>
+      <div class="quote-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
+      <Icon name="quote" class="relative size-8 text-violet" />
+      <blockquote class="relative mt-5 max-w-2xl font-display text-2xl leading-snug font-medium text-balance text-white sm:text-[1.75rem]">
+        <p>{quote}</p>
+      </blockquote>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .ring-wrap {
+    --ring: min(22rem, calc(100vw - 7rem));
+    padding: 2.5rem;
+    max-width: calc(var(--ring) + 5rem);
+  }
+  .wf-ring {
+    width: var(--ring);
+  }
+  .centre {
+    width: 54%;
+    height: 54%;
+    transform: translate(-50%, -50%);
+    padding: 0.75rem;
+  }
+  .orbit {
+    animation: var(--animate-orbit);
+  }
+  .orbit-dot {
+    transform: translate(-50%, -50%);
+  }
+  [data-workflow].is-paused .orbit {
+    animation-play-state: paused;
+  }
+  .node[aria-selected='true'] .node-tile {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: white;
+    box-shadow: 0 10px 24px -8px color-mix(in srgb, var(--color-accent) 55%, transparent);
+  }
+  @media (hover: hover) {
+    .node:hover .node-tile {
+      border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
+    }
+  }
+  /* With JS, only the selected stage's panel shows; without it all six are listed. */
+  .panels {
+    display: grid;
+    gap: 0.75rem;
+  }
+  :global(.js) .panel[hidden] {
+    display: none;
+  }
+  .quote-glow {
+    background: radial-gradient(
+      45% 90% at 85% 50%,
+      color-mix(in srgb, var(--color-accent) 30%, transparent),
+      transparent 70%
+    );
+  }
+  @media (min-width: 64rem) {
+    .ring-wrap {
+      --ring: 24rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .orbit {
+      display: none;
+    }
+  }
+</style>

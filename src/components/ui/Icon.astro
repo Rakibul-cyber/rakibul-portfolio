@@ -1,0 +1,35 @@
+---
+import { icons, type IconName } from '../../lib/icons';
+
+/**
+ * Small original line-icon set (24×24 grid, 1.75 stroke, round joins).
+ * Icons are decorative by default (`aria-hidden`); pass `label` when an icon is
+ * the only content of a control and needs an accessible name.
+ */
+
+export interface Props {
+  name: IconName;
+  class?: string;
+  label?: string;
+  strokeWidth?: number;
+}
+
+const { name, class: className = 'size-5', label, strokeWidth = 1.75 } = Astro.props;
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={strokeWidth}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class:list={['shrink-0', className]}
+  aria-hidden={label ? undefined : 'true'}
+  role={label ? 'img' : undefined}
+  aria-label={label}
+  focusable="false"
+>
+  <path d={icons[name]}></path>
+</svg>

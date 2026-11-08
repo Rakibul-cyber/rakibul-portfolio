@@ -1,0 +1,88 @@
+---
+import { ciTranscript } from '../../data/portfolio';
+
+const prefix = { cmd: '$', out: '', ok: '✓', dim: '', note: '●' } as const;
+const escape = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// Built as one string: whitespace inside <pre> is significant, so no formatter may touch it.
+const html =
+  ciTranscript.lines
+    .map((line) => {
+      const p = prefix[line.kind];
+      const mark = p ? `<span class="select-none" aria-hidden="true">${p} </span>` : '';
+      return `<span class="line line-${line.kind}" data-line>${mark}${escape(line.text)}</span>`;
+    })
+    .join('') + '<span class="cursor" aria-hidden="true"></span>';
+---
+
+<figure class="mx-auto max-w-3xl" data-reveal>
+  <div
+    class="terminal overflow-hidden rounded-2xl border border-white/10 bg-ink shadow-2xl shadow-slate-400/30"
+    data-terminal
+  >
+    <div class="flex items-center gap-3 border-b border-white/10 px-4 py-3">
+      <span class="flex gap-1.5" aria-hidden="true">
+        <span class="size-3 rounded-full bg-term-red"></span>
+        <span class="size-3 rounded-full bg-term-amber"></span>
+        <span class="size-3 rounded-full bg-term-green"></span>
+      </span>
+      <span class="truncate font-mono text-xs text-term-dim">{ciTranscript.title}</span>
+      <span class="ml-auto inline-flex shrink-0 items-center gap-1.5 font-mono text-xs text-term-ok">
+        <span class="size-1.5 rounded-full bg-term-ok" aria-hidden="true"></span>
+        {ciTranscript.status}
+      </span>
+    </div>
+    <pre
+      class="overflow-x-auto px-5 py-5 font-mono text-[0.8rem] leading-relaxed sm:px-6 sm:text-sm"
+      tabindex="0"
+      role="region"
+      aria-label="CI and training log replay"
+    ><code set:html={html} /></pre>
+  </div>
+  <figcaption class="mt-3 text-center text-xs leading-relaxed text-muted">
+    {ciTranscript.caption}
+  </figcaption>
+</figure>
+
+<style>
+  [data-terminal] :global(.line) {
+    display: block;
+    white-space: pre;
+  }
+  [data-terminal] :global(.line-cmd) {
+    color: white;
+    margin-top: 0.35rem;
+  }
+  [data-terminal] :global(.line-cmd:first-child) {
+    margin-top: 0;
+  }
+  [data-terminal] :global(.line-out) {
+    color: var(--color-term-info);
+  }
+  [data-terminal] :global(.line-dim) {
+    color: var(--color-term-dim);
+  }
+  [data-terminal] :global(.line-ok) {
+    color: var(--color-term-ok);
+  }
+  [data-terminal] :global(.line-note) {
+    color: var(--color-term-warn);
+    margin-top: 0.35rem;
+  }
+  [data-terminal] :global(.cursor) {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.05em;
+    vertical-align: text-bottom;
+    background: color-mix(in srgb, white 70%, transparent);
+    animation: var(--animate-blink);
+  }
+  /* Replay state, set by src/scripts/terminal.ts. Without JS every line is shown. */
+  [data-terminal].is-replaying :global(.line:not(.is-shown)) {
+    display: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-terminal] :global(.cursor) {
+      animation: none;
+    }
+  }
+</style>

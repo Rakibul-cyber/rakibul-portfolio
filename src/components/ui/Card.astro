@@ -1,0 +1,31 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+export interface Props extends Omit<HTMLAttributes<'div'>, 'class'> {
+  as?: 'div' | 'article' | 'li' | 'section';
+  /** Adds the hover shadow lift (hover-capable devices only). */
+  interactive?: boolean;
+  padding?: 'md' | 'lg' | 'none';
+  class?: string;
+}
+const {
+  as: Tag = 'div',
+  interactive = false,
+  padding = 'md',
+  class: className,
+  ...rest
+} = Astro.props;
+const pads = { none: '', md: 'p-6 sm:p-7', lg: 'p-7 sm:p-10' };
+---
+
+<Tag
+  class:list={[
+    'rounded-2xl border border-slate-200/80 bg-white shadow-sm',
+    interactive && 'lift transition-shadow hover:shadow-xl hover:shadow-slate-200/60',
+    pads[padding],
+    className,
+  ]}
+  {...rest}
+>
+  <slot />
+</Tag>

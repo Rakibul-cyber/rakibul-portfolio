@@ -1,3 +1,60 @@
+# Astro / Node
+node_modules/
+dist/
+.astro/
+*.log
+npm-debug.log*
+
+# Tests
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+.lighthouse/
+coverage/
+
+# OS / editor
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Environment files: never commit real values. A placeholder-only .env.example is allowed.
+.env
+.env.*
+!.env.example
+
+# Credentials, keys and service-account files
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+key.properties
+credentials*.json
+service-account*.json
+google-services.json
+GoogleService-Info.plist
+firebase-debug.log
+.firebaserc.local
+.npmrc.local
+
+# Flutter / Dart generated files, including the throwaway Chrome profile that
+# `flutter run -d chrome` writes to .dart_tool/chrome-device (cookies, history,
+# Chrome's own API key). See docs/SECURITY_INCIDENT_2026-11-08.md.
 build/
 .dart_tool/
 .flutter-plugins-dependencies
+.flutter-plugins
+.last_build_id
+.packages
+*.iml
+
+# Reference-site captures: internal design material showing a third party's site.
+# Kept locally for design review, never committed (removed from the branch 2026-11-08).
+docs/screenshots/reference-*
+
+# The CV is published only from public/. A root copy (old version with street address) was
+# untracked on 2026-11-08; the local file is kept.
+/CV_MD_Rakibul_Hassan.pdf

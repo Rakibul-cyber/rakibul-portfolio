@@ -1,125 +1,92 @@
-# Rakibul Hassan — Portfolio Website
-**Flutter Web Portfolio** · `rakibulhassan.dev`
+# Md Rakibul Hassan: portfolio
 
-A production-ready Flutter web portfolio designed for freelance & contract developer positioning.
+Personal portfolio of **Md Rakibul Hassan, AI/ML Engineer | AI-Powered Software Developer**, Frankfurt am Main.
 
----
+Live: <https://rakibul-cyber.github.io/rakibul-portfolio/>
 
-## 🚀 Quick Start
+A fully static site built with [Astro](https://astro.build), TypeScript (strict) and Tailwind CSS v4. There's no backend, no database, no cookies and no analytics. It's hosted for free on GitHub Pages from the `gh-pages` branch. All content lives in one typed file: [`src/data/portfolio.ts`](src/data/portfolio.ts).
 
-### Prerequisites
-- Flutter SDK 3.x+ (`flutter --version`)
-- Chrome browser (for web dev)
+## Requirements
 
-### Run Locally
+- Node.js **24 LTS** (≥ 22.23.4, required by Astro 7)
+- npm 11
+
+## Develop
+
 ```bash
-# 1. Install dependencies
-flutter pub get
-
-# 2. Run in Chrome
-flutter run -d chrome
-
-# 3. Build for production
-flutter build web --release --web-renderer canvaskit
+npm ci
+npm run dev        # http://localhost:4321/rakibul-portfolio/
 ```
 
-### Deploy
-The `build/web/` folder is your deployable output. Works with:
-- **GitHub Pages** — push `build/web/` to `gh-pages` branch
-- **Firebase Hosting** — `firebase deploy`
-- **Netlify / Vercel** — drag & drop `build/web/`
-- **Custom domain** — point DNS to your hosting
+## Build and preview
 
----
-
-## 📁 Project Structure
-
-```
-lib/
-├── main.dart                    # App entry point
-├── theme/
-│   └── app_theme.dart           # Colors, typography, theme
-├── models/
-│   └── portfolio_data.dart      # All content (projects, skills, pricing)
-├── screens/
-│   ├── portfolio_page.dart      # Main page + nav assembly
-│   ├── hero_section.dart        # Hero + terminal animation
-│   ├── skills_section.dart      # Skills & certifications
-│   ├── projects_section.dart    # Projects grid
-│   ├── hire_section.dart        # Pricing & hire me
-│   └── blog_contact_section.dart # Blog, contact form, footer
-└── widgets/
-    └── common_widgets.dart      # Shared: buttons, cards, tags, nav
-web/
-└── index.html                   # SEO meta + loading screen
+```bash
+npm run build      # → dist/
+npm run preview    # serves dist/ under /rakibul-portfolio/ like GitHub Pages: http://localhost:4321/rakibul-portfolio/
 ```
 
----
+## Test
 
-## ✏️ Customization
-
-### Update Your Content
-All portfolio content lives in one file: **`lib/models/portfolio_data.dart`**
-
-- Add/edit **projects** in `PortfolioData.projects`
-- Update **skills** in `PortfolioData.skills`
-- Change **pricing** in `PortfolioData.packages`
-- Add **blog posts** in `PortfolioData.blogPosts`
-
-### Update Rates
-Find `HirePackage` entries in `portfolio_data.dart` and edit the `price` field.
-
-### Add CV Download
-In `common_widgets.dart`, find `'Download CV'` button and wire `url_launcher`:
-```dart
-import 'package:url_launcher/url_launcher.dart';
-// ...
-onTap: () => launchUrl(Uri.parse('https://your-cv-link.pdf')),
+```bash
+npx playwright install --with-deps chromium   # once (or set PW_CHANNEL=chrome to use an installed Chrome)
+npm run verify       # type check → lint → format check → build → unit/build-output tests → e2e + axe
+npm run test:links   # checks every external link
+npm run check:deploy # deploy gate: hygiene, build-output and preservation tests; blocks files that must never be published
 ```
 
-### Colors
-All colors are in `lib/theme/app_theme.dart`. Change `cyan`, `amber`, etc.
+What each suite covers, plus the latest real results and Lighthouse scores, is in [`docs/TEST_PLAN.md`](docs/TEST_PLAN.md).
 
----
+## Edit content
 
-## 🎨 Design System
+Everything visible comes from [`src/data/portfolio.ts`](src/data/portfolio.ts):
 
-| Token | Hex | Usage |
-|-------|-----|-------|
-| bgDeep | `#0A0F1E` | Page background |
-| bgCard | `#111827` | Card backgrounds |
-| cyan | `#00D4FF` | Primary accent, CTAs |
-| amber | `#FFB347` | Secondary accent |
-| textPrimary | `#E8EDF5` | Headings |
-| textSecondary | `#8B9DC3` | Body text |
+| To… | Edit |
+| --- | --- |
+| Change hero text, contact details, LinkedIn URL | `profile` |
+| Add, reorder or hide a project | `projects` (array order = display order; `hidden: true` keeps it in data but off the site). Give it `categories` for the filters; add `highlight` for a case card or `caseStudy` for a full case study |
+| Change a statistic | `stats`. Every stat needs a `source` |
+| Change the expertise cards | `expertise` (`shownIn` must list existing project ids) |
+| Publish an article | set `status: 'published'` and a `url` in `articles`. The Writing section appears automatically |
+| Change the workflow ring or terminal | `workflow`, `ciTranscript`, `qualityGates` |
 
-**Fonts:** Space Grotesk (display) + Inter (body) + JetBrains Mono (terminal)
+Legacy fields (titles, descriptions, tags of the six original projects) are checked byte-for-byte by `tests/content-preservation.test.mjs`. If you change one on purpose, update the test's expectations. A changed GitHub link must also be recorded in `linkChanges`.
 
----
+## Add a profile photo
 
-## 📦 Dependencies
+1. Save the photo as `src/assets/profile.jpg` (square, at least 800 × 800 px).
+2. In `src/data/portfolio.ts`:
 
-| Package | Purpose |
-|---------|---------|
-| `google_fonts` | Space Grotesk + Inter + JetBrains Mono |
-| `flutter_animate` | Scroll/entry animations |
-| `animated_text_kit` | Text animations |
-| `url_launcher` | Links, CV download |
-| `font_awesome_flutter` | Social icons |
-| `visibility_detector` | Scroll-triggered animations |
+   ```ts
+   import profilePhoto from '../assets/profile.jpg';
+   // …
+   export const profile: Profile = {
+     // …
+     photo: { src: profilePhoto, alt: 'Md Rakibul Hassan' },
+   };
+   ```
 
----
+The hero and About section switch from the "RH" monogram to the photo. Astro generates responsive AVIF/WebP sizes with explicit dimensions.
 
-## 📋 TODO / Next Steps
+## Deploy
 
-- [ ] Connect contact form to EmailJS or backend
-- [ ] Add real CV PDF download link
-- [ ] Add your profile photo to hero section
-- [ ] Write and publish first blog post
-- [ ] Set up custom domain (`rakibulhassan.dev`)
-- [ ] Add Google Analytics
-- [ ] Deploy to Firebase Hosting
+Pushing to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml). It verifies everything, runs the deploy gate and publishes `dist/` to `gh-pages` as a normal commit. Pull requests are verified but never deployed. Full procedure, checks and rollback: [`docs/DEPLOYMENT_PLAN.md`](docs/DEPLOYMENT_PLAN.md).
 
----
+## Project layout
 
-Built with Flutter 💙 · Frankfurt am Main, Germany
+```text
+src/data/portfolio.ts      all content (typed)
+src/components/sections/   one component per page section
+src/components/work/       flagship case study, highlight cards, project index
+src/components/ui/         Button, Card, Tag, Icon, SectionHeading
+src/scripts/               small vanilla TS modules (header, menu, filters, workflow tabs, terminal, contact form, reveal)
+src/styles/global.css      Tailwind import, @theme tokens, reduced-motion rules
+src/pages/                 index, privacy, 404, robots.txt (no Impressum: owner decision 2026-11-08)
+public/                    CV, favicon, .nojekyll, legacy project images (deployed, not displayed), service-worker kill switch
+tests/                     legacy extractor + inventory, preservation, build-output, link check, e2e/
+scripts/                   sub-path preview server, screenshot capture, deploy gate
+docs/                      audit, design reference, decisions, migration map, tasks, test plan, deployment plan
+```
+
+## History
+
+The previous Flutter Web version is preserved at tag `legacy-flutter-source` (source) and `legacy-flutter-deploy` (deployed build). [`docs/CONTENT_MIGRATION_MAP.md`](docs/CONTENT_MIGRATION_MAP.md) maps every legacy item to its new place.

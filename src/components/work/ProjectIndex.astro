@@ -1,0 +1,131 @@
+---
+import Icon from '../ui/Icon.astro';
+import Tag from '../ui/Tag.astro';
+import { categoryFilters, categoryLabels, visibleProjects as projects } from '../../data/portfolio';
+import { smartQuotes } from '../../lib/typography';
+
+// Featured projects already carry their `project-<id>` anchor on the richer card above.
+const featured = new Set(['driver-stress', 'forest-ai', 'louco', 'stock-dashboard']);
+const count = (id: string) =>
+  id === 'all'
+    ? projects.length
+    : projects.filter((p) => p.categories.some((c) => c === id)).length;
+---
+
+<div class="mt-20" data-project-index>
+  <div class="flex flex-col gap-6">
+    <div>
+      <h3 id="index-title" class="font-display text-2xl font-bold tracking-tight text-ink">
+        All projects
+      </h3>
+      <p class="mt-2 max-w-xl text-sm leading-relaxed text-muted">
+        Every project from my previous portfolio, plus newer ones. Earlier descriptions are kept as
+        originally written.
+      </p>
+    </div>
+    <div class="filters" role="group" aria-label="Filter projects by area">
+      <ul class="flex flex-wrap gap-2">
+        {categoryFilters.map((f) => (
+          <li>
+            <button
+              type="button"
+              data-filter={f.id}
+              aria-pressed={f.id === 'all' ? 'true' : 'false'}
+              class="filter-btn inline-flex min-h-11 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 transition-colors hover:border-slate-300"
+            >
+              {f.label}
+              <span class="count rounded-full bg-surface px-1.5 py-0.5 text-xs tabular-nums text-slate-600">
+                {count(f.id)}
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <p class="sr-only" role="status" aria-live="polite" data-filter-status></p>
+
+  <ul
+    class="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
+    aria-labelledby="index-title"
+  >
+    {projects.map((p) => (
+      <li
+        id={featured.has(p.id) ? undefined : `project-${p.id}`}
+        data-categories={p.categories.join(' ')}
+        class="flex flex-col rounded-2xl border border-slate-200/80 bg-white p-6"
+      >
+        <div class="flex items-center justify-between gap-3 text-xs">
+          <span class="inline-flex items-center gap-1.5 font-semibold text-slate-700">
+            <span class="size-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
+            {p.status}
+          </span>
+          <span class="text-slate-500">
+            {p.categories.map((c) => categoryLabels[c]).join(' · ')}
+          </span>
+        </div>
+        <h4 class="mt-4 font-display leading-snug font-semibold text-ink">{p.title}</h4>
+        <p class="mt-1 text-xs text-slate-500">{p.subtitle}</p>
+        <p class="mt-3 text-sm leading-relaxed text-muted">{smartQuotes(p.description)}</p>
+        <ul class="mt-4 flex flex-wrap gap-1.5" aria-label="Technologies">
+          {p.tags.map((t) => (
+            <li>
+              <Tag>{t}</Tag>
+            </li>
+          ))}
+        </ul>
+        <div class="mt-auto flex flex-wrap gap-x-5 pt-5 text-sm">
+          {featured.has(p.id) && (
+            <a
+              href={`#project-${p.id}`}
+              class="inline-flex min-h-10 items-center gap-1.5 font-semibold text-accent-600 hover:text-accent"
+            >
+              Read the case study
+              <Icon name="arrow-right" class="size-4" />
+            </a>
+          )}
+          {p.githubUrl && (
+            <a
+              href={p.githubUrl}
+              class="inline-flex min-h-10 items-center gap-1.5 font-semibold text-ink hover:text-accent-600"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon name="github" class="size-4" />
+              Source
+              <span class="sr-only">of {p.shortTitle} on GitHub</span>
+            </a>
+          )}
+          {p.liveUrl && (
+            <a
+              href={p.liveUrl}
+              class="inline-flex min-h-10 items-center gap-1.5 font-semibold text-ink hover:text-accent-600"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon name="arrow-up-right" class="size-4" />
+              Live
+            </a>
+          )}
+        </div>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .filter-btn[aria-pressed='true'] {
+    background: var(--color-ink);
+    border-color: var(--color-ink);
+    color: white;
+  }
+  .filter-btn[aria-pressed='true'] .count {
+    background: color-mix(in srgb, white 18%, transparent);
+    color: white;
+  }
+  /* Filtering needs JS; without it every project is simply listed. */
+  :global(.no-js) .filters {
+    display: none;
+  }
+</style>

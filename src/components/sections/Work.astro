@@ -1,0 +1,37 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import FlagshipCase from '../work/FlagshipCase.astro';
+import HighlightCard from '../work/HighlightCard.astro';
+import ProjectIndex from '../work/ProjectIndex.astro';
+import { flagship, highlightProjects } from '../../data/portfolio';
+---
+
+<section
+  id="work"
+  aria-labelledby="work-title"
+  class="border-y border-slate-200/70 bg-surface py-24 sm:py-32"
+>
+  <div class="mx-auto max-w-6xl px-6 sm:px-8">
+    <SectionHeading
+      id="work-title"
+      eyebrow="Selected work"
+      title="Projects, with the evidence attached."
+      lead="A machine learning system built end to end, apps running in production, and everything else I’ve built. Metrics are reported as measured, limitations included."
+    />
+
+    <div class="mt-14">
+      <FlagshipCase project={flagship} />
+    </div>
+
+    <p class="mt-16 font-display text-xs font-semibold tracking-label text-slate-600 uppercase">
+      Case highlights
+    </p>
+    <div class="mt-5 grid grid-cols-1 items-start gap-5 lg:grid-cols-3">
+      {highlightProjects.map((p, i) => (
+        <HighlightCard project={p} delay={i * 70} />
+      ))}
+    </div>
+
+    <ProjectIndex />
+  </div>
+</section>

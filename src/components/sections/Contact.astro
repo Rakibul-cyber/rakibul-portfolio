@@ -1,0 +1,186 @@
+---
+import Icon from '../ui/Icon.astro';
+import type { IconName } from '../../lib/icons';
+import { contact, profile } from '../../data/portfolio';
+import { withBase } from '../../lib/url';
+
+// Handles derived from the URLs so they can't drift apart.
+const handle = (url: string) => url.replace(/\/+$/, '').split('/').pop() ?? url;
+const channels: {
+  icon: IconName;
+  label: string;
+  value: string;
+  href: string;
+  external?: boolean;
+}[] = [
+  { icon: 'phone', label: 'Phone', value: profile.phone, href: `tel:${profile.phoneHref}` },
+  {
+    icon: 'linkedin',
+    label: 'LinkedIn',
+    value: handle(profile.linkedin),
+    href: profile.linkedin,
+    external: true,
+  },
+  {
+    icon: 'github',
+    label: 'GitHub',
+    value: handle(profile.github),
+    href: profile.github,
+    external: true,
+  },
+  { icon: 'download', label: 'CV', value: 'Download PDF', href: withBase(profile.cv) },
+];
+const field =
+  'mt-1.5 block w-full rounded-xl border border-slate-300 bg-canvas px-4 py-3 text-base text-ink transition-colors placeholder:text-slate-500 focus:border-accent focus:bg-white focus:outline-none focus-visible:outline-2 focus-visible:outline-accent aria-[invalid=true]:border-red-600';
+---
+
+<section
+  id="contact"
+  aria-labelledby="contact-title"
+  class="border-t border-slate-200/70 py-24 sm:py-32"
+>
+  <div class="mx-auto grid grid-cols-1 max-w-6xl gap-14 px-6 sm:px-8 lg:grid-cols-2 lg:gap-16">
+    <div data-reveal>
+      <p class="font-display text-sm font-semibold tracking-eyebrow text-accent uppercase">
+        {contact.eyebrow}
+      </p>
+      <h2
+        id="contact-title"
+        class="mt-3 font-display text-3xl leading-tight font-bold tracking-tight text-balance text-ink sm:text-4xl sm:leading-10"
+      >
+        {contact.title}
+      </h2>
+      <p class="mt-5 text-lg leading-relaxed text-pretty text-muted">{contact.lead}</p>
+
+      <a
+        href={`mailto:${profile.email}`}
+        class="group mt-8 inline-flex min-h-11 items-center gap-3 font-display text-lg font-semibold break-all text-ink hover:text-accent-600"
+      >
+        <Icon name="mail" class="size-5 text-accent" />
+        {profile.email}
+      </a>
+
+      <ul class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {channels.map((c) => (
+          <li>
+            <a
+              href={c.href}
+              class="flex min-h-14 items-center gap-3 rounded-xl border border-slate-200/80 bg-white px-4 py-3 transition-colors hover:border-slate-300"
+              target={c.external ? '_blank' : undefined}
+              rel={c.external ? 'noopener noreferrer' : undefined}
+            >
+              <span class="flex size-9 items-center justify-center rounded-lg bg-accent-50 text-accent">
+                <Icon name={c.icon} class="size-4" />
+              </span>
+              <span class="min-w-0">
+                <span class="block text-xs text-slate-600">{c.label}</span>
+                <span class="block truncate text-sm font-medium text-ink">{c.value}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-6 flex items-center gap-2 text-sm text-muted">
+        <Icon name="pin" class="size-4" />
+        {profile.location}
+      </p>
+    </div>
+
+    <div data-reveal style="--reveal-delay: 80ms">
+      <form
+        class="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm sm:p-8"
+        action={`mailto:${profile.email}`}
+        method="post"
+        enctype="text/plain"
+        data-contact-form
+        data-email={profile.email}
+        aria-labelledby="contact-form-title"
+      >
+        <h3 id="contact-form-title" class="font-display text-lg font-semibold text-ink">
+          Write a message
+        </h3>
+        <p
+          class="mt-4 hidden rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
+          role="alert"
+          data-form-summary
+        ></p>
+        <div class="mt-5 space-y-5">
+          <div>
+            <label for="cf-name" class="text-sm font-medium text-ink">
+              Your name
+            </label>
+            <input
+              id="cf-name"
+              name="name"
+              type="text"
+              autocomplete="name"
+              required
+              minlength="2"
+              class={field}
+              aria-describedby="cf-name-error"
+            />
+            <p
+              id="cf-name-error"
+              class="mt-1.5 hidden text-sm text-red-700"
+              data-error-for="name"
+            ></p>
+          </div>
+          <div>
+            <label for="cf-email" class="text-sm font-medium text-ink">
+              Email address
+            </label>
+            <input
+              id="cf-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              class={field}
+              aria-describedby="cf-email-error"
+            />
+            <p
+              id="cf-email-error"
+              class="mt-1.5 hidden text-sm text-red-700"
+              data-error-for="email"
+            ></p>
+          </div>
+          <div>
+            <label for="cf-message" class="text-sm font-medium text-ink">
+              Message
+            </label>
+            <textarea
+              id="cf-message"
+              name="message"
+              rows="5"
+              required
+              minlength="10"
+              class={field}
+              aria-describedby="cf-message-error"
+            ></textarea>
+            <p
+              id="cf-message-error"
+              class="mt-1.5 hidden text-sm text-red-700"
+              data-error-for="message"
+            ></p>
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="group lift mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-6 py-3 font-semibold text-white shadow-lg shadow-accent/25 transition-colors hover:bg-accent-600"
+        >
+          Open in my email app
+          <Icon name="arrow-right" class="nudge size-4" />
+        </button>
+        <p class="mt-4 flex items-start gap-2 text-xs leading-relaxed text-muted">
+          <Icon name="info" class="mt-0.5 size-3.5" />
+          <span>
+            {contact.formNote}
+            <a href={withBase('privacy/')} class="underline underline-offset-2 hover:text-ink">
+              Privacy policy
+            </a>
+          </span>
+        </p>
+      </form>
+    </div>
+  </div>
+</section>

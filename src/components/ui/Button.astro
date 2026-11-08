@@ -1,0 +1,61 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Icon from './Icon.astro';
+import type { IconName } from '../../lib/icons';
+import { withBase } from '../../lib/url';
+
+type Variant = 'primary' | 'secondary' | 'ink' | 'ghost';
+
+export interface Props extends Omit<HTMLAttributes<'a'>, 'class'> {
+  href: string;
+  variant?: Variant;
+  size?: 'md' | 'sm';
+  icon?: IconName;
+  /** Icon before the label instead of after it. */
+  iconStart?: boolean;
+  external?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  icon,
+  iconStart = false,
+  external = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const variants: Record<Variant, string> = {
+  primary:
+    'bg-accent text-white shadow-lg shadow-accent/25 hover:bg-accent-600 hover:shadow-accent/40',
+  secondary: 'border border-slate-200 bg-white text-ink hover:border-slate-300 hover:bg-surface',
+  ink: 'bg-ink text-white hover:bg-ink/90',
+  ghost: 'text-muted hover:text-ink',
+};
+const sizes = {
+  md: 'min-h-12 px-6 py-3 text-base',
+  sm: 'min-h-10 px-4 py-2 text-sm',
+};
+const resolved = withBase(href);
+const iconClass = icon === 'arrow-up-right' ? 'nudge-diag size-4' : 'nudge size-4';
+---
+
+<a
+  href={resolved}
+  class:list={[
+    'group lift inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors',
+    variant !== 'ghost' && sizes[size],
+    variants[variant],
+    className,
+  ]}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener noreferrer' : undefined}
+  {...rest}
+>
+  {icon && iconStart && <Icon name={icon} class="size-4" />}
+  <slot />
+  {icon && !iconStart && <Icon name={icon} class={iconClass} />}
+</a>

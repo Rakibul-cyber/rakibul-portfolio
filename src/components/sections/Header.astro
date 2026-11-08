@@ -1,0 +1,134 @@
+---
+import Icon from '../ui/Icon.astro';
+import { nav, profile } from '../../data/portfolio';
+import { withBase } from '../../lib/url';
+
+export interface Props {
+  /** On the home page anchors stay in-page; elsewhere they point back to it. */
+  home?: boolean;
+}
+const { home = true } = Astro.props;
+const href = (anchor: string) => (home ? anchor : withBase(`/${anchor}`));
+---
+
+<header
+  data-header
+  class="fixed inset-x-0 top-0 z-50 border-b border-transparent transition-[background-color,border-color,backdrop-filter] duration-300"
+>
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-6 sm:px-8">
+    <a
+      href={home ? '#top' : withBase('/')}
+      class="font-display text-lg font-bold tracking-tight text-ink"
+      aria-label={`${profile.name}, home`}
+    >
+      Rakibul Hassan<span class="text-accent">.</span>
+    </a>
+
+    <nav aria-label="Primary" class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {nav.map((item) => (
+          <li>
+            <a
+              href={href(item.href)}
+              class="rounded-full px-3.5 py-2 text-sm font-medium text-muted transition-colors hover:text-ink"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a
+        href={href('#contact')}
+        class="hidden min-h-10 items-center rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-ink/90 sm:inline-flex"
+      >
+        Get in touch
+      </a>
+      <button
+        type="button"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        class="menu-toggle inline-flex size-11 items-center justify-center rounded-full text-ink transition-colors hover:bg-slate-100 lg:hidden"
+      >
+        <span class="sr-only" data-menu-label>
+          Open menu
+        </span>
+        <Icon name="menu" class="size-6" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<div
+  id="mobile-menu"
+  data-menu
+  role="dialog"
+  aria-modal="true"
+  aria-label="Site menu"
+  hidden
+  class="fixed inset-0 z-[60] flex flex-col bg-canvas lg:hidden"
+>
+  <div class="hero-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true"></div>
+  <div class="relative mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6 sm:px-8">
+    <span class="font-display text-lg font-bold tracking-tight text-ink">
+      Rakibul Hassan<span class="text-accent">.</span>
+    </span>
+    <button
+      type="button"
+      data-menu-close
+      class="inline-flex size-11 items-center justify-center rounded-full text-ink transition-colors hover:bg-slate-100"
+    >
+      <span class="sr-only">Close menu</span>
+      <Icon name="close" class="size-6" />
+    </button>
+  </div>
+  <nav
+    aria-label="Mobile"
+    class="relative mx-auto w-full max-w-6xl flex-1 overflow-y-auto px-6 pt-6 pb-10 sm:px-8"
+  >
+    <ul class="flex flex-col">
+      {nav.map((item) => (
+        <li class="border-b border-slate-200/70">
+          <a
+            href={href(item.href)}
+            data-menu-link
+            class="flex min-h-14 items-center justify-between font-display text-2xl font-semibold text-ink"
+          >
+            {item.label}
+            <Icon name="arrow-right" class="size-5 text-slate-400" />
+          </a>
+        </li>
+      ))}
+    </ul>
+    <a
+      href={href('#contact')}
+      data-menu-link
+      class="mt-8 flex min-h-12 w-full items-center justify-center rounded-full bg-ink px-6 py-3 font-semibold text-white"
+    >
+      Get in touch
+    </a>
+    <a
+      href={withBase(profile.cv)}
+      class="mt-3 flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 font-semibold text-ink"
+    >
+      <Icon name="download" class="size-4" />
+      Download CV
+    </a>
+  </nav>
+</div>
+
+<style>
+  [data-header].is-scrolled {
+    background-color: color-mix(in oklab, var(--color-canvas) 80%, transparent);
+    border-bottom-color: color-mix(in oklab, var(--color-slate-200) 70%, transparent);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+  /* Without JS the toggle can't work, so it isn't offered. */
+  :global(.no-js) .menu-toggle {
+    display: none;
+  }
+</style>

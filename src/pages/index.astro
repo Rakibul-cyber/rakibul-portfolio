@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/sections/Header.astro';
+import Hero from '../components/sections/Hero.astro';
+import Stats from '../components/sections/Stats.astro';
+import Expertise from '../components/sections/Expertise.astro';
+import Work from '../components/sections/Work.astro';
+import Process from '../components/sections/Process.astro';
+import Experience from '../components/sections/Experience.astro';
+import About from '../components/sections/About.astro';
+import Writing from '../components/sections/Writing.astro';
+import Contact from '../components/sections/Contact.astro';
+import Footer from '../components/sections/Footer.astro';
+import { personJsonLd, seo } from '../data/portfolio';
+---
+
+<Base title={seo.title} description={seo.description} path="/" jsonLd={[personJsonLd]}>
+  <Header />
+  <main id="main">
+    <Hero />
+    <Stats />
+    <Expertise />
+    <Work />
+    <Process />
+    <Experience />
+    <About />
+    <Writing />
+    <Contact />
+  </main>
+  <Footer />
+</Base>
