@@ -324,6 +324,13 @@ test('every statistic has a source', () => {
     data.stats.find((s) => /Projects documented/.test(s.label)).value,
     String(data.visibleProjects.length),
   );
+  // Past tense by owner decision (2026-11-08): the roles ended, current use isn't verified.
+  const shipped = data.stats.find((s) => s.label === 'Apps shipped to production');
+  assert.ok(shipped, '"Apps shipped to production" stat missing');
+  assert.equal(shipped.value, '2');
+  assert.match(shipped.source, /Louco.*store releases/);
+  assert.match(shipped.source, /Forest Tracking.*AWS/);
+  assert.ok(!hasText('Apps in production use'), 'old present-tense label still rendered');
 });
 
 test('project image files ship in dist but are never rendered', (t) => {

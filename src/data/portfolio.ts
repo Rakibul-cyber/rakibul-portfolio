@@ -705,7 +705,9 @@ export const highlightProjects = ['forest-ai', 'louco', 'stock-dashboard'].map(p
 // Stats (verified only, brief §3.3)
 // ---------------------------------------------------------------------------
 
-const productionApps = visibleProjects.filter((p) => ['Production', 'Live'].includes(p.status));
+// Apps that reached production at some point. Worded in the past ("shipped") because the
+// roles have ended and current production use isn't verified (owner decision 2026-11-08).
+const shippedApps = visibleProjects.filter((p) => ['Production', 'Live'].includes(p.status));
 
 export const stats: Stat[] = [
   {
@@ -715,9 +717,10 @@ export const stats: Stat[] = [
       'driver-stress-monitoring/models/model_metadata.json → cv_loso.summary.roc_auc.mean = 0.897',
   },
   {
-    value: String(productionApps.length),
-    label: 'Apps in production use',
-    source: 'Louco (“Production”) and Forest Tracking (“Live”) status on the legacy site',
+    value: String(shippedApps.length),
+    label: 'Apps shipped to production',
+    source:
+      'Louco: Android and iOS store releases via Google Play Console and TestFlight (resume; legacy status “Production”). Forest Tracking: deployed on AWS (legacy site and CV; legacy status “Live”)',
   },
   {
     value: String(visibleProjects.length),
