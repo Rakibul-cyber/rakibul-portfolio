@@ -41,6 +41,50 @@ test('home page loads cleanly: 200, no overflow, no broken images, no console er
   expect(errors).toEqual([]);
 });
 
+test('hero and About photos load as modern formats and fill their circles', async ({ page }) => {
+  await page.goto('./');
+  for (const [selector, circle] of [
+    ['.hero-photo', '.portrait-circle'],
+    ['.about-photo', '.about-visual'],
+  ] as const) {
+    const img = page.locator(selector);
+    await img.scrollIntoViewIfNeeded();
+    await expect(img).toBeVisible();
+    await expect
+      .poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0))
+      .toBe(true);
+    const info = await img.evaluate((el: HTMLImageElement) => {
+      const cs = getComputedStyle(el);
+      const r = el.getBoundingClientRect();
+      return {
+        src: el.currentSrc,
+        fit: cs.objectFit,
+        radius: cs.borderRadius,
+        w: r.width,
+        h: r.height,
+        dpr: window.devicePixelRatio,
+        natural: el.naturalWidth,
+      };
+    });
+    expect(info.src, `${selector} served as AVIF/WebP`).toMatch(/\.(avif|webp)$/);
+    expect(info.fit).toBe('cover');
+    expect(Math.abs(info.w - info.h), `${selector} is square`).toBeLessThan(1);
+    expect(parseFloat(info.radius)).toBeGreaterThanOrEqual(info.w / 2 - 1);
+    // the chosen candidate is sharp enough for the rendered size, without being oversized
+    expect(info.natural).toBeGreaterThanOrEqual(Math.floor(info.w * info.dpr));
+    expect(info.natural, `${selector} downloads far more pixels than needed`).toBeLessThanOrEqual(
+      Math.max(480, info.w * info.dpr * 2),
+    );
+    const parent = await page.locator(circle).boundingBox();
+    expect(parent).not.toBeNull();
+  }
+  await expect(page.locator('.hero-photo')).toHaveAttribute('alt', '');
+  await expect(page.locator('.about-photo')).toHaveAttribute(
+    'alt',
+    'Portrait of Md Rakibul Hassan',
+  );
+});
+
 test('all 7 visible projects are listed in the index', async ({ page }) => {
   await page.goto('./');
   await expect(page.locator('[data-project-index] [data-categories]')).toHaveCount(7);

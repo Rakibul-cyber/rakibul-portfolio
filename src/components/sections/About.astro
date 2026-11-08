@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import Icon from '../ui/Icon.astro';
 import {
   about,
@@ -21,13 +21,20 @@ import {
       <div class="hero-grid about-grid absolute inset-0" aria-hidden="true"></div>
       <div class="about-glow absolute inset-0" aria-hidden="true"></div>
       <div class="absolute inset-[16%]">
-        {profile.photo ? (
-          <Image
-            src={profile.photo.src}
-            alt={profile.photo.alt}
-            widths={[320, 480, 640]}
-            sizes="(min-width: 64rem) 320px, 60vw"
-            class="size-full rounded-full object-cover shadow-2xl ring-4 shadow-slate-300/50 ring-white"
+        {profile.aboutPhoto ? (
+          <Picture
+            src={profile.aboutPhoto.src}
+            alt={profile.aboutPhoto.alt}
+            formats={['avif', 'webp']}
+            widths={[240, 320, 480, 640, 720]}
+            sizes="(min-width: 30rem) 305px, 60vw"
+            pictureAttributes={{ class: 'block size-full' }}
+            class="about-photo size-full rounded-full object-cover shadow-2xl ring-4 shadow-slate-300/50 ring-white"
+            style={
+              profile.aboutPhoto.position
+                ? `object-position: ${profile.aboutPhoto.position}`
+                : undefined
+            }
           />
         ) : (
           <div

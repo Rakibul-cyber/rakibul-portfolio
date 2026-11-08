@@ -51,21 +51,21 @@ Everything visible comes from [`src/data/portfolio.ts`](src/data/portfolio.ts):
 
 Legacy fields (titles, descriptions, tags of the six original projects) are checked byte-for-byte by `tests/content-preservation.test.mjs`. If you change one on purpose, update the test's expectations. A changed GitHub link must also be recorded in `linkChanges`.
 
-## Add a profile photo
+## Profile photos
 
-1. Save the photo as `src/assets/profile.jpg` (square, at least 800 × 800 px).
-2. In `src/data/portfolio.ts`:
+The hero uses `src/assets/profile.jpg` (decorative, `alt=""`: the name is the heading next to it) and the About section `src/assets/about.jpg` (`alt="Portrait of Md Rakibul Hassan"`). Both are wired in `profile.photo` / `profile.aboutPhoto` in `src/data/portfolio.ts`; remove either and that slot falls back to the "RH" monogram. Astro generates AVIF and WebP in several widths (JPEG fallback) with explicit dimensions.
 
-   ```ts
-   import profilePhoto from '../assets/profile.jpg';
-   // …
-   export const profile: Profile = {
-     // …
-     photo: { src: profilePhoto, alt: 'Md Rakibul Hassan' },
-   };
-   ```
+The files in `src/assets/` are **cleaned copies**, not the camera originals:
 
-The hero and About section switch from the "RH" monogram to the photo. Astro generates responsive AVIF/WebP sizes with explicit dimensions.
+- cropped to a square around the face (1200 × 1200 px), so the circle needs no `object-position`; the optional `position` field is there for fine-tuning;
+- re-encoded with sharp without metadata: no EXIF (camera, settings), GPS, XMP, IPTC, ICC or comments. `tests/repo-hygiene.test.mjs` fails if a committed image in `src/assets/` carries any of them, and `tests/build-output.test.mjs` checks the generated files;
+- the About crop deliberately leaves out a bystander (a child) in the right half of the original frame. Keep it that way if you re-crop.
+
+The originals stay outside Git: `/assets/images/` is git-ignored and the hygiene test fails if anything there is tracked. To replace a photo, crop and re-encode it the same way, e.g. with sharp from this repo:
+
+```bash
+node -e "require('sharp')('IN.jpg').rotate().extract({left:L,top:T,width:S,height:S}).resize(1200,1200).toColourspace('srgb').jpeg({quality:86,mozjpeg:true}).toFile('src/assets/profile.jpg')"
+```
 
 ## Deploy
 

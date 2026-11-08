@@ -45,6 +45,7 @@
 | Impressum | **removed** (page, footer link, `data-todo` gate check) |
 | History purge | **no**; plan kept for reference, marked decided-against; history (incl. `869072a` and the old CV) remains |
 | Statistic | "2 · Apps shipped to production" (was "Apps in production use") |
+| Photos | Hero: profile photo (decorative). About: second photo with alt text. Cleaned, cropped copies in `src/assets/` (no metadata; bystander cropped out); originals git-ignored. Monogram stays as fallback |
 | Earlier: STEKO badge "Under review", STEKO repo link, LinkedIn, XR-Hub unlinked, blog hidden, monogram, reference screenshots untracked, root CV untracked, alert closed manually by owner | applied |
 
 ## Decisions still open

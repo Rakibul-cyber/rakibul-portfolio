@@ -11,10 +11,21 @@
  * - Every statistic carries a `source`.
  */
 import type { IconName } from '../lib/icons';
+import aboutPhoto from '../assets/about.jpg';
+import profilePhoto from '../assets/profile.jpg';
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
+
+export interface Photo {
+  /** Imported with astro:assets: responsive AVIF/WebP sizes are generated at build time. */
+  src: ImageMetadata;
+  /** Empty string marks the image as decorative. */
+  alt: string;
+  /** CSS object-position for the circular crop (default: centre). */
+  position?: string;
+}
 
 export interface Link {
   label: string;
@@ -47,10 +58,12 @@ export interface Profile {
   cv: string;
   monogram: string;
   /**
-   * Optional portrait. None exists yet; when added, import it with astro:assets
-   * here (see README "Add a profile photo"). Absent → monogram fallback.
+   * Hero portrait (decorative: the name is the page heading next to it) and About photo.
+   * Cleaned, cropped copies in src/assets/ (see README "Profile photos").
+   * Either one absent → the "RH" monogram is rendered in its place.
    */
-  photo?: { src: ImageMetadata; alt: string };
+  photo?: Photo;
+  aboutPhoto?: Photo;
 }
 
 export type ProjectCategory = 'ai-ml' | 'data' | 'mobile' | 'backend-cloud';
@@ -240,6 +253,8 @@ export const profile: Profile = {
   linkedin: 'https://www.linkedin.com/in/rakibulhassan-dev/',
   cv: 'CV_MD_Rakibul_Hassan.pdf',
   monogram: 'RH',
+  photo: { src: profilePhoto, alt: '' },
+  aboutPhoto: { src: aboutPhoto, alt: 'Portrait of Md Rakibul Hassan' },
 };
 
 export const nav: NavItem[] = [
@@ -251,7 +266,7 @@ export const nav: NavItem[] = [
   { label: 'Contact', href: '#contact' },
 ];
 
-/** Floating chips around the hero monogram: each names a verified skill. */
+/** Floating chips around the hero portrait: each names a verified skill. */
 export const heroChips: { icon: IconName; label: string }[] = [
   { icon: 'chip', label: 'Python · scikit-learn' },
   { icon: 'plug', label: 'FastAPI inference' },

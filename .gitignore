@@ -58,3 +58,7 @@ docs/screenshots/reference-*
 # The CV is published only from public/. A root copy (old version with street address) was
 # untracked on 2026-11-08; the local file is kept.
 /CV_MD_Rakibul_Hassan.pdf
+
+# Original, full-resolution photos (camera EXIF, uncropped frames). Only the cleaned,
+# cropped copies in src/assets/ are committed; see README "Profile photos".
+/assets/images/

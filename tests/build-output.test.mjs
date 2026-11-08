@@ -60,6 +60,8 @@ test('dist/ contains only intended static site files', () => {
     /^(index|404)\.html$/,
     /^privacy\/index\.html$/,
     /^_astro\/[\w.-]+\.(js|css|woff2)$/,
+    /^_astro\/(profile|about)\.[\w-]+\.(avif|webp|jpg)$/,
+    /^_astro\/(profile|about)\.[\w-]+\.(avif|webp|jpg)$/,
     /^projects\/[\w-]+\/[\w-]+\.png$/,
     /^CV_MD_Rakibul_Hassan\.pdf$/,
     /^favicon\.svg$/,
@@ -294,8 +296,66 @@ test('fonts are self-hosted Latin subsets only', () => {
 });
 
 test('images have alt text', () => {
+  // compressHTML writes alt="" as a bare `alt`; both mark a decorative image.
   for (const page of pages) {
     for (const m of read(page).matchAll(/<img\s[^>]*>/g))
-      assert.match(m[0], /\salt="/, `${rel(page)}: ${m[0]}`);
+      assert.match(m[0], /\salt(="|[\s>])/, `${rel(page)}: ${m[0]}`);
+  }
+});
+
+test('hero and About photos: decorative vs. described, AVIF + WebP, responsive', () => {
+  const html = read(path.join(dist, 'index.html'));
+  const pictures = [...html.matchAll(/<picture\b.*?<\/picture>/gs)].map((m) => m[0]);
+  const hero = pictures.find((p) => p.includes('hero-photo'));
+  const about = pictures.find((p) => p.includes('about-photo'));
+  assert.ok(hero, 'hero photo missing');
+  assert.ok(about, 'About photo missing');
+
+  const img = (pic) => pic.match(/<img\s[^>]*>/)[0];
+  assert.match(img(hero), /\salt(="")?[\s>]/, 'hero photo must be decorative (empty alt)');
+  assert.match(img(hero), /loading="eager"/);
+  assert.match(img(about), /\salt="Portrait of Md Rakibul Hassan"/);
+  assert.match(img(about), /loading="lazy"/);
+
+  for (const pic of [hero, about]) {
+    assert.match(pic, /<source\b[^>]*type="image\/avif"/, 'AVIF source missing');
+    assert.match(pic, /<source\b[^>]*type="image\/webp"/, 'WebP source missing');
+    assert.match(img(pic), /\swidth="\d+" height="\d+"/, 'explicit dimensions missing');
+    for (const set of pic.matchAll(/\ssrcset="([^"]*)"/g))
+      assert.ok(set[1].split(',').length >= 4, `too few responsive sizes: ${set[1]}`);
+  }
+});
+
+test('generated photo files carry no EXIF, XMP, IPTC or ICC metadata', () => {
+  // Same segment walk as tests/repo-hygiene.test.mjs, applied to the published JPEGs.
+  const jpegs = files.filter((f) => /_astro\/(profile|about)\.[\w-]+\.jpg$/.test(f));
+  assert.ok(jpegs.length >= 2, 'no generated photo JPEGs found');
+  for (const f of jpegs) {
+    const b = readFileSync(f);
+    for (let i = 2; i + 4 <= b.length && b[i] === 0xff;) {
+      const marker = b[i + 1];
+      if (marker === 0xda) break;
+      assert.ok(
+        !((marker >= 0xe1 && marker <= 0xef) || marker === 0xfe),
+        `${rel(f)}: metadata segment 0xFF${marker.toString(16).toUpperCase()}`,
+      );
+      i += 2 + b.readUInt16BE(i + 2);
+    }
+  }
+  for (const f of files.filter((f) => /_astro\/(profile|about)\./.test(f))) {
+    const latin = readFileSync(f).toString('latin1');
+    for (const needle of ['Exif\0', 'Canon', 'EOS ', 'ns.adobe.com'])
+      assert.ok(!latin.includes(needle), `${rel(f)} contains "${needle.replace('\0', '')}"`);
+  }
+});
+
+test('both photo slots keep the "RH" monogram fallback in code', () => {
+  for (const c of ['Hero', 'About']) {
+    const src = readFileSync(path.join(root, `src/components/sections/${c}.astro`), 'utf8');
+    assert.match(
+      src,
+      /\? \(\s*<Picture[\s\S]*?\) : \([\s\S]*?\{profile\.monogram\}/,
+      `${c}: fallback`,
+    );
   }
 });
