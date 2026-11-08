@@ -1,1 +1,23 @@
-node_modules
+# gh-pages holds the published site only. Never commit tooling output, caches or secrets.
+node_modules/
+.DS_Store
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+*.keystore
+key.properties
+google-services.json
+GoogleService-Info.plist
+
+# Flutter/Dart tooling output, including the Chrome profile from `flutter run -d chrome`
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.astro/
+test-results/
+playwright-report/

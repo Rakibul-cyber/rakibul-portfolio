@@ -1,1 +1,0 @@
-:  /Users/rakibulhassan/rakibul-portfolio/web/index.html
