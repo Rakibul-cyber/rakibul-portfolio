@@ -1,7 +1,6 @@
 ---
 import Legal from '../layouts/Legal.astro';
 import { profile } from '../data/portfolio';
-import { withBase } from '../lib/url';
 ---
 
 <Legal
@@ -19,11 +18,7 @@ import { withBase } from '../lib/url';
 
   <h2>1. Controller</h2>
   <p>
-    {profile.name}, contact details and postal address as stated in the
-    <a href={withBase('impressum/')} lang="de">
-      Impressum
-    </a>
-    . Email:
+    {profile.name}, {profile.location}. Email:
     <a href={`mailto:${profile.email}`}>{profile.email}</a>, phone:{' '}
     <a href={`tel:${profile.phoneHref}`}>{profile.phone}</a>.
   </p>

@@ -58,7 +58,7 @@ test('dist/ contains only intended static site files', () => {
   const allowed = [
     /^\.nojekyll$/,
     /^(index|404)\.html$/,
-    /^(impressum|privacy)\/index\.html$/,
+    /^privacy\/index\.html$/,
     /^_astro\/[\w.-]+\.(js|css|woff2)$/,
     /^projects\/[\w-]+\/[\w-]+\.png$/,
     /^CV_MD_Rakibul_Hassan\.pdf$/,
@@ -76,7 +76,7 @@ test('.nojekyll ships so GitHub Pages serves _astro/', () => {
 });
 
 test('expected pages exist', () => {
-  for (const p of ['index.html', 'impressum/index.html', 'privacy/index.html', '404.html']) {
+  for (const p of ['index.html', 'privacy/index.html', '404.html']) {
     assert.ok(existsSync(path.join(dist, p)), `missing ${p}`);
   }
 });
@@ -238,8 +238,8 @@ test('home page SEO: title, description, canonical, Open Graph, JSON-LD Person',
   assert.equal(person.url, `${SITE}${BASE}`);
 });
 
-test('legal pages and 404 are noindex and excluded from the sitemap', () => {
-  for (const p of ['impressum/index.html', 'privacy/index.html', '404.html']) {
+test('privacy and 404 are noindex and excluded from the sitemap; no Impressum', () => {
+  for (const p of ['privacy/index.html', '404.html']) {
     assert.match(
       read(path.join(dist, p)),
       /<meta name="robots" content="noindex/,
@@ -248,7 +248,11 @@ test('legal pages and 404 are noindex and excluded from the sitemap', () => {
   }
   const sitemap = read(path.join(dist, 'sitemap-0.xml'));
   assert.ok(sitemap.includes(`<loc>${SITE}${BASE}</loc>`), 'home page missing from sitemap');
-  assert.ok(!/impressum|privacy|404/.test(sitemap), 'noindex page listed in sitemap');
+  assert.ok(!/privacy|404/.test(sitemap), 'noindex page listed in sitemap');
+  // No Impressum by owner decision (2026-11-08): no page and no link to one.
+  assert.ok(!existsSync(path.join(dist, 'impressum')), 'impressum page should not exist');
+  for (const page of pages)
+    assert.ok(!read(page).includes('impressum/'), `${rel(page)} links to an Impressum`);
   assert.ok(read(path.join(dist, 'sitemap-index.xml')).includes(`${SITE}${BASE}sitemap-0.xml`));
 });
 

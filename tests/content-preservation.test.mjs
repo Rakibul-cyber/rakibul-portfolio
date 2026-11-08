@@ -149,7 +149,7 @@ test('Driver Stress is the flagship and links to its repository', () => {
   assert.ok(hasText('0.940'), 'held-out ROC-AUC not shown');
 });
 
-test('non-legacy projects are marked and the lead-scoring project is not presented as ML', () => {
+test('non-legacy projects: lead-intelligence is kept in data, hidden, and never presented as ML', () => {
   assert.deepEqual(
     data.projects.filter((p) => !p.legacy).map((p) => p.id),
     ['driver-stress', 'lead-intelligence'],
@@ -157,7 +157,13 @@ test('non-legacy projects are marked and the lead-scoring project is not present
   const lead = data.projects.find((p) => p.id === 'lead-intelligence');
   assert.deepEqual(lead.categories, ['backend-cloud']);
   assert.match(lead.description, /rule-based, not machine learning/);
-  assert.ok(hasText(lead.title) && hrefs.has(lead.githubUrl));
+  // Hidden by owner decision (2026-11-08) until confirmed with Enviotech GmbH.
+  assert.equal(lead.hidden, true);
+  assert.ok(!hasText(lead.title), 'hidden project is rendered');
+  assert.ok(
+    !hrefs.has(lead.githubUrl) && !html.includes('project-lead-intelligence'),
+    'hidden project is linked',
+  );
 });
 
 test('project order follows the brief, with owner-approved additions', () => {
@@ -206,20 +212,43 @@ test('contact details are preserved', () => {
   for (const s of c.social) assert.ok(hrefs.has(s.url), `${s.label} link ${s.url} not rendered`);
 });
 
-test('timeline organisations, roles and years are preserved', () => {
-  // Legacy short labels → the real names now rendered.
-  const expected = [
-    ['2025', 'Johannes Gutenberg University Mainz', 'HiWi'],
-    ['2025', 'Louco GmbH', 'Flutter Developer'],
-    ['2023', 'Teczo Sdn. Bhd.', 'Flutter Developer'],
-    ['2023', 'International Islamic University Malaysia', 'BSc Computer Science'],
+test('experience follows the resume (authoritative since 2026-11-08) and keeps every legacy organisation', () => {
+  // Legacy timeline organisations must still appear; titles and dates now come from the resume.
+  const legacyOrgs = [
+    'Johannes Gutenberg University Mainz',
+    'Louco',
+    'Teczo Sdn. Bhd.',
+    'International Islamic University Malaysia',
   ];
-  assert.equal(legacy.timeline.length, expected.length);
-  for (const [year, org, role] of expected) {
-    assert.ok(hasText(org), `organisation not rendered: ${org}`);
-    assert.ok(hasText(role), `role not rendered: ${role}`);
-    assert.ok(hasText(year), `year not rendered: ${year}`);
+  assert.equal(legacy.timeline.length, 4);
+  for (const org of legacyOrgs) assert.ok(hasText(org), `organisation not rendered: ${org}`);
+  const expected = [
+    ['Software Developer (Working Student)', 'Enviotech GmbH', 'July 2026 – present'],
+    ['Software Developer', 'Louco Event Media GmbH', 'March 2026 – June 2026'],
+    [
+      'HiWi – Mobile Application Developer',
+      'Johannes Gutenberg University Mainz',
+      'September 2025 – February 2026',
+    ],
+    ['Software Developer', 'Teczo Sdn. Bhd.', 'February 2022 – August 2022'],
+  ];
+  assert.deepEqual(
+    data.experience.map((e) => [e.role, e.org, e.period]),
+    expected,
+  );
+  for (const [role, org, period] of expected) {
+    assert.ok(
+      hasText(role) && hasText(org) && hasText(period),
+      `${org} not rendered as in the resume`,
+    );
   }
+  // Only the current role may say "present".
+  assert.deepEqual(
+    data.experience.filter((e) => /present/i.test(e.period)).map((e) => e.org),
+    ['Enviotech GmbH'],
+  );
+  for (const e of data.experience) assert.equal(e.source, 'Resume');
+  assert.ok(hasText('BSc Computer Science'), 'education entry missing');
 });
 
 test('certifications, learning and languages are preserved', () => {
@@ -230,10 +259,22 @@ test('certifications, learning and languages are preserved', () => {
     // Sentence case is applied site-wide, so compare case-insensitively.
     assert.ok(text.toLowerCase().includes(normalise(core).toLowerCase()), `learning item: ${core}`);
   }
+  // Language names are preserved; levels come from the resume (Fluent / Basic since 2026-11-08).
   for (const l of legacy.languages) {
-    const [name, level] = l.split(' — ');
-    assert.ok(hasText(name) && hasText(level), `language: ${l}`);
+    const [name] = l.split(' — ');
+    assert.ok(hasText(name), `language: ${name}`);
   }
+  assert.deepEqual(
+    data.languages.map((l) => `${l.name}:${l.level}`),
+    ['Bengali:Native', 'English:Fluent', 'German:Basic'],
+  );
+});
+
+test('publications: BEST4U.COM links to the journal, STEKO-SD is under review', () => {
+  assert.ok(hrefs.has('https://journals.iium.edu.my/kict/index.php/jisdt/article/view/255'));
+  const steko = data.publications.find((p) => p.title.startsWith('STEKO-SD'));
+  assert.equal(steko.status, 'under review');
+  assert.ok(!steko.url);
 });
 
 test('blog posts are kept verbatim in data as drafts and not rendered', () => {
@@ -281,7 +322,7 @@ test('every statistic has a source', () => {
   }
   assert.equal(
     data.stats.find((s) => /Projects documented/.test(s.label)).value,
-    String(data.projects.length),
+    String(data.visibleProjects.length),
   );
 });
 

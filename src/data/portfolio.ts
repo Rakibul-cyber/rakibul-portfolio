@@ -119,6 +119,11 @@ export interface Project {
   coverImagePath?: string;
   galleryImagePaths: string[];
   categories: ProjectCategory[];
+  /**
+   * Hide from the rendered site without deleting the entry (index, filters, counts,
+   * "Shown in" links all skip it). Re-enable by removing the flag.
+   */
+  hidden?: boolean;
   /** true for projects that existed on the legacy site. */
   legacy: boolean;
   caseStudy?: CaseStudy;
@@ -188,6 +193,8 @@ export interface Publication {
   year?: string;
   /** Publication status as confirmed by the owner, e.g. 'under review'. */
   status?: string;
+  /** Link to the published article. */
+  url?: string;
   note?: string;
 }
 
@@ -504,6 +511,9 @@ export const projects: Project[] = [
     galleryImagePaths: [],
     categories: ['backend-cloud'],
     legacy: false,
+    // Hidden 2026-11-08 until the owner confirms with Enviotech GmbH that this public
+    // repository may be shown: the resume's Enviotech role describes a similar system.
+    hidden: true,
   },
   {
     id: 'louco',
@@ -540,15 +550,18 @@ export const projects: Project[] = [
     categories: ['mobile'],
     legacy: true,
     highlight: {
-      domain: 'Event discovery · Louco GmbH',
+      domain: 'Event discovery · Louco Event Media GmbH',
       summary:
-        'A production event discovery app for Germany. I built features across the app as a freelance Flutter developer and helped get it release-ready on Android and iOS.',
+        'A production event discovery app for Germany. As a software developer at Louco Event Media GmbH (March–June 2026) I worked across the app and its Android and iOS releases.',
       details: [
         {
           label: 'Problem',
           body: 'Helping people in Germany discover events by city, with sign-in, favourites and notifications.',
         },
-        { label: 'My role', body: 'Flutter Developer (freelance) at Louco GmbH, Frankfurt.' },
+        {
+          label: 'My role',
+          body: 'Software Developer at Louco Event Media GmbH, Offenbach (March–June 2026).',
+        },
         {
           label: 'Architecture',
           body: 'Flutter UI → GetX controllers → REST API layer → Firebase for authentication (Google, Apple) and push notifications.',
@@ -682,6 +695,9 @@ const projectById = (id: string): Project => {
   return p;
 };
 
+/** Projects that are rendered on the site (hidden ones are kept in data only). */
+export const visibleProjects = projects.filter((p) => !p.hidden);
+
 export const flagship = projectById('driver-stress');
 export const highlightProjects = ['forest-ai', 'louco', 'stock-dashboard'].map(projectById);
 
@@ -689,7 +705,7 @@ export const highlightProjects = ['forest-ai', 'louco', 'stock-dashboard'].map(p
 // Stats (verified only, brief §3.3)
 // ---------------------------------------------------------------------------
 
-const productionApps = projects.filter((p) => ['Production', 'Live'].includes(p.status));
+const productionApps = visibleProjects.filter((p) => ['Production', 'Live'].includes(p.status));
 
 export const stats: Stat[] = [
   {
@@ -704,7 +720,7 @@ export const stats: Stat[] = [
     source: 'Louco (“Production”) and Forest Tracking (“Live”) status on the legacy site',
   },
   {
-    value: String(projects.length),
+    value: String(visibleProjects.length),
     label: 'Projects documented here',
     source: 'Count of projects rendered on this page',
   },
@@ -811,6 +827,25 @@ export const legacySkills: Skill[] = [
   { name: 'PostgreSQL', category: 'Data', level: 4 },
   { name: 'Firebase', category: 'Data', level: 3 },
   { name: 'MySQL', category: 'Data', level: 3 },
+];
+
+/**
+ * Further skills listed in the resume (2026-11-06) that are not in the legacy list.
+ * Shown in the full toolkit only, never on the expertise cards, because no
+ * project on this site evidences them (owner instruction 2026-11-08).
+ */
+export const resumeSkills: { category: string; names: string[] }[] = [
+  { category: 'Languages', names: ['JavaScript', 'SQL', 'C++'] },
+  {
+    category: 'Machine learning & AI',
+    names: ['scikit-learn', 'NLP', 'XGBoost', 'Model evaluation'],
+  },
+  {
+    category: 'Data engineering & automation',
+    names: ['pandas', 'NumPy', 'BeautifulSoup', 'Playwright', 'Web scraping', 'Data visualization'],
+  },
+  { category: 'APIs & cloud', names: ['FastAPI', 'Azure'] },
+  { category: 'Tools', names: ['GitLab', 'Postman', 'SSH', 'Jira', 'Trello'] },
 ];
 
 // ---------------------------------------------------------------------------
@@ -940,44 +975,58 @@ export const transitionNote = {
   ],
 };
 
+// Source: Rakibul_Hassan_Resume.pdf (created 2026-11-06), authoritative for experience
+// since 2026-11-08. Titles, dates and bullets are taken from it unchanged in substance.
 export const experience: ExperienceEntry[] = [
   {
-    period: '2025 – present',
-    role: 'Mobile Application Developer (HiWi)',
+    period: 'July 2026 – present',
+    role: 'Software Developer (Working Student)',
+    org: 'Enviotech GmbH',
+    location: 'Frankfurt am Main, Germany',
+    points: [
+      'Developing Python-based data extraction and automation pipelines using BeautifulSoup and Playwright to collect and process data from municipal websites and documents.',
+      'Transforming unstructured data into structured information through data cleaning, filtering, classification and scoring for an automated lead intelligence and reporting system.',
+      'Generating structured Excel reports and data extracts, including priority classifications, supporting evidence and run summaries.',
+      'Troubleshooting scraping, data-quality and reporting issues across heterogeneous websites and document formats; translating business requirements into software solutions with the project lead.',
+    ],
+    source: 'Resume',
+  },
+  {
+    period: 'March 2026 – June 2026',
+    role: 'Software Developer',
+    org: 'Louco Event Media GmbH',
+    location: 'Offenbach, Germany',
+    points: [
+      'Developed and maintained production software for Android and iOS, integrating REST APIs and backend services for authentication, notifications and personalized user experiences.',
+      'Investigated and resolved production issues involving APIs, authentication, notifications and application performance.',
+      'Collaborated with backend developers in Agile Scrum to design, test and deliver software, including sprint planning, testing and production releases.',
+      'Managed Android and iOS deployments using Google Play Console and TestFlight.',
+    ],
+    source: 'Resume',
+  },
+  {
+    period: 'September 2025 – February 2026',
+    role: 'HiWi – Mobile Application Developer',
     org: 'Johannes Gutenberg University Mainz',
     location: 'Mainz, Germany',
     points: [
-      'Developing a Forest Tracking and Environmental Safety Application focused on climate and environmental data monitoring.',
-      'Integrated API, AI, GPS and satellite data for real-time forest condition analysis.',
-      'Utilized AWS Cloud for hosting, storage and processing environmental data.',
-      'Worked with Flutter for the front end and AWS services for scalable data management.',
-      'Gained practical experience in cloud architecture, data pipelines and environmental analytics.',
+      'Developed a cloud-connected research platform supporting environmental monitoring and data collection.',
+      'Integrated AWS cloud services, GPS data and external APIs.',
+      'Built scalable software for collecting, processing and visualizing environmental information for academic research projects.',
     ],
-    source: 'CV',
+    source: 'Resume',
   },
   {
-    period: '2025 – present',
-    role: 'Flutter Developer (freelance)',
-    org: 'Louco GmbH',
-    location: 'Frankfurt, Germany',
-    points: [
-      'Implemented features across authentication, onboarding, discovery, favorites, notifications and profile flows.',
-      'Integrated REST APIs with GetX.',
-      'Improved guest mode, city-based discovery, event details, responsive mobile/tablet layouts and Android/iOS release readiness.',
-    ],
-    source: 'Legacy site (Louco project description)',
-  },
-  {
-    period: '2023',
-    role: 'Flutter Developer',
+    period: 'February 2022 – August 2022',
+    role: 'Software Developer',
     org: 'Teczo Sdn. Bhd.',
     location: 'Kuala Lumpur, Malaysia',
     points: [
-      'Built the XR-Hub Condominium Management System, improving communication and automation for property management.',
-      'Automated workflows, billing and maintenance tracking to improve efficiency.',
-      'Strengthened teamwork, problem-solving and deployment experience.',
+      'Developed production software applications serving multiple customers, integrating REST APIs and backend services.',
+      'Improved software quality and maintainability through modular architecture and optimized application performance.',
+      'Collaborated with cross-functional teams using Git and Agile Scrum.',
     ],
-    source: 'CV',
+    source: 'Resume',
   },
 ];
 
@@ -1002,7 +1051,7 @@ export const about = {
   eyebrow: 'About me',
   paragraphs: [
     'I’m a software engineer in Frankfurt am Main, completing an MSc in High Integrity Systems at Frankfurt University of Applied Sciences after a BSc in Computer Science (Software Engineering) at the International Islamic University Malaysia.',
-    'Most of my professional work so far has been mobile and backend engineering: Flutter apps in production for Louco GmbH and for an environmental monitoring project at Johannes Gutenberg University Mainz, with REST APIs, Firebase and AWS behind them.',
+    'My professional work so far has been software engineering: Python data-extraction and automation pipelines as a working student at Enviotech GmbH (since July 2026), production Android and iOS software at Louco Event Media GmbH (March–June 2026), a cloud-connected environmental monitoring platform at Johannes Gutenberg University Mainz (September 2025 – February 2026), and customer software at Teczo Sdn. Bhd. in Kuala Lumpur (2022).',
     'I now focus on machine learning, and I build it the way I build software: data validated before training, evaluation on data the model has never seen, the model served behind a tested API, and CI that trains, tests and ships it. Outside code, I’m a Bengali literature enthusiast.',
   ],
 };
@@ -1021,8 +1070,9 @@ export const learning: string[] = [
 
 export const languages: { name: string; level: string }[] = [
   { name: 'Bengali', level: 'Native' },
-  { name: 'English', level: 'Professional' },
-  { name: 'German', level: 'Learning' },
+  // Levels from the resume (2026-11-08); legacy site said Professional / Learning.
+  { name: 'English', level: 'Fluent' },
+  { name: 'German', level: 'Basic' },
 ];
 
 export const publications: Publication[] = [
@@ -1031,7 +1081,11 @@ export const publications: Publication[] = [
     title: 'STEKO-SD: A Mobile Health Solution to Assist Self-Checking of Metabolic Syndrome',
     status: 'under review',
   },
-  { title: 'BEST4U.COM: A Creative Platform for Secondhand Items Transaction', year: '2022' },
+  {
+    title: 'BEST4U.COM: A Creative Platform for Secondhand Items Transaction',
+    year: '2022',
+    url: 'https://journals.iium.edu.my/kict/index.php/jisdt/article/view/255',
+  },
 ];
 
 // ---------------------------------------------------------------------------

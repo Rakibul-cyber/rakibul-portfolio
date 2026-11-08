@@ -20,8 +20,8 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      // Legal pages are noindex and stay out of the sitemap.
-      filter: (page) => !/\/(impressum|privacy)\/?$/.test(page),
+      // The privacy page is noindex and stays out of the sitemap.
+      filter: (page) => !/\/privacy\/?$/.test(page),
     }),
   ],
   vite: {

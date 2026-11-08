@@ -25,15 +25,15 @@ test('every "Shown in" link targets an existing project anchor', async ({ page }
   for (const href of hrefs) await expect(page.locator(href ?? '')).toHaveCount(1);
 });
 
-test('project filters show 2 / 1 / 5 / 4 / 8 and announce the result', async ({ page }) => {
+test('project filters show 2 / 1 / 5 / 3 / 7 and announce the result', async ({ page }) => {
   const visible = page.locator('[data-project-index] [data-categories]:visible');
   const status = page.locator('[data-filter-status]');
   const cases: [string, number][] = [
     ['ai-ml', 2],
     ['data', 1],
     ['mobile', 5],
-    ['backend-cloud', 4],
-    ['all', 8],
+    ['backend-cloud', 3],
+    ['all', 7],
   ];
   for (const [filter, expected] of cases) {
     const button = page.locator(`[data-filter="${filter}"]`);

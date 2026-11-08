@@ -41,9 +41,9 @@ test('home page loads cleanly: 200, no overflow, no broken images, no console er
   expect(errors).toEqual([]);
 });
 
-test('all 8 projects are listed in the index', async ({ page }) => {
+test('all 7 visible projects are listed in the index', async ({ page }) => {
   await page.goto('./');
-  await expect(page.locator('[data-project-index] [data-categories]')).toHaveCount(8);
+  await expect(page.locator('[data-project-index] [data-categories]')).toHaveCount(7);
 });
 
 test('reduced motion: everything is visible immediately and the terminal shows its full output', async ({
@@ -96,15 +96,9 @@ test('CV is served as a PDF from the legacy URL', async ({ request }) => {
   expect((await res.body()).subarray(0, 5).toString('latin1')).toBe('%PDF-');
 });
 
-test('Impressum, privacy policy and 404 pages render', async ({ page }) => {
+test('privacy policy and 404 pages render', async ({ page }) => {
   const errors = trackErrors(page);
-  let res = await page.goto('impressum/');
-  expect(res?.status()).toBe(200);
-  await expect(page.locator('h1')).toHaveText('Impressum');
-  await expect(page.locator('html')).toHaveAttribute('lang', 'de');
-  await expect(page.locator('[data-todo="impressum-address"]')).toBeVisible();
-
-  res = await page.goto('privacy/');
+  let res = await page.goto('privacy/');
   expect(res?.status()).toBe(200);
   await expect(page.locator('h1')).toHaveText('Privacy policy');
   await expect(page.getByText('The contact form sends and stores nothing.')).toBeVisible();

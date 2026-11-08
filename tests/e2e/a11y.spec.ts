@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 // Reduced motion makes every revealed element fully opaque, so contrast is measured on final colours.
 test.use({ reducedMotion: 'reduce' });
 
-const pages = ['./', 'impressum/', 'privacy/', 'this-page-does-not-exist/'];
+const pages = ['./', 'privacy/', 'this-page-does-not-exist/'];
 
 for (const path of pages) {
   test(`no serious or critical axe violations: ${path}`, async ({ page }) => {

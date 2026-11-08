@@ -91,7 +91,19 @@ import {
           <ul class="mt-3 space-y-2 text-sm text-slate-700">
             {publications.map((p) => (
               <li>
-                {p.title}
+                {p.url ? (
+                  <a
+                    href={p.url}
+                    class="underline decoration-slate-300 underline-offset-4 hover:text-accent-600 hover:decoration-accent"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {p.title}
+                    <span class="sr-only"> (opens the journal article)</span>
+                  </a>
+                ) : (
+                  p.title
+                )}
                 {p.year && <span class="text-muted"> ({p.year})</span>}
                 {p.status && <span class="text-muted"> ({p.status})</span>}
               </li>
