@@ -30,6 +30,7 @@ const FORBIDDEN = [
   ],
   [/(^|\/)(credentials|service-account)[^/]*\.json$/, 'service credentials'],
   [/(^|\/)\.flutter-plugins(-dependencies)?$/, 'Flutter plugin cache'],
+  [/^CV_MD_Rakibul_Hassan\.pdf$/, 'root CV copy (the CV is published only from public/)'],
 ];
 
 test('no generated, browser-profile or secret files are tracked', () => {
