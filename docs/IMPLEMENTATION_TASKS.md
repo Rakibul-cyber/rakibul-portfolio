@@ -18,7 +18,7 @@ Status legend: ✅ done · 🔄 in progress · ⏳ pending · ⚠️ done with c
 
 | Task | Acceptance | Files | Cx | Status |
 |---|---|---|---|---|
-| Screenshots 1440/820/390 + full page (scrolled) | saved | `docs/screenshots/reference-*.png` | S | ✅ |
+| Screenshots 1440/820/390 + full page (scrolled) | saved (local only since 2026-11-08) | `docs/screenshots/reference-*.png` | S | ✅ |
 | Token extraction from compiled CSS | §5.1 confirmed | — | S | ✅ |
 | Component measurements + interaction inventory | documented | `docs/REFERENCE_DESIGN_AUDIT.md` | M | ✅ |
 | Section mapping | every section mapped or omitted with reason | same | S | ✅ |

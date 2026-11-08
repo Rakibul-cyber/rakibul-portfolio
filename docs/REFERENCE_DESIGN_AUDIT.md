@@ -4,13 +4,13 @@ Phase 1 deliverable. Reference: https://matthias-eymers.de/ inspected on **2026-
 
 **Rule:** we adopt the reference's *design language* (composition, spacing, type scale, colour system, interaction patterns). We do **not** copy its images, logos, photos, copy or code. Every asset and sentence on the redesigned site belongs to Md Rakibul Hassan.
 
-> The screenshots below show a third party's site, including his portrait and client logos. They are internal design-review material, live under `docs/` and are never deployed (`docs/` is outside `public/`). Before the branch is pushed to the public repo, the owner may prefer to drop them; see `PROJECT_STATUS.md`.
+> The `reference-*` screenshots show a third party's site (his portrait and client logos). They are internal design-review material: since 2026-11-08 they are **git-ignored and kept only on the owner's machine**, not in the repository. Earlier commits on this branch, including the pushed `origin/redesign/ai-ml-astro`, still contain them in history.
 
 ## 1. Captures
 
 | File | Viewport | Notes |
 |---|---|---|
-| `docs/screenshots/reference-desktop.png` / `-full.png` | 1440×900 | full page 8,833 px tall |
+| `docs/screenshots/reference-desktop.png` / `-full.png` (local only) | 1440×900 | full page 8,833 px tall |
 | `docs/screenshots/reference-tablet.png` / `-full.png` | 820×1180 | full page 11,737 px |
 | `docs/screenshots/reference-mobile.png` / `-full.png` | 390×844 | full page 15,542 px |
 | `docs/screenshots/reference-desktop-header-scrolled.png` | 1440 | header after scrolling (blur state) |

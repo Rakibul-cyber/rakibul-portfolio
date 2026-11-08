@@ -27,3 +27,7 @@ build/
 .dart_tool/
 .flutter-plugins-dependencies
 .flutter-plugins
+
+# Reference-site captures: internal design material showing a third party's site.
+# Kept locally for design review, never committed (removed from the branch 2026-11-08).
+docs/screenshots/reference-*
