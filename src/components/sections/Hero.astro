@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import Button from '../ui/Button.astro';
 import Icon from '../ui/Icon.astro';
 import { heroChips, profile } from '../../data/portfolio';
@@ -71,13 +71,19 @@ import { withBase } from '../../lib/url';
     >
       <div class="portrait-circle relative">
         {profile.photo ? (
-          <Image
+          <Picture
             src={profile.photo.src}
             alt={profile.photo.alt}
-            widths={[240, 368, 736]}
-            sizes="(min-width: 64rem) 368px, (min-width: 40rem) 320px, 240px"
+            formats={['avif', 'webp']}
+            widths={[240, 320, 368, 480, 640, 736]}
+            sizes="(min-width: 80rem) 368px, (min-width: 64rem) 288px, (min-width: 40rem) 320px, 240px"
             loading="eager"
-            class="size-full rounded-full object-cover shadow-2xl ring-4 shadow-slate-300/50 ring-white"
+            fetchpriority="high"
+            pictureAttributes={{ class: 'block size-full' }}
+            class="hero-photo size-full rounded-full object-cover shadow-2xl ring-4 shadow-slate-300/50 ring-white"
+            style={
+              profile.photo.position ? `object-position: ${profile.photo.position}` : undefined
+            }
           />
         ) : (
           <div

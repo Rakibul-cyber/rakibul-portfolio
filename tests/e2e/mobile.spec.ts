@@ -50,7 +50,7 @@ test('focus is trapped inside the open menu', async ({ page }) => {
   }
 });
 
-test('hero chips never cover the centre of the monogram', async ({ page }) => {
+test('hero chips never cover the centre of the portrait', async ({ page }) => {
   const circle = await page.locator('.portrait-circle').boundingBox();
   expect(circle).not.toBeNull();
   if (!circle) return;
@@ -62,7 +62,7 @@ test('hero chips never cover the centre of the monogram', async ({ page }) => {
     if (!b) continue;
     const overlaps =
       b.x < cx + r && b.x + b.width > cx - r && b.y < cy + r && b.y + b.height > cy - r;
-    expect(overlaps, 'chip overlaps the monogram centre').toBe(false);
+    expect(overlaps, 'chip overlaps the portrait centre').toBe(false);
   }
 });
 

@@ -9,11 +9,24 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { registerHooks } from 'node:module';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 const legacy = JSON.parse(readFileSync(path.join(root, 'tests', 'legacy-inventory.json'), 'utf8'));
-// Node 24 strips TypeScript types natively; portfolio.ts has only type-only imports.
+// Node 24 strips TypeScript types natively. The only value imports in portfolio.ts are the
+// astro:assets photos; outside Astro they resolve to a stub with the file name.
+registerHooks({
+  load(url, context, nextLoad) {
+    if (/\.(jpe?g|png|webp|avif)$/i.test(url))
+      return {
+        format: 'module',
+        source: `export default { src: ${JSON.stringify(url)}, width: 0, height: 0, format: 'jpg' };`,
+        shortCircuit: true,
+      };
+    return nextLoad(url, context);
+  },
+});
 const data = await import(path.join(root, 'src', 'data', 'portfolio.ts'));
 
 assert.ok(
@@ -349,4 +362,12 @@ test('project image files ship in dist but are never rendered', (t) => {
   for (const src of imgSrcs)
     assert.ok(!src.includes('/projects/'), `project image rendered: ${src}`);
   assert.ok(!/url\([^)]*\/projects\//.test(html), 'project image used as CSS background');
+});
+
+test('hero photo is decorative and the About photo is described', () => {
+  assert.match(data.profile.photo.src.src, /\/src\/assets\/profile\.jpg$/);
+  assert.equal(data.profile.photo.alt, '');
+  assert.match(data.profile.aboutPhoto.src.src, /\/src\/assets\/about\.jpg$/);
+  assert.equal(data.profile.aboutPhoto.alt, 'Portrait of Md Rakibul Hassan');
+  assert.equal(data.profile.monogram, 'RH');
 });
