@@ -53,6 +53,24 @@ const idsByPage = new Map(
 
 // ---------------------------------------------------------------------------
 
+test('dist/ contains only intended static site files', () => {
+  // Anything else (OS metadata, source maps, env files, stray copies) must not be published.
+  const allowed = [
+    /^\.nojekyll$/,
+    /^(index|404)\.html$/,
+    /^(impressum|privacy)\/index\.html$/,
+    /^_astro\/[\w.-]+\.(js|css|woff2)$/,
+    /^projects\/[\w-]+\/[\w-]+\.png$/,
+    /^CV_MD_Rakibul_Hassan\.pdf$/,
+    /^favicon\.svg$/,
+    /^flutter_service_worker\.js$/,
+    /^robots\.txt$/,
+    /^sitemap-(index|\d+)\.xml$/,
+  ];
+  const unexpected = files.map(rel).filter((f) => !allowed.some((re) => re.test(f)));
+  assert.deepEqual(unexpected, []);
+});
+
 test('.nojekyll ships so GitHub Pages serves _astro/', () => {
   assert.ok(existsSync(path.join(dist, '.nojekyll')));
 });

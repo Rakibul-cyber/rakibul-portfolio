@@ -33,6 +33,9 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v7.0.1
+        with:
+          # The publish step authenticates with its own token; don't leave one in .git/config.
+          persist-credentials: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v7.1.0
@@ -99,6 +102,9 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v7.0.1
+        with:
+          # The publish step authenticates with its own token; don't leave one in .git/config.
+          persist-credentials: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v7.1.0

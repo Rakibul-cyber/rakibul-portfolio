@@ -16,7 +16,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "extract:legacy": "node tests/extract-legacy-inventory.mjs",
-    "test": "node --test tests/content-preservation.test.mjs tests/build-output.test.mjs",
+    "test": "node --test tests/repo-hygiene.test.mjs tests/content-preservation.test.mjs tests/build-output.test.mjs",
     "test:e2e": "playwright test",
     "test:a11y": "playwright test tests/e2e/a11y.spec.ts",
     "test:links": "node tests/external-links.mjs",
