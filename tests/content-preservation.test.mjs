@@ -64,9 +64,13 @@ test('inventory is complete (brief §4 counts)', () => {
 
 test('every legacy project is rendered with title, subtitle, description, status and tags', () => {
   for (const p of legacy.projects) {
+    const corrected = data.contentCorrections.find((c) => c.from === p.description);
     for (const field of ['title', 'subtitle', 'description', 'status']) {
-      assert.ok(hasText(p[field]), `${p.title}: ${field} not rendered: "${p[field]}"`);
+      const expected = field === 'description' && corrected ? corrected.to : p[field];
+      assert.ok(hasText(expected), `${p.title}: ${field} not rendered: "${expected}"`);
     }
+    if (corrected)
+      assert.ok(!hasText(corrected.from), `${p.title}: superseded legacy text still rendered`);
     for (const tag of p.tags) assert.ok(hasText(tag), `${p.title}: tag "${tag}" not rendered`);
   }
 });
@@ -77,7 +81,20 @@ test('legacy project fields are kept verbatim in data', () => {
     assert.ok(p, `project missing from data: ${lp.title}`);
     assert.equal(p.legacy, true);
     assert.equal(p.subtitle, lp.subtitle);
-    assert.equal(p.description, lp.description);
+    const correction = data.contentCorrections.find(
+      (c) => c.projectId === p.id && c.field === 'description',
+    );
+    if (correction) {
+      assert.equal(
+        correction.from,
+        lp.description,
+        `${lp.title}: correction 'from' must equal the legacy text`,
+      );
+      assert.equal(p.description, correction.to);
+      assert.ok(correction.reason.length > 10 && correction.approvedOn);
+    } else {
+      assert.equal(p.description, lp.description);
+    }
     assert.equal(p.status, lp.status);
     assert.deepEqual(p.tags, lp.tags);
     assert.equal(p.liveUrl ?? null, lp.liveUrl);

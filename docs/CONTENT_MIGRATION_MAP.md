@@ -12,7 +12,7 @@ Every legacy content item → where it lives now → what changed. Source of the
 | Louco Mobile App | `louco` | Case highlight + project index | title, subtitle, description, tags (12), status "Production" | Order 2 → 4. Highlight with architecture (Flutter UI → GetX → REST → Firebase), features and release from the legacy description. No user numbers. Images moved to `public/projects/louco/*`; deployed, not rendered. |
 | XR-Hub Condominium Management System | `xr-hub` | Project index | all | Order 3 → 6. No repo link (three candidate repos; owner decision 5). |
 | Analyzing Historical Stock & Revenue Data and Building a Dashboard | `stock-dashboard` | Case highlight + project index | all, incl. GitHub URL | Order 4 → 3. Highlight from the legacy description and tags only. The 6 referenced images never existed; paths kept in data (`projects/stock-dashboard/*`) and reported as a warning. |
-| STEKO Health Checker | `steko` | Project index | title, subtitle, description, tags, status "Published" | Order 5 → 5. **GitHub URL changed** `https://github.com/Rakibul-cyber` → `…/FYP-2-Steko-Health-Checker-Application` (awaiting approval; `linkChanges` in data). |
+| STEKO Health Checker | `steko` | Project index | title, subtitle, tags, status "Published" | Order 5 → 5. **GitHub URL changed** `https://github.com/Rakibul-cyber` → `…/FYP-2-Steko-Health-Checker-Application` (approved by the owner on 2026-11-08; recorded in `linkChanges`).. **Description corrected** (owner-approved 2026-11-08): "Published research:" → "Research paper (under review):"; the paper is under review, not published. Recorded in `contentCorrections`; the preservation test checks the old text is gone and the new text is rendered. |
 | Automotive HMI Dashboard | `automotive-hmi` | Project index | all, incl. GitHub URL | Order 6 → 7. |
 | — (new) | `driver-stress` | Flagship case study + project index | — | New project from `github.com/Rakibul-cyber/driver-stress-monitoring`; all facts from its README, `model_metadata.json`, `train_log.txt`, `ci.yml`, `src/`, `tests/`. |
 
@@ -46,13 +46,13 @@ Legacy emoji icons are kept in data as `legacyIcon` (not rendered). Legacy `live
 |---|---|---|
 | About paragraph 1 ("I'm a Flutter developer and aspiring DevOps engineer…") | About | Rewritten for AI/ML positioning (brief §4.4) |
 | About paragraph 2 ("Previously at JGU Mainz (HiWi)…") | About + Experience | Rewritten. Also fixes the legacy contradiction ("previously" vs. "present") |
-| About paragraph 3 ("Outside code: Bengali literature enthusiast, published researcher in mobile health…") | About (last sentence) | Bengali literature kept; "published researcher" dropped (publication status unconfirmed, owner decision 4) |
+| About paragraph 3 ("Outside code: Bengali literature enthusiast, published researcher in mobile health…") | About (last sentence) | Bengali literature kept; "published researcher" dropped (the paper is under review) |
 | Timeline 2025 – Present · HiWi · JGU Mainz | Experience: Mobile Application Developer (HiWi), JGU Mainz | Real title from CV; 5 CV bullets |
 | Timeline 2025 – Present · Freelance · Louco GmbH | Experience: Flutter Developer (freelance), Louco GmbH, Frankfurt | Bullets from the legacy Louco description (Louco is not on the CV) |
 | Timeline 2023 · Flutter Dev · Teczo Sdn. Bhd. | Experience: Flutter Developer, Teczo Sdn. Bhd., Kuala Lumpur | 3 CV bullets |
 | Timeline 2023 · BSc Computer Science | Experience → Education: BSc Computer Science (Software Engineering), IIUM, 2023 | Added MSc High Integrity Systems (in progress) from the CV |
 | — | Experience intro: transition note | New, factual (brief §4.4) |
-| — | Publications: STEKO-SD (no status), BEST4U.COM (2022) | New from CV; STEKO status conflict flagged |
+| — | Publications: STEKO-SD (under review), BEST4U.COM (2022) | New from CV. STEKO-SD status confirmed by the owner on 2026-11-08 as **under review** (legacy site said published, CV said ongoing) |
 
 ## Writing
 
@@ -76,6 +76,16 @@ Legacy emoji icons are kept in data as `legacyIcon` (not rendered). Legacy `live
 | Legacy | New | Change |
 |---|---|---|
 | `https://rakibul-cyber.github.io/rakibul-portfolio/CV_MD_Rakibul_Hassan.pdf` (404 in production) | `public/CV_MD_Rakibul_Hassan.pdf` → same URL | Fixed: the file now ships with the build |
+
+## Owner-approved corrections (2026-11-08)
+
+| Item | Before | After | Where enforced |
+|---|---|---|---|
+| STEKO Health Checker description | `… Published research: "STEKO-SD: …".` | `… Research paper (under review): "STEKO-SD: …".` | `contentCorrections` in `src/data/portfolio.ts`; preservation test |
+| STEKO-SD publication | no status shown | "(under review)" | `publications` |
+| STEKO GitHub link | `https://github.com/Rakibul-cyber` | `…/FYP-2-Steko-Health-Checker-Application` | `linkChanges` (status `approved`) |
+
+The STEKO project's legacy **status** field ("Published") is still verbatim. See the open question in `PROJECT_STATUS.md`.
 
 ## Removed (approved, brief §4.5)
 

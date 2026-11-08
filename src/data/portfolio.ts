@@ -186,6 +186,8 @@ export interface Education {
 export interface Publication {
   title: string;
   year?: string;
+  /** Publication status as confirmed by the owner, e.g. 'under review'. */
+  status?: string;
   note?: string;
 }
 
@@ -548,10 +550,11 @@ export const projects: Project[] = [
     title: 'STEKO Health Checker',
     subtitle: 'Final Year Project · mHealth',
     description:
-      'Mobile health monitoring app tracking vital signs, health trends, and alerts. Published research: "STEKO-SD: A Mobile Health Solution to Assist Self-Checking of Metabolic Syndrome".',
+      // Corrected from the legacy text, which said "Published research" (see contentCorrections).
+      'Mobile health monitoring app tracking vital signs, health trends, and alerts. Research paper (under review): "STEKO-SD: A Mobile Health Solution to Assist Self-Checking of Metabolic Syndrome".',
     tags: ['Flutter', 'Node.js', 'Firebase', 'Health Tech', 'Research'],
     status: 'Published',
-    // Changed from the profile URL; awaiting owner approval (see linkChanges).
+    // Changed from the profile URL; approved by the owner on 2026-11-08 (see linkChanges).
     githubUrl: 'https://github.com/Rakibul-cyber/FYP-2-Steko-Health-Checker-Application',
     legacyIcon: '❤️',
     galleryImagePaths: [],
@@ -589,6 +592,28 @@ export const projects: Project[] = [
   },
 ];
 
+export interface ContentCorrection {
+  projectId: string;
+  field: 'description';
+  from: string;
+  to: string;
+  reason: string;
+  approvedOn: string;
+}
+
+/** Owner-approved factual corrections to verbatim legacy text (enforced by the preservation test). */
+export const contentCorrections: ContentCorrection[] = [
+  {
+    projectId: 'steko',
+    field: 'description',
+    from: 'Mobile health monitoring app tracking vital signs, health trends, and alerts. Published research: "STEKO-SD: A Mobile Health Solution to Assist Self-Checking of Metabolic Syndrome".',
+    to: 'Mobile health monitoring app tracking vital signs, health trends, and alerts. Research paper (under review): "STEKO-SD: A Mobile Health Solution to Assist Self-Checking of Metabolic Syndrome".',
+    reason:
+      'The STEKO-SD paper is under review, not published (owner confirmation; the CV said "ongoing").',
+    approvedOn: '2026-11-08',
+  },
+];
+
 /** Repository-link changes versus the legacy site. Each is a one-line revert above. */
 export const linkChanges: LinkChange[] = [
   {
@@ -598,7 +623,7 @@ export const linkChanges: LinkChange[] = [
     to: 'https://github.com/Rakibul-cyber/FYP-2-Steko-Health-Checker-Application',
     reason:
       'The legacy link pointed to the GitHub profile; the project repository exists and matches (Dart final-year project).',
-    status: 'awaiting-approval',
+    status: 'approved',
   },
 ];
 
@@ -967,8 +992,11 @@ export const languages: { name: string; level: string }[] = [
 ];
 
 export const publications: Publication[] = [
-  // Status deliberately omitted: the legacy site says published, the CV says ongoing.
-  { title: 'STEKO-SD: A Mobile Health Solution to Assist Self-Checking of Metabolic Syndrome' },
+  // Status confirmed by the owner on 2026-11-08 (legacy site said published, CV said ongoing).
+  {
+    title: 'STEKO-SD: A Mobile Health Solution to Assist Self-Checking of Metabolic Syndrome',
+    status: 'under review',
+  },
   { title: 'BEST4U.COM: A Creative Platform for Secondhand Items Transaction', year: '2022' },
 ];
 

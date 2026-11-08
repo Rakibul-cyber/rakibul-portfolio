@@ -1,14 +1,14 @@
 # Project status: portfolio redesign (Flutter Web → Astro)
 
-**Last updated:** 2026-11-08 · **Branch:** `redesign/ai-ml-astro` (local only, no upstream) · **Nothing pushed, merged or deployed.**
+**Last updated:** 2026-11-08 · **Branch:** `redesign/ai-ml-astro` (pushed by the owner to `origin/redesign/ai-ml-astro`; later commits are local) · **Not merged or deployed by me.**
 
 ## Phases
 
 | Phase | Status | Evidence |
 |---|---|---|
 | 0 Audit | ✅ | `docs/EXISTING_PORTFOLIO_AUDIT.md` |
-| 1 Reference analysis | ✅ | `docs/REFERENCE_DESIGN_AUDIT.md`, `docs/screenshots/reference-*` |
-| 2 Branch, tags, plan | ✅ | local tags `legacy-flutter-source` (2eadadd), `legacy-flutter-deploy` (ae42c32) |
+| 1 Reference analysis | ✅ | `docs/REFERENCE_DESIGN_AUDIT.md`; `docs/screenshots/reference-*` now local only (git-ignored) |
+| 2 Branch, tags, plan | ✅ | tags `legacy-flutter-source` (2eadadd), `legacy-flutter-deploy` (ae42c32), **still local only** (not on origin) |
 | 3 Scaffold + design system | ✅ | Astro 7.4.2, TS strict, Tailwind 4.3.3 `@theme` tokens |
 | 4 Content model + extraction | ✅ | `tests/legacy-inventory.json` (6 projects, 16 skills, 4 posts, 4 timeline, 3/3/3), `src/data/portfolio.ts` |
 | 5 Header, hero, stats | ✅ | |
@@ -18,31 +18,61 @@
 | 9 Quality | ✅ | `npm run verify` exit 0: check 0/0/0, lint, format, 32/32 node tests, 43/43 e2e incl. axe; Lighthouse mobile 96/100/100/100 |
 | 10 Deploy prep | ✅ | `.github/workflows/deploy.yml` (actionlint clean), `docs/DEPLOYMENT_PLAN.md`, README |
 
+## Urgent: found on `gh-pages` (2026-11-08)
+
+Commit `869072a` "Add new images and sitemap files for project updates" (made outside this branch and already pushed to the **public** `gh-pages`) contains 328 build and cache files. Among them:
+
+- **`.dart_tool/chrome-device/`**: a complete Chrome profile from `flutter run -d chrome`, including `Cookies`, `Login Data`, `History`, `Web Data` and session files. They are downloadable from `raw.githubusercontent.com` (HTTP 200). GitHub Pages itself returns 404 because Jekyll skips dot-folders. A local inspection that printed counts and hostnames only found 2 cookies, both for github.com and **encrypted** with the macOS Keychain key, 0 saved logins, no autofill/addresses/cards, and 10 history entries (9 localhost, 1 github.com). The risk is low, but this does not belong in a public repo.
+- `dist/` (the redesign build) served at `/rakibul-portfolio/dist/`, where its asset paths don't resolve, plus `build/`, `.astro/`, `test-results/` and `.DS_Store` files.
+- `dist/CV_MD_Rakibul_Hassan.pdf`, **the CV with your street address**, now live at `https://rakibul-cyber.github.io/rakibul-portfolio/dist/CV_MD_Rakibul_Hassan.pdf` (HTTP 200).
+
+Recommended (owner action, not done):
+
+1. Optional extra safety: sign out of GitHub sessions you don't recognise (GitHub → Settings → Sessions).
+2. Remove these files from `gh-pages` with a normal commit. This stops serving them, but they stay in history. Merging the redesign and letting the deploy workflow publish will also replace the whole `gh-pages` tree.
+3. To erase them from history as well, `gh-pages` must be rewritten and **force-pushed**, e.g. reset it to `ae42c32` (the legacy build): `git push --force-with-lease origin ae42c32:gh-pages`. Cached copies on GitHub may persist until GitHub support purges them. This needs your explicit go-ahead.
+
 ## Blocking items
 
-- **Deployment only:** the Impressum postal address (decision 1). `npm run check:deploy` fails until it's added, so the first deploy job will stop at the gate.
-- Nothing else blocks.
+- **Deployment only:** the Impressum postal address. In the 2026-11-08 round you chose "I'll type my address", but no address came through, so the placeholder remains and `npm run check:deploy` still fails. Send the address, or decide to drop the Impressum.
 
-## Decisions needed from the owner
+## Resolved owner decisions (2026-11-08)
 
-1. **Impressum postal address** (blocks deployment). Replace the placeholder in `src/pages/impressum.astro`.
-2. **Profile photo:** none exists in the repo, its history or the CV. The site shows an "RH" monogram; see README → "Add a profile photo".
-3. **LinkedIn URL:** `/in/rakibulhassan-dev/` (legacy site, currently used) or `/in/rakibul-hassan-33a2771b2/` (CV and the older React site). Both return HTTP 999 to bots; please open them to confirm which is yours. One-line change: `profile.linkedin`.
-4. **STEKO-SD publication status:** the legacy site said "published", the CV says "ongoing". It's shown without a status. (The STEKO project's legacy status "Published" and description are kept verbatim.)
-5. **XR-Hub repository link:** `XRHub-project-master-2`, `real-estate-condominium-management-system`, `flutter-web-project_Teczo` (a third candidate found in the audit), or none (current).
-6. **Approve the repository link changes** listed below.
-7. **Blog articles:** none of the 4 has a body anywhere. Provide the bodies (they'll be published as pages) or keep them hidden (current; all `status: 'draft'`).
-8. **AI-related candidate repositories** to add as projects (none added): `Text-Summarizer-Using-NLP`, `USING-ANIMAL-CLASSFY-MACHINE-LEARNING`, `aws-satellite-data-pipeline`, `careerpilot-ai.`, `smart-infrastructure-lead-intelligence`, `phitron-ai-ml-journey`, `Analysing-student-interest-in-Science-Subject-By-Using-EEG-Signals`.
-9. **The CV PDF contains your street address** and will be publicly downloadable once deployed (as the legacy site intended). Keep it, or supply a CV without the address?
-10. **Forest AI repository:** `Forest-Tracking-Environmental-Safety-System` contains a Figma Make UI bundle (React/TypeScript, "Forester App Design"), not the Flutter + AWS app, so it is **not linked**. Link it anyway (labelled as a UI prototype), or leave it out?
-11. **Reference screenshots** (`docs/screenshots/reference-*`) show a third party's site, including his portrait and client logos. Keep them in the public repo or delete them before pushing?
-12. **Legal texts** (Impressum, privacy policy) are templates. Please review them, ideally with a qualified adviser.
-13. **Optional cleanup:** `assets/projects/**` and the root `CV_MD_Rakibul_Hassan.pdf` duplicate the deployed copies in `public/`. They were kept because the brief didn't list them for removal.
+| # | Decision | Applied |
+|---|---|---|
+| LinkedIn | `https://www.linkedin.com/in/rakibulhassan-dev/` | already in `profile.linkedin`; no change |
+| STEKO-SD | under review | publication shows "(under review)"; STEKO description corrected (see `docs/CONTENT_MIGRATION_MAP.md` → Owner-approved corrections) |
+| STEKO repo link | approved | `linkChanges` status `approved` |
+| XR-Hub | leave unlinked | no change |
+| Blog | keep hidden | all 4 articles stay `draft` |
+| Profile photo | no photo supplied | the "RH" monogram stays |
+| Reference screenshots | remove from branch | untracked and git-ignored; files kept locally. **They remain in the history of the already-pushed `origin/redesign/ai-ml-astro`** (commit `c2ca139`) |
+| CV | owner will supply a PDF without the street address at `public/CV_MD_Rakibul_Hassan.pdf` (same filename) | **pending:** the file is still the old 205,078-byte CV. Older versions remain in Git history (and on `main`, the pushed redesign branch and `gh-pages`), so they stay downloadable from the repository even after replacement |
 
-## Changes awaiting approval (each a one-line revert in `src/data/portfolio.ts`)
+## Decisions still open
 
-- **STEKO Health Checker GitHub link:** `https://github.com/Rakibul-cyber` → `https://github.com/Rakibul-cyber/FYP-2-Steko-Health-Checker-Application` (repo verified: Dart final-year project with the matching features). To revert, set `githubUrl` back and remove the `linkChanges` entry.
-- (Forest AI link was **not** added; see decision 10.)
+1. **Impressum address** (blocks deployment).
+2. **STEKO project status field.** The legacy status badge still says "Published" (verbatim legacy field), which reads oddly next to "paper under review". Options: keep it (it can be read as the app being delivered), or change it to e.g. "Delivered" as another recorded correction.
+3. **Root `CV_MD_Rakibul_Hassan.pdf`** (old version with the street address) is still tracked at the repository root as a duplicate; only `public/` is deployed. Remove it from the branch once the new CV is in `public/`?
+4. **gh-pages cleanup** (see Urgent above).
+5. **Forest AI repository:** not linked (the repo is a Figma Make UI bundle). Link as a UI prototype, or leave it out?
+6. **Legal texts** (Impressum, privacy policy) are templates; please review.
+7. **AI candidate repositories:** assessment below; none added.
+8. Optional cleanup: `assets/projects/**` duplicates `public/projects/**`.
+
+## AI candidate repositories: assessment (2026-11-08)
+
+Bar: the Driver Stress project. That means real code, a README that explains the approach, honest measured results, and tests and CI where relevant. All seven were shallow-cloned and read.
+
+| Repository | What is actually there | Verdict |
+|---|---|---|
+| `smart-infrastructure-lead-intelligence` | ~5,900 lines of Python, 378 test functions, Docker + Compose, GitHub Actions CI green on `main` (26 Oct 2026), a long README with architecture, limitations and a GDPR/robots note. Scoring is **rule-based** (keyword signals → 0–100 score), not ML | **Recommend (1).** Strongest engineering evidence after Driver Stress. Present it under backend/automation as "rule-based lead scoring pipeline", **not** as AI/ML. It scrapes public business contact data, so keep the legal note visible |
+| `USING-ANIMAL-CLASSFY-MACHINE-LEARNING` | 2022 coursework: pandas + scikit-learn Random Forest with GridSearchCV on the Austin shelter-outcomes dataset; predicts **adoption vs. not**. The README claims it classifies animals into mammals/birds/reptiles, which the code does not do. Random split without a seed; accuracy only printed, no recorded results, no tests | **Recommend (2), only after fixes.** It is real supervised ML, but first rewrite the README to match the code, fix the seed, use a stratified split, add a baseline and record the metrics. As it stands it fails the honesty bar |
+| `Text-Summarizer-Using-NLP` | Two notebooks: spaCy word-frequency extractive summariser with a tkinter UI, and TextBlob sentiment on tweets (tweepy), plus a PDF report. No evaluation (no ROUGE). The README claims optional transformer summarisation that isn't in the code | Not now. Classic NLP coursework with no measured results and an overclaiming README |
+| `aws-satellite-data-pipeline` | 60-line boto3 script. The "AI processing" is `time.sleep(2)`, random coordinates and a hard-coded `"ai_confidence_score": "98.5%"` | **Do not add.** Showing a fabricated confidence score would undermine the honest framing of the site. It could be reframed as a plain EC2/S3/IAM exercise, but adds little |
+| `careerpilot-ai.` | Only `Readme.Md`, which is actually a Word `.docx` renamed; no code | Do not add |
+| `phitron-ai-ml-journey` | README only (43 words), no notebooks yet | Do not add (course log) |
+| `Analysing-student-interest-…-EEG-Signals` | README + a PDF report; no code or data | Do not add unless the code is published |
 
 ## Known warnings
 
@@ -51,7 +81,7 @@
 - Lighthouse SEO is 63 on the Impressum and privacy pages because they are `noindex` by design.
 - `robots.txt` is served under `/rakibul-portfolio/`; crawlers only read it at the domain root, so it's advisory (TD-15).
 - The Pages source setting could not be read without authentication; inferred as `gh-pages` / root from the served content.
-- Pre-existing `.DS_Store` files were never committed or discarded. The tracked root `.DS_Store` was untracked in `697b211` (local file kept) and is now git-ignored. Untracked `lib/.DS_Store` and `assets/.DS_Store` remain on disk, as do the ignored `build/` and `.dart_tool/` folders.
+- On this branch, pre-existing `.DS_Store` files were never committed or discarded. The tracked root `.DS_Store` was untracked in `697b211` (local file kept) and is now git-ignored. Untracked `lib/.DS_Store` and `assets/.DS_Store` remain on disk, as do the ignored `build/` and `.dart_tool/` folders.
 - The legacy Flutter service worker is neutralised by a kill switch at the same URL (verified with a local upgrade simulation).
 
 ## Environment notes
