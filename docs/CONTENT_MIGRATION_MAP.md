@@ -27,7 +27,7 @@ Legacy emoji icons are kept in data as `legacyIcon` (not rendered). Legacy `live
 | Rotating roles (Flutter Developer / DevOps Engineer / Cloud Architect / Full-Stack Developer) | Role line "AI/ML Engineer \| AI-Powered Software Developer" | Repositioning (brief §3.2). Removed. |
 | Status "Available for freelance & part-time" | "Open to AI/ML and software engineering roles" | Brief §3.2 |
 | Hero intro (MSc student … Flutter apps and AWS …) | Brief §3.2 introduction | Rewritten |
-| Stats 3+ years / 10+ projects / 3 countries / 2 publications | 0.90 LOSO ROC-AUC · 2 apps in production use · 7 projects | Unverified figures dropped; each new stat has `source` |
+| Stats 3+ years / 10+ projects / 3 countries / 2 publications | 0.90 LOSO ROC-AUC · 2 apps shipped to production · 7 projects | Unverified figures dropped; each new stat has `source` |
 | CTAs "Hire Me →", "View My Work" | "See my work", "Get in touch", "Download CV" | Hire removed |
 | Terminal animation (`flutter build`, `aws s3 sync`, "Available for hire 🚀") | Removed; the process section replays the **real** Driver Stress CI + training log | Fictional output removed (brief §4.5) |
 
@@ -96,7 +96,7 @@ Legacy emoji icons are kept in data as `legacyIcon` (not rendered). Legacy `live
 
 The legacy timeline remains in `tests/legacy-inventory.json`. The preservation test now checks that every legacy organisation still appears and that experience matches the resume exactly; only the Enviotech role may say "present".
 
-Project status badges such as Louco "Production" and Forest "Live" describe the apps, not roles, so they are unchanged. The "2 apps in production use" statistic still relies on these legacy statuses and should be re-confirmed by the owner, since the roles have ended.
+Project status badges such as Louco "Production" and Forest "Live" describe the apps, not roles, so they are unchanged. The statistic was reworded on 2026-11-08 (owner decision) from "2 · Apps in production use" to **"2 · Apps shipped to production"**: the roles have ended and current use isn't verified. Sources: Louco store releases (Google Play Console, TestFlight) and the Forest Tracking AWS deployment.
 
 ## Owner-approved corrections (2026-11-08)
 

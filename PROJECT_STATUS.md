@@ -44,13 +44,14 @@
 | smart-infrastructure-lead-intelligence | **hidden** via `hidden: true` until confirmed with Enviotech; kept in data |
 | Impressum | **removed** (page, footer link, `data-todo` gate check) |
 | History purge | **no**; plan kept for reference, marked decided-against; history (incl. `869072a` and the old CV) remains |
+| Statistic | "2 · Apps shipped to production" (was "Apps in production use") |
 | Earlier: STEKO badge "Under review", STEKO repo link, LinkedIn, XR-Hub unlinked, blog hidden, monogram, reference screenshots untracked, root CV untracked, alert closed manually by owner | applied |
 
 ## Decisions still open
 
 1. **Publishing the redesign** (push the branch, merge PR #1): needs explicit approval.
 2. **Google Drive copy** of the old CV (with street address) is still public: restrict it or replace it with the new file (owner, in Drive).
-3. **"2 apps in production use" statistic:** based on the legacy statuses of Louco ("Production") and Forest AI ("Live"). Both roles have ended; please confirm both apps are still in production use, or the statistic should change.
+3. ~~Statistic wording~~: resolved 2026-11-08, now **"2 · Apps shipped to production"** (sources: Louco store releases, Forest Tracking AWS deployment).
 4. **Enviotech confirmation** for the lead-intelligence project (then remove `hidden: true`).
 5. Forest AI repository link: not linked (a Figma Make UI bundle).
 6. The privacy policy is a template; please review. Without an Impressum, the controller is identified by name, city, email and phone.

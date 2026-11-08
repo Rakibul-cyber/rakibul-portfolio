@@ -18,7 +18,7 @@ Engineering recruiters and hiring managers for AI/ML and software engineering ro
 
 1. Header: wordmark, anchors, "Get in touch".
 2. Hero: status, headline, intro, CTAs, CV, monogram with verified skill chips, role line.
-3. Stats card: 0.90 LOSO ROC-AUC · 2 apps in production use · 7 projects, plus a technology marquee.
+3. Stats card: 0.90 LOSO ROC-AUC · 2 apps shipped to production · 7 projects, plus a technology marquee.
 4. Expertise: AI & ML engineering → AI-powered software development → Mobile application architecture → MLOps, backend & DevOps; then the full toolkit (16 legacy skills).
 5. Work: Driver Stress case study (flagship) → highlights (Forest AI, Louco, Stock Dashboard) → filterable index of all 7 projects.
 6. Process: six-stage AI/ML workflow ring with Driver Stress examples, CI terminal replay, quality gates.
