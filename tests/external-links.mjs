@@ -47,18 +47,49 @@ async function check(url) {
   return 'error';
 }
 
+/**
+ * github.com sometimes answers unauthenticated page requests with 5xx (rate limiting /
+ * abuse protection) even for pages that exist. For profile and repository URLs, confirm
+ * the target through the public API instead and report that explicitly.
+ */
+async function githubApiFallback(url) {
+  const m = /^https:\/\/github\.com\/([^/]+)(?:\/([^/]+))?\/?$/.exec(url);
+  if (!m) return null;
+  const api = m[2]
+    ? `https://api.github.com/repos/${m[1]}/${m[2]}`
+    : `https://api.github.com/users/${m[1]}`;
+  try {
+    const res = await fetch(api, {
+      headers: { accept: 'application/vnd.github+json' },
+      signal: AbortSignal.timeout(15000),
+    });
+    return res.status;
+  } catch {
+    return null;
+  }
+}
+
 let failures = 0;
 let warnings = 0;
 const results = await Promise.all([...urls.keys()].map(async (url) => [url, await check(url)]));
 for (const [url, status] of results.sort()) {
   const linkedin = /linkedin\.com/.test(url);
-  const ok = typeof status === 'number' && status < 400;
+  let ok = typeof status === 'number' && status < 400;
   let label = ok ? 'ok  ' : 'FAIL';
+  let note = '';
+  if (!ok && typeof status === 'number' && status >= 500) {
+    const apiStatus = await githubApiFallback(url);
+    if (apiStatus === 200) {
+      ok = true;
+      label = 'ok* ';
+      note = ` (github.com answered ${status}; target confirmed via GitHub API)`;
+    }
+  }
   if (!ok && linkedin && status === 999) {
     label = 'WARN';
     warnings += 1;
   } else if (!ok) failures += 1;
-  console.log(`${label} ${String(status).padEnd(5)} ${url}`);
+  console.log(`${label} ${String(status).padEnd(5)} ${url}${note}`);
 }
 console.log(
   `\n${urls.size} external URLs: ${urls.size - failures - warnings} ok, ${warnings} warning(s), ${failures} failure(s).`,
