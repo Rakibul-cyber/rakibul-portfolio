@@ -64,13 +64,18 @@ test('inventory is complete (brief §4 counts)', () => {
 
 test('every legacy project is rendered with title, subtitle, description, status and tags', () => {
   for (const p of legacy.projects) {
-    const corrected = data.contentCorrections.find((c) => c.from === p.description);
+    const id = data.projects.find((x) => x.title === p.title)?.id;
     for (const field of ['title', 'subtitle', 'description', 'status']) {
-      const expected = field === 'description' && corrected ? corrected.to : p[field];
+      const corrected = data.contentCorrections.find(
+        (c) => c.projectId === id && c.field === field,
+      );
+      const expected = corrected ? corrected.to : p[field];
       assert.ok(hasText(expected), `${p.title}: ${field} not rendered: "${expected}"`);
+      // A superseded description must be gone; short status words may legitimately appear elsewhere.
+      if (corrected && field === 'description') {
+        assert.ok(!hasText(corrected.from), `${p.title}: superseded text still rendered`);
+      }
     }
-    if (corrected)
-      assert.ok(!hasText(corrected.from), `${p.title}: superseded legacy text still rendered`);
     for (const tag of p.tags) assert.ok(hasText(tag), `${p.title}: tag "${tag}" not rendered`);
   }
 });
@@ -81,21 +86,26 @@ test('legacy project fields are kept verbatim in data', () => {
     assert.ok(p, `project missing from data: ${lp.title}`);
     assert.equal(p.legacy, true);
     assert.equal(p.subtitle, lp.subtitle);
-    const correction = data.contentCorrections.find(
-      (c) => c.projectId === p.id && c.field === 'description',
-    );
-    if (correction) {
-      assert.equal(
-        correction.from,
-        lp.description,
-        `${lp.title}: correction 'from' must equal the legacy text`,
+    for (const field of ['description', 'status']) {
+      const correction = data.contentCorrections.find(
+        (c) => c.projectId === p.id && c.field === field,
       );
-      assert.equal(p.description, correction.to);
-      assert.ok(correction.reason.length > 10 && correction.approvedOn);
-    } else {
-      assert.equal(p.description, lp.description);
+      if (correction) {
+        assert.equal(
+          correction.from,
+          lp[field],
+          `${lp.title}: correction 'from' must equal legacy ${field}`,
+        );
+        assert.equal(p[field], correction.to);
+        assert.ok(correction.reason.length > 10 && correction.approvedOn);
+      } else {
+        assert.equal(
+          p[field],
+          lp[field],
+          `${lp.title}: ${field} changed without a contentCorrections entry`,
+        );
+      }
     }
-    assert.equal(p.status, lp.status);
     assert.deepEqual(p.tags, lp.tags);
     assert.equal(p.liveUrl ?? null, lp.liveUrl);
     assert.equal(p.legacyIcon, lp.icon);
@@ -139,10 +149,30 @@ test('Driver Stress is the flagship and links to its repository', () => {
   assert.ok(hasText('0.940'), 'held-out ROC-AUC not shown');
 });
 
-test('project order follows the brief', () => {
+test('non-legacy projects are marked and the lead-scoring project is not presented as ML', () => {
+  assert.deepEqual(
+    data.projects.filter((p) => !p.legacy).map((p) => p.id),
+    ['driver-stress', 'lead-intelligence'],
+  );
+  const lead = data.projects.find((p) => p.id === 'lead-intelligence');
+  assert.deepEqual(lead.categories, ['backend-cloud']);
+  assert.match(lead.description, /rule-based, not machine learning/);
+  assert.ok(hasText(lead.title) && hrefs.has(lead.githubUrl));
+});
+
+test('project order follows the brief, with owner-approved additions', () => {
   assert.deepEqual(
     data.projects.map((p) => p.id),
-    ['driver-stress', 'forest-ai', 'stock-dashboard', 'louco', 'steko', 'xr-hub', 'automotive-hmi'],
+    [
+      'driver-stress',
+      'forest-ai',
+      'stock-dashboard',
+      'lead-intelligence',
+      'louco',
+      'steko',
+      'xr-hub',
+      'automotive-hmi',
+    ],
   );
 });
 

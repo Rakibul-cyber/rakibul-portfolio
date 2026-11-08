@@ -482,6 +482,30 @@ export const projects: Project[] = [
     },
   },
   {
+    id: 'lead-intelligence',
+    shortTitle: 'Lead Intelligence',
+    title: 'Smart Infrastructure Lead Intelligence',
+    subtitle: 'Python pipeline · Rule-based lead scoring',
+    // Facts from the repository's README, src/lead_intelligence/scorer.py, tests/ and .github/workflows/ci.yml.
+    description:
+      'A Python pipeline that crawls public organisation websites (Requests and Beautiful Soup, with an optional Playwright fallback for JavaScript-rendered pages), detects keyword-based signals such as street lighting, procurement and smart-city activity, and scores each lead from 0 to 100 with explicit weights and Low/Medium/High priority. Results go to Excel reports with evidence excerpts. The scoring is rule-based, not machine learning.',
+    tags: [
+      'Python',
+      'Requests',
+      'Beautiful Soup',
+      'Playwright',
+      'openpyxl',
+      'pytest',
+      'Docker',
+      'GitHub Actions',
+    ],
+    status: 'Project',
+    githubUrl: 'https://github.com/Rakibul-cyber/smart-infrastructure-lead-intelligence',
+    galleryImagePaths: [],
+    categories: ['backend-cloud'],
+    legacy: false,
+  },
+  {
     id: 'louco',
     shortTitle: 'Louco',
     title: 'Louco Mobile App',
@@ -553,7 +577,8 @@ export const projects: Project[] = [
       // Corrected from the legacy text, which said "Published research" (see contentCorrections).
       'Mobile health monitoring app tracking vital signs, health trends, and alerts. Research paper (under review): "STEKO-SD: A Mobile Health Solution to Assist Self-Checking of Metabolic Syndrome".',
     tags: ['Flutter', 'Node.js', 'Firebase', 'Health Tech', 'Research'],
-    status: 'Published',
+    // Corrected from the legacy status "Published" (see contentCorrections).
+    status: 'Under review',
     // Changed from the profile URL; approved by the owner on 2026-11-08 (see linkChanges).
     githubUrl: 'https://github.com/Rakibul-cyber/FYP-2-Steko-Health-Checker-Application',
     legacyIcon: '❤️',
@@ -594,7 +619,7 @@ export const projects: Project[] = [
 
 export interface ContentCorrection {
   projectId: string;
-  field: 'description';
+  field: 'description' | 'status';
   from: string;
   to: string;
   reason: string;
@@ -610,6 +635,15 @@ export const contentCorrections: ContentCorrection[] = [
     to: 'Mobile health monitoring app tracking vital signs, health trends, and alerts. Research paper (under review): "STEKO-SD: A Mobile Health Solution to Assist Self-Checking of Metabolic Syndrome".',
     reason:
       'The STEKO-SD paper is under review, not published (owner confirmation; the CV said "ongoing").',
+    approvedOn: '2026-11-08',
+  },
+  {
+    projectId: 'steko',
+    field: 'status',
+    from: 'Published',
+    to: 'Under review',
+    reason:
+      'Status badge aligned with the publication status confirmed by the owner (under review).',
     approvedOn: '2026-11-08',
   },
 ];
@@ -755,7 +789,7 @@ export const expertise: Expertise[] = [
       'Docker and Docker Compose',
       'AWS EC2, S3 and IAM; PostgreSQL; Node.js and Django backends',
     ],
-    shownIn: ['driver-stress', 'forest-ai', 'xr-hub'],
+    shownIn: ['driver-stress', 'forest-ai', 'xr-hub', 'lead-intelligence'],
   },
 ];
 
