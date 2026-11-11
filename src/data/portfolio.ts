@@ -12,6 +12,9 @@
  */
 import type { IconName } from '../lib/icons';
 import aboutPhoto from '../assets/about.jpg';
+import enviotechLogo from '../assets/logos/enviotech.png';
+import loucoLogo from '../assets/logos/louco.svg';
+import teczoLogo from '../assets/logos/teczo.png';
 import profilePhoto from '../assets/profile.jpg';
 
 // ---------------------------------------------------------------------------
@@ -192,6 +195,19 @@ export interface ExperienceEntry {
   points: string[];
   /** Where the bullet points come from. */
   source: string;
+}
+
+export interface Company {
+  name: string;
+  role: string;
+  /** Official logo file; omitted renders the name as text. */
+  logo?: {
+    src: ImageMetadata;
+    /** Tailwind height class: logos are balanced by optical size, not pixel height. */
+    class: string;
+    /** The logo is drawn for dark backgrounds and is shown on an ink plate. */
+    onDark?: boolean;
+  };
 }
 
 export interface Education {
@@ -1045,6 +1061,39 @@ export const experience: ExperienceEntry[] = [
       'Collaborated with cross-functional teams using Git and Agile Scrum.',
     ],
     source: 'Resume',
+  },
+];
+
+/**
+ * Employers and research organisations (never clients), in the order of `experience`.
+ * The cards are deliberately not links (owner decision, 2026-11-11).
+ * `logo` is set only for an unmodified file taken from the organisation's own website:
+ * - Enviotech (enviotech.de) and Louco (louco.app): the owner confirmed permission.
+ * - Teczo: the 1017×225 wordmark from the media library of teczo.co, the website the
+ *   owner confirmed. It is white, so it is shown on the ink plate.
+ * - JGU: its logo policy (Verwaltungsmitteilung 12/2016) forbids third-party use without
+ *   written permission, so the name renders as text.
+ */
+export const companies: Company[] = [
+  {
+    name: 'ENVIOTECH GmbH',
+    role: 'Software Developer',
+    logo: { src: enviotechLogo, class: 'h-8' },
+  },
+  {
+    name: 'Louco Event Media GmbH',
+    role: 'Software Developer',
+    // The lime wordmark is drawn for dark backgrounds, as on louco.app.
+    logo: { src: loucoLogo, class: 'h-7', onDark: true },
+  },
+  {
+    name: 'Johannes Gutenberg University Mainz',
+    role: 'Research Assistant · Mobile Application Developer',
+  },
+  {
+    name: 'Teczo Sdn. Bhd.',
+    role: 'Software Developer',
+    logo: { src: teczoLogo, class: 'h-5', onDark: true },
   },
 ];
 

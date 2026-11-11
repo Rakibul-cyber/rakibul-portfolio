@@ -15,10 +15,10 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
 const legacy = JSON.parse(readFileSync(path.join(root, 'tests', 'legacy-inventory.json'), 'utf8'));
 // Node 24 strips TypeScript types natively. The only value imports in portfolio.ts are the
-// astro:assets photos; outside Astro they resolve to a stub with the file name.
+// astro:assets photos and logos; outside Astro they resolve to a stub with the file name.
 registerHooks({
   load(url, context, nextLoad) {
-    if (/\.(jpe?g|png|webp|avif)$/i.test(url))
+    if (/\.(jpe?g|png|webp|avif|svg)$/i.test(url))
       return {
         format: 'module',
         source: `export default { src: ${JSON.stringify(url)}, width: 0, height: 0, format: 'jpg' };`,

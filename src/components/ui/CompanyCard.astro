@@ -1,0 +1,35 @@
+---
+import { Image } from 'astro:assets';
+import type { Company } from '../../data/portfolio';
+
+/**
+ * One cell of the companies grid: the official logo, or the name as text when no
+ * logo may be used. Cells are static by design: no links and no hover states.
+ */
+export interface Props {
+  company: Company;
+}
+const { name, role, logo } = Astro.props.company;
+---
+
+<div class="flex h-full flex-col items-center justify-center gap-3 bg-white px-4 py-8 text-center sm:px-6 sm:py-10">
+  <span class="flex min-h-12 items-center justify-center">
+    {logo ? (
+      <span class:list={[logo.onDark && 'rounded-lg bg-ink px-3.5 py-2']}>
+        <Image
+          src={logo.src}
+          alt={name}
+          height={logo.src.height}
+          width={logo.src.width}
+          class:list={['w-auto', logo.class]}
+          loading="lazy"
+        />
+      </span>
+    ) : (
+      <span class="font-display text-base leading-snug font-semibold text-balance text-ink sm:text-lg">
+        {name}
+      </span>
+    )}
+  </span>
+  <span class="text-xs leading-snug text-pretty text-muted">{role}</span>
+</div>
