@@ -91,3 +91,5 @@ A GitHub Pages *project* site lives under `/rakibul-portfolio/`, but crawlers on
 ## TD-12 What we deliberately did not build
 
 A chat-style "AI builder" mock, a client-logo grid and a cookie banner (see `REFERENCE_DESIGN_AUDIT.md` §7), plus a language switch, analytics, a CMS and a blog engine (no complete articles exist).
+
+The "Selected companies" grid added on 2026-11-11 is not a client grid: it lists the four employers and research organisations from `experience` (`companies` in `src/data/portfolio.ts`). A logo is shown only when it is an unmodified file from the organisation's own website and no policy forbids it (Enviotech and Louco, with permission confirmed by the owner; Teczo, the 1017×225 wordmark from the media library of teczo.co); otherwise the name is set in type (JGU's logo policy requires written permission). The Louco and Teczo wordmarks are drawn for dark backgrounds and sit on an ink plate. The cards are static: no links, no hover states (owner decision, 2026-11-11).

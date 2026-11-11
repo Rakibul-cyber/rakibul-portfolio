@@ -61,7 +61,8 @@ test('dist/ contains only intended static site files', () => {
     /^privacy\/index\.html$/,
     /^_astro\/[\w.-]+\.(js|css|woff2)$/,
     /^_astro\/(profile|about)\.[\w-]+\.(avif|webp|jpg)$/,
-    /^_astro\/(profile|about)\.[\w-]+\.(avif|webp|jpg)$/,
+    // Company logos (src/assets/logos/): PNGs are re-encoded, the SVG is passed through.
+    /^_astro\/(enviotech|louco|teczo)\.[\w-]+\.(webp|png|svg)$/,
     /^projects\/[\w-]+\/[\w-]+\.png$/,
     /^CV_MD_Rakibul_Hassan\.pdf$/,
     /^favicon\.svg$/,
@@ -154,6 +155,17 @@ test('external links that open a new tab use rel="noopener noreferrer"', () => {
       assert.match(m[0], /rel="noopener noreferrer"/, `${rel(page)}: ${m[0].slice(0, 120)}`);
     }
   }
+});
+
+test('company cards are static: no links, every logo has a description', () => {
+  const section = read(path.join(dist, 'index.html')).match(
+    /<section id="companies"[\s\S]*?<\/section>/,
+  )?.[0];
+  assert.ok(section, 'companies section missing');
+  assert.doesNotMatch(section, /<a\s/, 'companies section contains a link');
+  const imgs = [...section.matchAll(/<img\s[^>]*>/g)].map((m) => m[0]);
+  assert.equal(imgs.length, 3, 'expected the Enviotech, Louco and Teczo logos');
+  for (const img of imgs) assert.match(img, /alt="[^"]+"/, img.slice(0, 120));
 });
 
 test('the CV is a real PDF', () => {
