@@ -62,7 +62,7 @@ test('dist/ contains only intended static site files', () => {
     /^_astro\/[\w.-]+\.(js|css|woff2)$/,
     /^_astro\/(profile|about)\.[\w-]+\.(avif|webp|jpg)$/,
     // Company logos (src/assets/logos/): PNGs are re-encoded, the SVG is passed through.
-    /^_astro\/(enviotech|louco|teczo)\.[\w-]+\.(webp|png|svg)$/,
+    /^_astro\/(enviotech|jgu|louco|teczo)\.[\w-]+\.(webp|png|svg)$/,
     /^projects\/[\w-]+\/[\w-]+\.png$/,
     /^CV_MD_Rakibul_Hassan\.pdf$/,
     /^favicon\.svg$/,
@@ -164,7 +164,7 @@ test('company cards are static: no links, every logo has a description', () => {
   assert.ok(section, 'companies section missing');
   assert.doesNotMatch(section, /<a\s/, 'companies section contains a link');
   const imgs = [...section.matchAll(/<img\s[^>]*>/g)].map((m) => m[0]);
-  assert.equal(imgs.length, 3, 'expected the Enviotech, Louco and Teczo logos');
+  assert.equal(imgs.length, 4, 'expected all four logos');
   for (const img of imgs) assert.match(img, /alt="[^"]+"/, img.slice(0, 120));
 });
 

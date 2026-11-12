@@ -13,6 +13,7 @@
 import type { IconName } from '../lib/icons';
 import aboutPhoto from '../assets/about.jpg';
 import enviotechLogo from '../assets/logos/enviotech.png';
+import jguLogo from '../assets/logos/jgu.png';
 import loucoLogo from '../assets/logos/louco.svg';
 import teczoLogo from '../assets/logos/teczo.png';
 import profilePhoto from '../assets/profile.jpg';
@@ -1071,8 +1072,9 @@ export const experience: ExperienceEntry[] = [
  * - Enviotech (enviotech.de) and Louco (louco.app): the owner confirmed permission.
  * - Teczo: the 1017×225 wordmark from the media library of teczo.co, the website the
  *   owner confirmed. It is white, so it is shown on the ink plate.
- * - JGU: its logo policy (Verwaltungsmitteilung 12/2016) forbids third-party use without
- *   written permission, so the name renders as text.
+ * - JGU: the square JGU mark, supplied by the owner (2026-11-12). Pixels unchanged; only
+ *   an EXIF chunk was stripped. JGU's logo policy (Verwaltungsmitteilung 12/2016) requires
+ *   the university's written permission for third-party use; none is recorded here.
  */
 export const companies: Company[] = [
   {
@@ -1089,6 +1091,7 @@ export const companies: Company[] = [
   {
     name: 'Johannes Gutenberg University Mainz',
     role: 'Research Assistant · Mobile Application Developer',
+    logo: { src: jguLogo, class: 'h-14' },
   },
   {
     name: 'Teczo Sdn. Bhd.',
