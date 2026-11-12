@@ -61,6 +61,16 @@ The files in `src/assets/` are **cleaned copies**, not the camera originals:
 - re-encoded with sharp without metadata: no EXIF (camera, settings), GPS, XMP, IPTC, ICC or comments. `tests/repo-hygiene.test.mjs` fails if a committed image in `src/assets/` carries any of them, and `tests/build-output.test.mjs` checks the generated files;
 - the About crop deliberately leaves out a bystander (a child) in the right half of the original frame. Keep it that way if you re-crop.
 
+The hero photo was colour-corrected on 2026-11-12 from the 4000 × 4000 original (`Profile.jpg`), with global adjustments only: no retouching, smoothing or generated content.
+
+- crop `2150 × 2150` at `(707, 273)`, about 20% tighter than before, so the face reads larger in the circle;
+- white balance warmed slightly (R ×1.018, B ×0.972) so the grey wall reads neutral; near-white tones are excluded so the shirt stays white;
+- a gentle S-curve for depth with a slight highlight shoulder (output range 1–251);
+- a soft falloff toward the frame edge (−7% brightness, −28% saturation) to quieten the background; the face is unaffected;
+- light sharpening (σ 0.7) after resizing to 1200 × 1200, saved as JPEG quality 88 (mozjpeg) without metadata.
+
+The About photo is unchanged.
+
 The originals stay outside Git: `/assets/images/` is git-ignored and the hygiene test fails if anything there is tracked. To replace a photo, crop and re-encode it the same way, e.g. with sharp from this repo:
 
 ```bash
