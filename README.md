@@ -80,7 +80,7 @@ node -e "require('sharp')('IN.jpg').rotate().extract({left:L,top:T,width:S,heigh
 
 The "Sports & Teamwork" section (`sports` in `src/data/portfolio.ts`) uses two of the owner's photos in `src/assets/sports/`. Like the profile photos, they are cleaned copies; the originals stay in the git-ignored `/assets/images/`.
 
-- `match.jpg` (from `1000009713.jpeg`): 900 × 1125 crop at native resolution, a slight warm-up of the overcast light, gentle shadow lift and S-curve.
+- `match.jpg` (from `1000009702.jpeg`, replacing `1000009713.jpeg` on 2026-11-14): 880 × 1100 crop at native resolution that trims the goalpost at the left edge and keeps both players head to toe, a slight warm-up of the overcast light, a gentle S-curve.
 - `team.jpg` (from `1000006294.jpeg`): 1050 × 700 crop that leaves out a gift bag with a handwritten name, midtones lifted (the room was dim), warm cast slightly tempered.
 - Global adjustments only, no upscaling, light sharpening, JPEG quality 86 (mozjpeg) without metadata. Faces, people and backgrounds are unaltered.
 
