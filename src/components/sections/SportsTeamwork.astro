@@ -1,0 +1,55 @@
+---
+import { Picture } from 'astro:assets';
+import SectionHeading from '../ui/SectionHeading.astro';
+import { sports } from '../../data/portfolio';
+
+// Mobile order follows the DOM (text, featured, supporting); from md up the featured
+// photo spans the left column and the text sits above the supporting photo on the right.
+---
+
+<section
+  id="sports"
+  aria-labelledby="sports-title"
+  class="border-t border-slate-200/70 py-24 sm:py-32"
+>
+  <div class="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-6 sm:px-8 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-x-10 lg:gap-x-16">
+    <SectionHeading
+      id="sports-title"
+      eyebrow={sports.eyebrow}
+      title={sports.title}
+      lead={sports.lead}
+      class="md:col-start-2 md:row-start-1 md:self-end"
+    />
+
+    <figure
+      class="aspect-[4/5] overflow-hidden rounded-2xl border border-slate-200/80 bg-surface md:col-start-1 md:row-span-2 md:row-start-1 md:self-center"
+      data-reveal
+    >
+      <Picture
+        src={sports.featured.src}
+        alt={sports.featured.alt}
+        formats={['avif', 'webp']}
+        widths={[360, 480, 640, 900]}
+        sizes="(min-width: 72rem) 470px, (min-width: 48rem) 42vw, calc(100vw - 3rem)"
+        pictureAttributes={{ class: 'block size-full' }}
+        class="size-full object-cover"
+      />
+    </figure>
+
+    <figure
+      class="aspect-[3/2] overflow-hidden rounded-2xl border border-slate-200/80 bg-surface md:col-start-2 md:row-start-2 md:self-start"
+      data-reveal
+      style="--reveal-delay: 80ms"
+    >
+      <Picture
+        src={sports.supporting.src}
+        alt={sports.supporting.alt}
+        formats={['avif', 'webp']}
+        widths={[360, 540, 720, 1050]}
+        sizes="(min-width: 72rem) 560px, (min-width: 48rem) 50vw, calc(100vw - 3rem)"
+        pictureAttributes={{ class: 'block size-full' }}
+        class="size-full object-cover"
+      />
+    </figure>
+  </div>
+</section>
