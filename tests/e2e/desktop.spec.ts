@@ -25,15 +25,30 @@ test('every "Shown in" link targets an existing project anchor', async ({ page }
   for (const href of hrefs) await expect(page.locator(href ?? '')).toHaveCount(1);
 });
 
-test('project filters show 2 / 1 / 5 / 3 / 7 and announce the result', async ({ page }) => {
+test('project anchors are unique and every #project- link resolves to exactly one element', async ({
+  page,
+}) => {
+  const ids = await page.locator('[id^="project-"]').evaluateAll((els) => els.map((e) => e.id));
+  expect(ids.length).toBeGreaterThan(0);
+  expect(
+    ids.filter((id, i) => ids.indexOf(id) !== i),
+    'duplicate project anchors',
+  ).toEqual([]);
+  const hrefs = await page
+    .locator('a[href^="#project-"]')
+    .evaluateAll((as) => [...new Set(as.map((a) => a.getAttribute('href') ?? ''))]);
+  for (const href of hrefs) await expect(page.locator(href), href).toHaveCount(1);
+});
+
+test('project filters show 3 / 1 / 5 / 4 / 8 and announce the result', async ({ page }) => {
   const visible = page.locator('[data-project-index] [data-categories]:visible');
   const status = page.locator('[data-filter-status]');
   const cases: [string, number][] = [
-    ['ai-ml', 2],
+    ['ai-ml', 3],
     ['data', 1],
     ['mobile', 5],
-    ['backend-cloud', 3],
-    ['all', 7],
+    ['backend-cloud', 4],
+    ['all', 8],
   ];
   for (const [filter, expected] of cases) {
     const button = page.locator(`[data-filter="${filter}"]`);
