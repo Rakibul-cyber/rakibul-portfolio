@@ -273,7 +273,11 @@ export const profile: Profile = {
   cv: 'CV_MD_Rakibul_Hassan.pdf',
   monogram: 'RH',
   photo: { src: profilePhoto, alt: '' },
-  aboutPhoto: { src: aboutPhoto, alt: 'Portrait of Md Rakibul Hassan' },
+  aboutPhoto: {
+    src: aboutPhoto,
+    alt: 'Md Rakibul Hassan in a white shirt, smiling and looking down at a phone',
+    position: '45% 30%',
+  },
 };
 
 export const nav: NavItem[] = [

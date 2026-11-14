@@ -16,42 +16,42 @@ import {
   aria-labelledby="about-title"
   class="border-t border-slate-200/70 py-24 sm:py-32"
 >
-  <div class="mx-auto grid grid-cols-1 max-w-6xl items-start gap-14 px-6 sm:px-8 lg:grid-cols-2 lg:gap-16">
-    <div class="about-visual relative mx-auto aspect-square w-full max-w-md" data-reveal>
-      <div class="hero-grid about-grid absolute inset-0" aria-hidden="true"></div>
-      <div class="about-glow absolute inset-0" aria-hidden="true"></div>
-      <div class="absolute inset-[16%]">
-        {profile.aboutPhoto ? (
-          <Picture
-            src={profile.aboutPhoto.src}
-            alt={profile.aboutPhoto.alt}
-            formats={['avif', 'webp']}
-            widths={[240, 320, 480, 640, 720]}
-            sizes="(min-width: 30rem) 305px, 60vw"
-            pictureAttributes={{ class: 'block size-full' }}
-            class="about-photo size-full rounded-full object-cover shadow-2xl ring-4 shadow-slate-300/50 ring-white"
-            style={
-              profile.aboutPhoto.position
-                ? `object-position: ${profile.aboutPhoto.position}`
-                : undefined
-            }
-          />
-        ) : (
-          <div
-            class="relative flex size-full items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-white shadow-2xl ring-4 shadow-slate-400/40 ring-white"
-            role="img"
-            aria-label={`${profile.name} monogram`}
-          >
-            <span class="font-display text-8xl font-bold tracking-tight text-gradient">
-              {profile.monogram}
-            </span>
-          </div>
-        )}
-      </div>
+  <div class="mx-auto grid max-w-6xl grid-cols-1 gap-12 px-6 sm:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-x-16 lg:gap-y-14">
+    <!-- Below lg: a 4:5 portrait above the text. From lg: the photo fills the full height of the intro row. -->
+    <div
+      class="about-visual relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-2xl border border-slate-200/80 bg-surface lg:mx-0 lg:aspect-auto lg:min-h-[32rem] lg:max-w-none"
+      data-reveal
+    >
+      {profile.aboutPhoto ? (
+        <Picture
+          src={profile.aboutPhoto.src}
+          alt={profile.aboutPhoto.alt}
+          formats={['avif', 'webp']}
+          widths={[320, 480, 640, 800, 960]}
+          sizes="(min-width: 64rem) 480px, (min-width: 30rem) 448px, calc(100vw - 3rem)"
+          pictureAttributes={{ class: 'absolute inset-0 block size-full' }}
+          class="about-photo size-full object-cover"
+          style={
+            profile.aboutPhoto.position
+              ? `object-position: ${profile.aboutPhoto.position}`
+              : undefined
+          }
+        />
+      ) : (
+        <div
+          class="absolute inset-0 flex items-center justify-center bg-white"
+          role="img"
+          aria-label={`${profile.name} monogram`}
+        >
+          <span class="font-display text-8xl font-bold tracking-tight text-gradient">
+            {profile.monogram}
+          </span>
+        </div>
+      )}
     </div>
 
-    <div>
-      <div data-reveal>
+    <div data-reveal>
+      <div>
         <p class="font-display text-sm font-semibold tracking-eyebrow text-accent uppercase">
           {about.eyebrow}
         </p>
@@ -66,86 +66,79 @@ import {
           <p class="mt-5 text-lg leading-relaxed text-pretty text-muted">{p}</p>
         ))}
       </div>
+    </div>
 
-      <div class="mt-10 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2" data-reveal>
-        <div>
-          <h3 class="about-label">
-            <Icon name="award" class="size-4" />
-            Certifications
-          </h3>
-          <ul class="mt-3 space-y-1.5 text-sm text-slate-700">
-            {certifications.map((c) => (
-              <li>{c}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3 class="about-label">
-            <Icon name="book" class="size-4" />
-            Currently learning
-          </h3>
-          <ul class="mt-3 space-y-1.5 text-sm text-slate-700">
-            {learning.map((l) => (
-              <li>{l}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3 class="about-label">
-            <Icon name="file" class="size-4" />
-            Publications
-          </h3>
-          <ul class="mt-3 space-y-2 text-sm text-slate-700">
-            {publications.map((p) => (
-              <li>
-                {p.url ? (
-                  <a
-                    href={p.url}
-                    class="underline decoration-slate-300 underline-offset-4 hover:text-accent-600 hover:decoration-accent"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {p.title}
-                    <span class="sr-only"> (opens the journal article)</span>
-                  </a>
-                ) : (
-                  p.title
-                )}
-                {p.year && <span class="text-muted"> ({p.year})</span>}
-                {p.status && <span class="text-muted"> ({p.status})</span>}
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3 class="about-label">
-            <Icon name="globe" class="size-4" />
-            Languages
-          </h3>
-          <ul class="mt-3 space-y-1.5 text-sm text-slate-700">
-            {languages.map((l) => (
-              <li>
-                {l.name} <span class="text-muted">· {l.level}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+    <div
+      class="grid grid-cols-1 gap-x-8 gap-y-8 border-t border-slate-200/70 pt-10 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4"
+      data-reveal
+    >
+      <div>
+        <h3 class="about-label">
+          <Icon name="award" class="size-4" />
+          Certifications
+        </h3>
+        <ul class="mt-3 space-y-1.5 text-sm text-slate-700">
+          {certifications.map((c) => (
+            <li>{c}</li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 class="about-label">
+          <Icon name="book" class="size-4" />
+          Currently learning
+        </h3>
+        <ul class="mt-3 space-y-1.5 text-sm text-slate-700">
+          {learning.map((l) => (
+            <li>{l}</li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 class="about-label">
+          <Icon name="file" class="size-4" />
+          Publications
+        </h3>
+        <ul class="mt-3 space-y-2 text-sm text-slate-700">
+          {publications.map((p) => (
+            <li>
+              {p.url ? (
+                <a
+                  href={p.url}
+                  class="underline decoration-slate-300 underline-offset-4 hover:text-accent-600 hover:decoration-accent"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {p.title}
+                  <span class="sr-only"> (opens the journal article)</span>
+                </a>
+              ) : (
+                p.title
+              )}
+              {p.year && <span class="text-muted"> ({p.year})</span>}
+              {p.status && <span class="text-muted"> ({p.status})</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h3 class="about-label">
+          <Icon name="globe" class="size-4" />
+          Languages
+        </h3>
+        <ul class="mt-3 space-y-1.5 text-sm text-slate-700">
+          {languages.map((l) => (
+            <li>
+              {l.name} <span class="text-muted">· {l.level}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
 <style>
-  .about-grid {
-    mask-image: radial-gradient(closest-side, #000 40%, transparent 100%);
-  }
-  .about-glow {
-    background: radial-gradient(
-      closest-side,
-      color-mix(in srgb, var(--color-accent) 14%, transparent),
-      transparent 75%
-    );
-  }
   .about-label {
     display: flex;
     align-items: center;

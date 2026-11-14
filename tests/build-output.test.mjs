@@ -341,7 +341,10 @@ test('hero and About photos: decorative vs. described, AVIF + WebP, responsive',
   const img = (pic) => pic.match(/<img\s[^>]*>/)[0];
   assert.match(img(hero), /\salt(="")?[\s>]/, 'hero photo must be decorative (empty alt)');
   assert.match(img(hero), /loading="eager"/);
-  assert.match(img(about), /\salt="Portrait of Md Rakibul Hassan"/);
+  assert.match(
+    img(about),
+    /\salt="Md Rakibul Hassan in a white shirt, smiling and looking down at a phone"/,
+  );
   assert.match(img(about), /loading="lazy"/);
 
   for (const pic of [hero, about]) {
