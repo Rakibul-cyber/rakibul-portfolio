@@ -53,13 +53,12 @@ Legacy fields (titles, descriptions, tags of the six original projects) are chec
 
 ## Profile photos
 
-The hero uses `src/assets/profile.jpg` (decorative, `alt=""`: the name is the heading next to it) and the About section `src/assets/about.jpg` (`alt="Portrait of Md Rakibul Hassan"`). Both are wired in `profile.photo` / `profile.aboutPhoto` in `src/data/portfolio.ts`; remove either and that slot falls back to the "RH" monogram. Astro generates AVIF and WebP in several widths (JPEG fallback) with explicit dimensions.
+The hero uses `src/assets/profile.jpg` (decorative, `alt=""`: the name is the heading next to it) and the About section `src/assets/about.jpg` (`alt="Md Rakibul Hassan in a white shirt, smiling and looking down at a phone"`). Both are wired in `profile.photo` / `profile.aboutPhoto` in `src/data/portfolio.ts`; remove either and that slot falls back to the "RH" monogram. Astro generates AVIF and WebP in several widths (JPEG fallback) with explicit dimensions.
 
 The files in `src/assets/` are **cleaned copies**, not the camera originals:
 
-- cropped to a square around the face (1200 × 1200 px), so the circle needs no `object-position`; the optional `position` field is there for fine-tuning;
+- the hero photo is cropped to a square around the face (1200 × 1200 px), so the circle needs no `object-position`; the About photo is a 3:4 portrait (see below) placed with `position` (`45% 30%`);
 - re-encoded with sharp without metadata: no EXIF (camera, settings), GPS, XMP, IPTC, ICC or comments. `tests/repo-hygiene.test.mjs` fails if a committed image in `src/assets/` carries any of them, and `tests/build-output.test.mjs` checks the generated files;
-- the About crop deliberately leaves out a bystander (a child) in the right half of the original frame. Keep it that way if you re-crop.
 
 The hero photo was colour-corrected on 2026-11-12 from the 4000 × 4000 original (`Profile.jpg`), with global adjustments only: no retouching, smoothing or generated content.
 
@@ -69,7 +68,7 @@ The hero photo was colour-corrected on 2026-11-12 from the 4000 × 4000 original
 - a soft falloff toward the frame edge (−7% brightness, −28% saturation) to quieten the background; the face is unaffected;
 - light sharpening (σ 0.7) after resizing to 1200 × 1200, saved as JPEG quality 88 (mozjpeg) without metadata.
 
-The About photo is unchanged.
+The About photo was replaced on 2026-11-14 with `1000002840.jpeg` (960 × 1280, used at native size: no crop, no resize, no upscaling). It is shown as a rectangle with rounded corners that fills the height of the intro row on desktop and is a 4:5 portrait above the text on tablet and mobile. Global adjustments only: white balance slightly cooled (R ×0.99, B ×1.016) with near-white tones excluded so the shirt stays neutral, a gentle S-curve, saturation ×0.97, very light sharpening (σ 0.4), JPEG quality 88 (mozjpeg) without metadata.
 
 The originals stay outside Git: `/assets/images/` is git-ignored and the hygiene test fails if anything there is tracked. To replace a photo, crop and re-encode it the same way, e.g. with sharp from this repo:
 

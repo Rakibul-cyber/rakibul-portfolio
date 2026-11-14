@@ -368,6 +368,9 @@ test('hero photo is decorative and the About photo is described', () => {
   assert.match(data.profile.photo.src.src, /\/src\/assets\/profile\.jpg$/);
   assert.equal(data.profile.photo.alt, '');
   assert.match(data.profile.aboutPhoto.src.src, /\/src\/assets\/about\.jpg$/);
-  assert.equal(data.profile.aboutPhoto.alt, 'Portrait of Md Rakibul Hassan');
+  assert.equal(
+    data.profile.aboutPhoto.alt,
+    'Md Rakibul Hassan in a white shirt, smiling and looking down at a phone',
+  );
   assert.equal(data.profile.monogram, 'RH');
 });

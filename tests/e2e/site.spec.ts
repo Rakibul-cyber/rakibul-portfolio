@@ -41,12 +41,9 @@ test('home page loads cleanly: 200, no overflow, no broken images, no console er
   expect(errors).toEqual([]);
 });
 
-test('hero and About photos load as modern formats and fill their circles', async ({ page }) => {
+test('hero photo loads as a modern format and fills its circle', async ({ page }) => {
   await page.goto('./');
-  for (const [selector, circle] of [
-    ['.hero-photo', '.portrait-circle'],
-    ['.about-photo', '.about-visual'],
-  ] as const) {
+  for (const [selector, circle] of [['.hero-photo', '.portrait-circle']] as const) {
     const img = page.locator(selector);
     await img.scrollIntoViewIfNeeded();
     await expect(img).toBeVisible();
@@ -79,9 +76,50 @@ test('hero and About photos load as modern formats and fill their circles', asyn
     expect(parent).not.toBeNull();
   }
   await expect(page.locator('.hero-photo')).toHaveAttribute('alt', '');
-  await expect(page.locator('.about-photo')).toHaveAttribute(
+});
+
+test('About photo is a rounded rectangle that fills its frame, sharp and undistorted', async ({
+  page,
+}) => {
+  await page.goto('./');
+  const img = page.locator('.about-photo');
+  await img.scrollIntoViewIfNeeded();
+  await expect(img).toBeVisible();
+  await expect
+    .poll(() => img.evaluate((el: HTMLImageElement) => el.complete && el.naturalWidth > 0))
+    .toBe(true);
+  const info = await img.evaluate((el: HTMLImageElement) => {
+    const r = el.getBoundingClientRect();
+    const frame = el.closest('.about-visual');
+    if (!frame) throw new Error('.about-visual frame missing');
+    return {
+      src: el.currentSrc,
+      fit: getComputedStyle(el).objectFit,
+      frameRadius: parseFloat(getComputedStyle(frame).borderTopLeftRadius),
+      w: r.width,
+      h: r.height,
+      fw: frame.clientWidth,
+      fh: frame.clientHeight,
+      dpr: window.devicePixelRatio,
+      natural: el.naturalWidth,
+      aspect: el.naturalWidth / el.naturalHeight,
+    };
+  });
+  expect(info.src, 'served as AVIF/WebP').toMatch(/\.(avif|webp)$/);
+  // object-fit: cover keeps proportions (no stretching) while filling the frame
+  expect(info.fit).toBe('cover');
+  expect(Math.abs(info.w - info.fw)).toBeLessThan(2);
+  expect(Math.abs(info.h - info.fh)).toBeLessThan(2);
+  // a rectangle with subtle rounded corners, not a circle
+  expect(info.h, 'portrait, taller than wide').toBeGreaterThan(info.w);
+  expect(info.frameRadius).toBeGreaterThan(0);
+  expect(info.frameRadius).toBeLessThan(Math.min(info.w, info.h) / 8);
+  // sharp enough for the drawn width: with cover, the photo is drawn at max(w, h * aspect)
+  const drawn = Math.max(info.w, info.h * info.aspect);
+  expect(info.natural).toBeGreaterThanOrEqual(Math.floor(drawn * info.dpr * 0.98));
+  await expect(img).toHaveAttribute(
     'alt',
-    'Portrait of Md Rakibul Hassan',
+    'Md Rakibul Hassan in a white shirt, smiling and looking down at a phone',
   );
 });
 
