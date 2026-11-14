@@ -1201,10 +1201,12 @@ export const about = {
 /**
  * "Beyond the code" section. Text is the owner's own wording (2026-11-12); it makes no claims
  * about results, awards or roles. The trophy and medals stay visible in the photo, uncaptioned.
- * The owner confirmed permission from the identifiable people to publish both photos
- * (2026-11-14). Photos are the owner's, cropped and colour-corrected copies of originals kept
- * outside Git (see README "Sports photos"). Alt text describes only what is visible and names
- * nobody.
+ * Team photo: the owner confirmed permission from the identifiable people (2026-11-14). The
+ * featured photo was replaced on 2026-11-14 with 1000009702.jpeg, which shows a different
+ * teammate and two players in the background; the owner confirmed permission to publish it,
+ * including the identifiable people in it (2026-11-14). Photos are the owner's, cropped and
+ * colour-corrected copies of originals kept outside Git (see README "Sports photos"). Alt text
+ * describes only what is visible and names nobody.
  */
 export const sports = {
   eyebrow: 'Beyond the code',
@@ -1212,7 +1214,7 @@ export const sports = {
   lead: 'Beyond software engineering, sports are an important part of my life. Through football, cricket, and team activities, I’ve learned the value of discipline, communication, resilience, and working toward shared goals. These are qualities I bring to every project and team I work with.',
   featured: {
     src: sportsMatchPhoto,
-    alt: 'Two teammates in matching jerseys on a grass pitch, wearing medals, one holding up a trophy',
+    alt: 'Two teammates in matching jerseys standing on a grass pitch, both wearing medals, one holding a trophy, with other players in the background',
   } satisfies Photo,
   supporting: {
     src: sportsTeamPhoto,
