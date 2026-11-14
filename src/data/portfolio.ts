@@ -304,6 +304,7 @@ export const heroChips: { icon: IconName; label: string }[] = [
 // ---------------------------------------------------------------------------
 
 const DRIVER_REPO = 'https://github.com/Rakibul-cyber/driver-stress-monitoring';
+const INDUSTRIAL_AI_REPO = 'https://github.com/Rakibul-cyber/industrial-ai-predictive-maintenance';
 
 export const projects: Project[] = [
   {
@@ -425,6 +426,71 @@ export const projects: Project[] = [
       links: [
         { label: 'Repository', href: DRIVER_REPO },
         { label: 'CI workflow', href: `${DRIVER_REPO}/actions/workflows/ci.yml` },
+      ],
+    },
+  },
+  {
+    // Added 2026-11-14 (owner-approved). Every figure is taken from the repository's committed
+    // reports (reports/metrics_*.json, README, docs/14 and docs/16) at commit 1bdfda0.
+    id: 'industrial-ai',
+    shortTitle: 'Industrial AI',
+    title: 'Industrial AI — Predictive Maintenance Platform',
+    subtitle: 'Predictive maintenance · ML service · MLOps',
+    description:
+      'Built an end-to-end ML platform to predict the remaining useful life of turbofan engines using NASA C-MAPSS sensor data. Used leakage-safe feature engineering, engine-grouped cross-validation, and gradient boosting to achieve a test RMSE of 16.61 cycles, compared with 19.14 for the Ridge baseline. Delivered calibrated prediction intervals, FastAPI inference, a Streamlit dashboard, Docker Compose, and automated CI testing.',
+    tags: [
+      'Python',
+      'scikit-learn',
+      'pandas',
+      'FastAPI',
+      'Streamlit',
+      'pytest',
+      'Docker',
+      'GitHub Actions',
+    ],
+    status: 'Open source',
+    githubUrl: INDUSTRIAL_AI_REPO,
+    galleryImagePaths: [],
+    categories: ['ai-ml', 'backend-cloud'],
+    legacy: false,
+    highlight: {
+      domain: 'Predictive maintenance · NASA C-MAPSS',
+      summary:
+        'Remaining-useful-life prediction for turbofan engines on simulated NASA C-MAPSS FD001 data, from a checksummed data pipeline and engine-grouped evaluation to a tested FastAPI service, a Streamlit dashboard and CI.',
+      details: [
+        {
+          label: 'Problem',
+          body: 'Estimating how many cycles a turbofan engine has left from multi-sensor run-to-failure data, using the simulated NASA C-MAPSS FD001 benchmark.',
+        },
+        {
+          label: 'Approach',
+          body: [
+            'Leakage-safe features: 30-cycle trailing mean and standard deviation of 14 sensors, built by one function shared by training and the API; a contract test checks that API and offline predictions match.',
+            'Engine-grouped 5-fold cross-validation, so models are always scored on unseen engines. The served model was selected on CV RMSE; the official test set was used only for reporting.',
+          ],
+        },
+        {
+          label: 'Results',
+          body: [
+            'HistGradientBoosting: test RMSE 16.61, MAE 12.57 cycles (CV RMSE 16.56). Ridge baseline: test RMSE 19.14, MAE 15.35.',
+            '80% prediction intervals, conformally calibrated on held-out engines: 77.7% coverage, inside the pre-registered 77–83% band.',
+          ],
+        },
+        {
+          label: 'Engineering',
+          body: [
+            'FastAPI inference service and a Streamlit dashboard, packaged with Docker Compose and readiness healthchecks.',
+            'GitHub Actions CI: ruff, 305 tests at 97% line coverage (85% gate) and a Docker smoke test. Pinned dependencies; retraining reproduces the served model byte for byte.',
+          ],
+        },
+        {
+          label: 'Limitations',
+          body: [
+            'Simulated FD001 data only (one operating condition, one fault mode); not deployed in a production or industrial environment.',
+            'Remaining useful life is capped at 125 cycles, so engines with longer remaining life are under-predicted.',
+            'The unsupervised anomaly score did not meet its pre-registered trend target (0.680 against 0.7).',
+          ],
+        },
       ],
     },
   },
@@ -737,7 +803,7 @@ const projectById = (id: string): Project => {
 export const visibleProjects = projects.filter((p) => !p.hidden);
 
 export const flagship = projectById('driver-stress');
-export const highlightProjects = ['forest-ai', 'louco', 'stock-dashboard'].map(projectById);
+export const highlightProjects = ['industrial-ai', 'forest-ai', 'louco'].map(projectById);
 
 // ---------------------------------------------------------------------------
 // Stats (verified only, brief §3.3)
@@ -807,7 +873,7 @@ export const expertise: Expertise[] = [
       'Subject-independent evaluation (leave-one-subject-out)',
       'scikit-learn pipelines exported as one artefact',
     ],
-    shownIn: ['driver-stress'],
+    shownIn: ['driver-stress', 'industrial-ai'],
   },
   {
     icon: 'spark',
@@ -846,7 +912,7 @@ export const expertise: Expertise[] = [
       'Docker and Docker Compose',
       'AWS EC2, S3 and IAM; PostgreSQL; Node.js and Django backends',
     ],
-    shownIn: ['driver-stress', 'forest-ai', 'xr-hub', 'lead-intelligence'],
+    shownIn: ['driver-stress', 'industrial-ai', 'forest-ai', 'xr-hub', 'lead-intelligence'],
   },
 ];
 

@@ -123,9 +123,9 @@ test('About photo is a rounded rectangle that fills its frame, sharp and undisto
   );
 });
 
-test('all 7 visible projects are listed in the index', async ({ page }) => {
+test('all 8 visible projects are listed in the index', async ({ page }) => {
   await page.goto('./');
-  await expect(page.locator('[data-project-index] [data-categories]')).toHaveCount(7);
+  await expect(page.locator('[data-project-index] [data-categories]')).toHaveCount(8);
 });
 
 test('reduced motion: everything is visible immediately and the terminal shows its full output', async ({

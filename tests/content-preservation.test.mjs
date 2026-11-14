@@ -165,7 +165,7 @@ test('Driver Stress is the flagship and links to its repository', () => {
 test('non-legacy projects: lead-intelligence is kept in data, hidden, and never presented as ML', () => {
   assert.deepEqual(
     data.projects.filter((p) => !p.legacy).map((p) => p.id),
-    ['driver-stress', 'lead-intelligence'],
+    ['driver-stress', 'industrial-ai', 'lead-intelligence'],
   );
   const lead = data.projects.find((p) => p.id === 'lead-intelligence');
   assert.deepEqual(lead.categories, ['backend-cloud']);
@@ -184,6 +184,7 @@ test('project order follows the brief, with owner-approved additions', () => {
     data.projects.map((p) => p.id),
     [
       'driver-stress',
+      'industrial-ai',
       'forest-ai',
       'stock-dashboard',
       'lead-intelligence',
@@ -193,6 +194,24 @@ test('project order follows the brief, with owner-approved additions', () => {
       'automotive-hmi',
     ],
   );
+});
+
+test('each project has one anchor: featured on its card, the rest on their index row', () => {
+  const index = html.slice(html.indexOf('data-project-index'));
+  const featured = new Set([data.flagship, ...data.highlightProjects].map((p) => p.id));
+  for (const { id } of data.visibleProjects) {
+    const anchor = `id="project-${id}"`;
+    assert.equal(html.split(anchor).length - 1, 1, `${id}: expected exactly one anchor`);
+    if (featured.has(id)) {
+      assert.ok(!index.includes(anchor), `${id}: featured project anchored in the index`);
+      assert.ok(
+        index.includes(`href="#project-${id}"`),
+        `${id}: index row does not link to its card`,
+      );
+    } else {
+      assert.ok(index.includes(anchor), `${id}: index row has no anchor`);
+    }
+  }
 });
 
 test('CV is linked under the legacy URL and shipped as a real PDF', () => {

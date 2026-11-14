@@ -1,11 +1,17 @@
 ---
 import Icon from '../ui/Icon.astro';
 import Tag from '../ui/Tag.astro';
-import { categoryFilters, categoryLabels, visibleProjects as projects } from '../../data/portfolio';
+import {
+  categoryFilters,
+  categoryLabels,
+  flagship,
+  highlightProjects,
+  visibleProjects as projects,
+} from '../../data/portfolio';
 import { smartQuotes } from '../../lib/typography';
 
 // Featured projects already carry their `project-<id>` anchor on the richer card above.
-const featured = new Set(['driver-stress', 'forest-ai', 'louco', 'stock-dashboard']);
+const featured = new Set([flagship, ...highlightProjects].map((p) => p.id));
 const count = (id: string) =>
   id === 'all'
     ? projects.length
