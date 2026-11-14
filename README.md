@@ -77,6 +77,14 @@ The originals stay outside Git: `/assets/images/` is git-ignored and the hygiene
 node -e "require('sharp')('IN.jpg').rotate().extract({left:L,top:T,width:S,height:S}).resize(1200,1200).toColourspace('srgb').jpeg({quality:86,mozjpeg:true}).toFile('src/assets/profile.jpg')"
 ```
 
+## Sports photos
+
+The "Sports & Teamwork" section (`sports` in `src/data/portfolio.ts`) uses two of the owner's photos in `src/assets/sports/`. Like the profile photos, they are cleaned copies; the originals stay in the git-ignored `/assets/images/`.
+
+- `match.jpg` (from `1000009713.jpeg`): 900 × 1125 crop at native resolution, a slight warm-up of the overcast light, gentle shadow lift and S-curve.
+- `team.jpg` (from `1000006294.jpeg`): 1050 × 700 crop that leaves out a gift bag with a handwritten name, midtones lifted (the room was dim), warm cast slightly tempered.
+- Global adjustments only, no upscaling, light sharpening, JPEG quality 86 (mozjpeg) without metadata. Faces, people and backgrounds are unaltered.
+
 ## Deploy
 
 Pushing to `main` runs [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml). It verifies everything, runs the deploy gate and publishes `dist/` to `gh-pages` as a normal commit. Pull requests are verified but never deployed. Full procedure, checks and rollback: [`docs/DEPLOYMENT_PLAN.md`](docs/DEPLOYMENT_PLAN.md).

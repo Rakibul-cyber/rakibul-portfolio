@@ -12,6 +12,8 @@
  */
 import type { IconName } from '../lib/icons';
 import aboutPhoto from '../assets/about.jpg';
+import sportsMatchPhoto from '../assets/sports/match.jpg';
+import sportsTeamPhoto from '../assets/sports/team.jpg';
 import enviotechLogo from '../assets/logos/enviotech.png';
 import jguLogo from '../assets/logos/jgu.png';
 import loucoLogo from '../assets/logos/louco.svg';
@@ -1124,6 +1126,28 @@ export const about = {
     'My professional work so far has been software engineering: Python data-extraction and automation pipelines as a working student at Enviotech GmbH (since July 2026), production Android and iOS software at Louco Event Media GmbH (March–June 2026), a cloud-connected environmental monitoring platform at Johannes Gutenberg University Mainz (September 2025 – February 2026), and customer software at Teczo Sdn. Bhd. in Kuala Lumpur (2022).',
     'I now focus on machine learning, and I build it the way I build software: data validated before training, evaluation on data the model has never seen, the model served behind a tested API, and CI that trains, tests and ships it. Outside code, I’m a Bengali literature enthusiast.',
   ],
+};
+
+/**
+ * "Beyond the code" section. Text is the owner's own wording (2026-11-12); it makes no claims
+ * about results, awards or roles. The trophy and medals stay visible in the photo, uncaptioned.
+ * The owner confirmed permission from the identifiable people to publish both photos
+ * (2026-11-14). Photos are the owner's, cropped and colour-corrected copies of originals kept
+ * outside Git (see README "Sports photos"). Alt text describes only what is visible and names
+ * nobody.
+ */
+export const sports = {
+  eyebrow: 'Beyond the code',
+  title: 'Sports & Teamwork',
+  lead: 'Beyond software engineering, sports are an important part of my life. Through football, cricket, and team activities, I’ve learned the value of discipline, communication, resilience, and working toward shared goals. These are qualities I bring to every project and team I work with.',
+  featured: {
+    src: sportsMatchPhoto,
+    alt: 'Two teammates in matching jerseys on a grass pitch, wearing medals, one holding up a trophy',
+  } satisfies Photo,
+  supporting: {
+    src: sportsTeamPhoto,
+    alt: 'A team in matching black and red jerseys posing together in a wood-panelled hall',
+  } satisfies Photo,
 };
 
 export const certifications: string[] = [

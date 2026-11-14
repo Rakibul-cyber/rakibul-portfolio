@@ -61,6 +61,8 @@ test('dist/ contains only intended static site files', () => {
     /^privacy\/index\.html$/,
     /^_astro\/[\w.-]+\.(js|css|woff2)$/,
     /^_astro\/(profile|about)\.[\w-]+\.(avif|webp|jpg)$/,
+    // Sports & Teamwork photos (src/assets/sports/).
+    /^_astro\/(match|team)\.[\w-]+\.(avif|webp|jpg)$/,
     // Company logos (src/assets/logos/): PNGs are re-encoded, the SVG is passed through.
     /^_astro\/(enviotech|jgu|louco|teczo)\.[\w-]+\.(webp|png|svg)$/,
     /^projects\/[\w-]+\/[\w-]+\.png$/,
@@ -166,6 +168,19 @@ test('company cards are static: no links, every logo has a description', () => {
   const imgs = [...section.matchAll(/<img\s[^>]*>/g)].map((m) => m[0]);
   assert.equal(imgs.length, 4, 'expected all four logos');
   for (const img of imgs) assert.match(img, /alt="[^"]+"/, img.slice(0, 120));
+});
+
+test('sports section sits between About and Contact, with described photos', () => {
+  const html = read(path.join(dist, 'index.html'));
+  const at = (id) => html.indexOf(`<section id="${id}"`);
+  assert.ok(at('sports') > at('about') && at('sports') < at('contact'), 'section order');
+  const section = html.match(/<section id="sports"[\s\S]*?<\/section>/)?.[0];
+  const imgs = [...section.matchAll(/<img\s[^>]*>/g)].map((m) => m[0]);
+  assert.equal(imgs.length, 2, 'expected the featured and supporting photo');
+  for (const img of imgs) {
+    assert.match(img, /alt="[^"]{20,}"/, img.slice(0, 120));
+    assert.match(img, /width="\d+" height="\d+"/, 'explicit dimensions prevent layout shift');
+  }
 });
 
 test('the CV is a real PDF', () => {
