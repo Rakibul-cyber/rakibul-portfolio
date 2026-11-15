@@ -60,13 +60,21 @@ The files in `src/assets/` are **cleaned copies**, not the camera originals:
 - the hero photo is cropped to a square around the face (1200 × 1200 px), so the circle needs no `object-position`; the About photo is a 3:4 portrait (see below) placed with `position` (`45% 30%`);
 - re-encoded with sharp without metadata: no EXIF (camera, settings), GPS, XMP, IPTC, ICC or comments. `tests/repo-hygiene.test.mjs` fails if a committed image in `src/assets/` carries any of them, and `tests/build-output.test.mjs` checks the generated files;
 
-The hero photo was colour-corrected on 2026-11-12 from the 4000 × 4000 original (`Profile.jpg`), with global adjustments only: no retouching, smoothing or generated content.
+The hero photo was re-edited on 2026-11-15 from the 4000 × 4000 original (`Profile.jpg`): a natural colour grade plus subtle, localized facial retouching. It replaces the 2026-11-12 version, which used global adjustments only. The original background is preserved: nothing was cut out, replaced, blurred or generated, and no generative model was involved. The background differs from the original only in colour and tone. Lightness figures below are CIELAB L units (0–100).
 
-- crop `2150 × 2150` at `(707, 273)`, about 20% tighter than before, so the face reads larger in the circle;
-- white balance warmed slightly (R ×1.018, B ×0.972) so the grey wall reads neutral; near-white tones are excluded so the shirt stays white;
-- a gentle S-curve for depth with a slight highlight shoulder (output range 1–251);
-- a soft falloff toward the frame edge (−7% brightness, −28% saturation) to quieten the background; the face is unaffected;
-- light sharpening (σ 0.7) after resizing to 1200 × 1200, saved as JPEG quality 88 (mozjpeg) without metadata.
+- **Crop:** `2340 × 2340` at `(640, 230)`, slightly looser than the previous `2150 × 2150`, downscaled to 1200 × 1200 (no upscaling).
+- **Facial retouching (localized):**
+  - 18 small temporary marks on the cheek, temple and nose were healed by blending in adjacent skin texture. A 2020 full-resolution photo was used to check that they are not permanent features;
+  - the under-eye area and the shadow side of the face were lifted gently (about 6 L), in the low frequencies only, so the stubble and jawline keep their definition;
+  - blotchy skin tone was evened in the mid frequencies only (22% in lightness, 36% in colour), which leaves pores, fine texture and facial structure as photographed;
+  - shine on the forehead and nose was reduced by compressing skin highlights;
+  - the eyes received light local sharpening;
+  - not done: no skin-smoothing filter, no whitening (the lit cheek is within about 1 L of the original), no reshaping or warping of any facial feature.
+- **Lighting and contrast:** white balance warmed slightly in linear light (R ×1.020, B ×0.974) with clipped whites excluded; a gentle S-curve with blacks and whites anchored, so hair and deep shadows stay dark; a highlight shoulder so the shirt, which is blown out in the original, stays plain white with no invented detail.
+- **Background colour grading:** applied through a soft subject mask, so background and subject can be graded slightly differently without cutting anything out. Background brightness stays close to the original (the grey wall is about 1.5 L lighter) with a little more contrast and depth. Colour strength is raised moderately (measured against the original: greens about +34%, roof tiles about +35%) and the olive greens are shifted slightly toward a fresher green. The grey wall stays grey.
+- **Output:** light sharpening (σ 0.8) after resizing, saved as JPEG quality 90 (mozjpeg, 4:4:4) without metadata.
+
+The edit is scripted (Python with OpenCV and NumPy; Apple's on-device Vision framework supplies the subject mask and face landmarks). The scripts, masters and review comparisons are kept with the originals in the git-ignored `/assets/images/hero-portrait-enhancement/`.
 
 The About photo was replaced on 2026-11-14 with `1000002840.jpeg` (960 × 1280, used at native size: no crop, no resize, no upscaling). It is shown as a rectangle with rounded corners that fills the height of the intro row on desktop and is a 4:5 portrait above the text on tablet and mobile. Global adjustments only: white balance slightly cooled (R ×0.99, B ×1.016) with near-white tones excluded so the shirt stays neutral, a gentle S-curve, saturation ×0.97, very light sharpening (σ 0.4), JPEG quality 88 (mozjpeg) without metadata.
 
